@@ -5,13 +5,17 @@ interface IEnvVariable {
     PORT: string,
     MONGODB_CONFIG_URL: string,
     BCRYPT_HASH_ROUND: string,
+    JWT_REFRESH_EXPIRED: string,
+    JWT_REFRESH_SECRET: string,
+    JWT_ACCESS_EXPIRED: string,
+    JWT_ACCESS_SECRET: string,
     NODE_DEV: "development" | "production",
 };
 
 
 const envVariable = (): IEnvVariable => {
 
-    const requireVariable: string[] = ["MONGODB_CONFIG_URL", "NODE_DEV", "PORT", "BCRYPT_HASH_ROUND"];
+    const requireVariable: string[] = ["MONGODB_CONFIG_URL", "NODE_DEV", "PORT", "BCRYPT_HASH_ROUND", "JWT_REFRESH_EXPIRED", "JWT_REFRESH_SECRET", "JWT_ACCESS_EXPIRED", "JWT_ACCESS_SECRET"];
 
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
@@ -23,6 +27,10 @@ const envVariable = (): IEnvVariable => {
         PORT: process.env.PORT as string,
         MONGODB_CONFIG_URL: process.env.MONGODB_CONFIG_URL as string,
         BCRYPT_HASH_ROUND: process.env.BCRYPT_HASH_ROUND as string,
+        JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET as string,
+        JWT_ACCESS_EXPIRED: process.env.JWT_ACCESS_EXPIRED as string,
+        JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
+        JWT_REFRESH_EXPIRED: process.env.JWT_REFRESH_EXPIRED as string,
         NODE_DEV: process.env.NODE_DEV as "development" | "production",
     }
 };

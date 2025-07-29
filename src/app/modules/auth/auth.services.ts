@@ -4,7 +4,9 @@ import { AppError } from "../../utils/AppError";
 import { isActive, IUserModel } from "../users/user.interface";
 import { User } from "../users/user.model";
 import bcrypt from "bcrypt";
+import { createUserJwtToken } from '../../utils/userTokens';
 
+// User login with email and password and cookie set
 const AuthLogIn = async (payload: Partial<IUserModel>) => {
 
     const { email, password } = payload;
@@ -29,9 +31,15 @@ const AuthLogIn = async (payload: Partial<IUserModel>) => {
         throw new AppError(httpStatusCodes.NOT_FOUND, "Wrong password.");
     }
 
+    const { accessToken, refreshToken } = createUserJwtToken(isUserExist);
+
+
     const { password: _, ...rest } = isUserExist.toObject();
 
+
     return {
+        accessToken,
+        refreshToken,
         user: rest
     }
 };
