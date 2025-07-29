@@ -4,13 +4,14 @@ dotenv.config();
 interface IEnvVariable {
     PORT: string,
     MONGODB_CONFIG_URL: string,
+    BCRYPT_HASH_ROUND: string,
     NODE_DEV: "development" | "production",
 };
 
 
 const envVariable = (): IEnvVariable => {
 
-    const requireVariable: string[] = ["MONGODB_CONFIG_URL", "NODE_DEV", "PORT"];
+    const requireVariable: string[] = ["MONGODB_CONFIG_URL", "NODE_DEV", "PORT", "BCRYPT_HASH_ROUND"];
 
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
@@ -21,6 +22,7 @@ const envVariable = (): IEnvVariable => {
     return {
         PORT: process.env.PORT as string,
         MONGODB_CONFIG_URL: process.env.MONGODB_CONFIG_URL as string,
+        BCRYPT_HASH_ROUND: process.env.BCRYPT_HASH_ROUND as string,
         NODE_DEV: process.env.NODE_DEV as "development" | "production",
     }
 };

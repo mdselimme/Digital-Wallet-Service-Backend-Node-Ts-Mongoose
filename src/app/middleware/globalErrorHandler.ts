@@ -15,6 +15,10 @@ export const globalErrorHandler = (error: any, req: Request, res: Response, next
     let statusCode = 500;
     let message = `Something went wrong!! ${error.message}`;
 
+    if (error.name === "ZodError") {
+        statusCode = error.statusCode
+        message = error.message
+    }
     if (error instanceof AppError) {
         statusCode = error.statusCode
         message = error.message
