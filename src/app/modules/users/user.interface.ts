@@ -32,5 +32,5 @@ export interface IUserModel {
     isActive?: isActive,
     isVerified?: boolean,
     phone?: string,
-    status?: IStatus
+    userStatus?: IStatus
 }

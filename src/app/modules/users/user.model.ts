@@ -18,7 +18,7 @@ const userSchemaModel = new Schema<IUserModel>({
         type: String,
         trim: true
     },
-    status: { type: String, enum: Object.values(IStatus), default: IStatus.Pending },
+    userStatus: { type: String, enum: Object.values(IStatus), default: IStatus.Pending },
 }, {
     versionKey: false,
     timestamps: true
