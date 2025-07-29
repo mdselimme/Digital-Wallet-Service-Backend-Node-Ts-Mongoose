@@ -12,6 +12,9 @@ router.post("/login",
     AuthController.AuthLogIn
 );
 
+// Refresh Token route 
+router.post("/refresh-token", AuthController.getNewAccessTokenFromRefreshToken)
+
 // User Logout Route 
 router.post("/logout",
     AuthController.AuthLogOut

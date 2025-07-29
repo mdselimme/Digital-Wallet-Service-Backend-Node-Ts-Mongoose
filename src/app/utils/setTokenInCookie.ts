@@ -2,8 +2,8 @@ import { Response } from "express";
 import { envData } from "../config/envVariable";
 
 interface IToken {
-    accessToken: string,
-    refreshToken: string,
+    accessToken?: string,
+    refreshToken?: string,
 }
 
 
