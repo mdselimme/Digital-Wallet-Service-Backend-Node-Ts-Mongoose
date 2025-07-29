@@ -1,0 +1,36 @@
+import { Types } from "mongoose"
+
+
+
+export enum IUserRole {
+    Admin = "Admin",
+    User = "User",
+    Agent = "Agent"
+}
+
+export enum isActive {
+    Active = "Active",
+    Blocked = "Blocked",
+    Deleted = "Deleted"
+}
+
+export enum IStatus {
+    Approve = "Approve",
+    Pending = "Pending",
+    Suspend = "Suspend"
+}
+
+
+export interface IUserModel {
+    _id?: Types.ObjectId,
+    name?: string,
+    email: string,
+    photo?: string,
+    password: string,
+    address?: string,
+    role?: IUserRole,
+    isActive?: isActive,
+    isVerified?: boolean,
+    phone?: string,
+    status?: IStatus
+}
