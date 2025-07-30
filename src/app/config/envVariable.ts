@@ -19,6 +19,7 @@ const envVariable = (): IEnvVariable => {
 
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
+            // eslint-disable-next-line no-console
             console.log(`Env Variable ${key} Cannot Assign in .env file.`);
         }
     })
