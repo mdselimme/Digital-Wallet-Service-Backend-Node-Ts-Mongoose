@@ -6,6 +6,7 @@ import httpStatusCodes from "http-status-codes";
 import { setTokenInCookie } from "../../utils/setTokenInCookie";
 import { AppError } from "../../utils/AppError";
 import { newAccessTokenFromRefreshToken } from "../../utils/userTokens";
+import { JwtPayload } from "jsonwebtoken";
 
 
 
@@ -20,6 +21,23 @@ const AuthLogIn = catchAsyncTryCatchHandler(async (req: Request, res: Response) 
         success: true,
         message: "User logged in Successfully.",
         data: result,
+        statusCode: httpStatusCodes.OK
+    });
+});
+
+// User login with email and password and cookie set
+const resetUserPassword = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    await AuthServices.resetUserPasswordService(req.body, decodedToken as JwtPayload);
+
+    // setTokenInCookie(res, { accessToken: result.accessToken, refreshToken: result.refreshToken });
+
+    sendResponse(res, {
+        success: true,
+        message: "User password reset successfully.",
+        data: null,
         statusCode: httpStatusCodes.OK
     });
 });
@@ -73,4 +91,9 @@ const AuthLogOut = catchAsyncTryCatchHandler(async (req: Request, res: Response)
 
 
 
-export const AuthController = { AuthLogIn, AuthLogOut, getNewAccessTokenFromRefreshToken }
+export const AuthController = {
+    AuthLogIn,
+    AuthLogOut,
+    getNewAccessTokenFromRefreshToken,
+    resetUserPassword
+}
