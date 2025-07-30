@@ -7,12 +7,18 @@ export enum IPaymentType {
     BONUS = "BONUS",
 };
 
+export enum ITransFee {
+    Agent = 0.5,
+    User = 1,
+    Free = 0
+}
+
 
 export interface ITransaction {
-    _id: Types.ObjectId,
+    _id?: Types.ObjectId,
     send: Types.ObjectId,
     to: Types.ObjectId,
     amount: number,
-    fee: number,
+    fee: ITransFee,
     type: IPaymentType
 }

@@ -2,6 +2,7 @@ import { Server } from "http";
 import app from "./app";
 import { envData } from "./app/config/envVariable";
 import mongoose from "mongoose";
+import { seedSuperAdmin } from "./app/utils/seedSuperAdmin";
 
 
 let server: Server;
@@ -26,6 +27,7 @@ const serverStart = async () => {
 
 (async () => {
     await serverStart();
+    await seedSuperAdmin();
 })();
 
 // Sigterm error 

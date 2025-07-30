@@ -34,13 +34,14 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 
         const user = await User.create([userData], { session });
 
-        const walletPayload: IWallet = {
-            user: user[0]._id,
-            balance: 50,
-            transaction:
-        }
 
-        const wallet = await Wallet.create()
+        // const walletPayload: IWallet = {
+        //     user: user[0]._id,
+        //     balance: 50,
+        //     transaction:
+        // }
+
+        // const wallet = await Wallet.create()
 
         return user;
     } catch (error) {

@@ -4,6 +4,7 @@ import { Types } from "mongoose"
 
 export enum IUserRole {
     Admin = "Admin",
+    Super_Admin = "Super_Admin",
     User = "User",
     Agent = "Agent"
 }
