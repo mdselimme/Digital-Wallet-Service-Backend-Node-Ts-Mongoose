@@ -7,15 +7,17 @@ import { IPaymentType, ITransaction, ITransFee } from "./transaction.interface";
 
 
 const transactionSchemaModel = new Schema<ITransaction>({
-    _id: {
-        type: Schema.Types.ObjectId
-    },
+    // _id: {
+    //     type: Schema.Types.ObjectId
+    // },
     send: {
         type: Schema.Types.ObjectId,
+        ref: "User",
         required: [true, "Sender id is required."]
     },
     to: {
         type: Schema.Types.ObjectId,
+        ref: "User",
         required: [true, "Receiver id is required."]
     },
     amount: {
@@ -24,7 +26,7 @@ const transactionSchemaModel = new Schema<ITransaction>({
     },
     fee: {
         type: Number,
-        enum: Object.values(ITransFee),
+        enum: [0.5, 1, 0],
         default: ITransFee.Free
     },
     type: {

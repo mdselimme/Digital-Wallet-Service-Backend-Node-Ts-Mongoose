@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 import { envData } from "../../config/envVariable";
 import { Wallet } from "../wallet/wallet.model";
 import { IWallet } from "../wallet/wallet.interface";
+import { Transaction } from "../transaction/transaction.model";
+import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
 
 
 // Create An User 
@@ -34,22 +36,43 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 
         const user = await User.create([userData], { session });
 
+        const digitalWallet = await User.findOne({ email: envData.SUPER_ADMIN_EMAIL });
 
-        // const walletPayload: IWallet = {
-        //     user: user[0]._id,
-        //     balance: 50,
-        //     transaction:
-        // }
+        if (!digitalWallet) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "Server Response Problem");
+        }
 
-        // const wallet = await Wallet.create()
+        const transactionPayload: ITransaction = {
+            send: digitalWallet._id,
+            to: user[0]._id,
+            amount: 50,
+            fee: ITransFee.Free,
+            type: IPaymentType.BONUS
+        };
 
-        return user;
+        const transaction = await Transaction.create([transactionPayload], { session });
+
+
+        const walletPayload: IWallet = {
+            user: user[0]._id,
+            balance: transaction[0].amount,
+            transaction: [transaction[0]._id]
+        };
+
+        const wallet = await Wallet.create([walletPayload], { session });
+
+        const updateUser = await User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true });
+
+        await session.commitTransaction();
+
+        session.endSession();
+
+        return updateUser;
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
         throw error;
     }
-
 };
 
 

@@ -7,6 +7,7 @@ import { IWallet } from "./wallet.interface";
 const walletSchemaModel = new Schema<IWallet>({
     user: {
         type: Schema.Types.ObjectId,
+        ref: "User",
         required: [true, "User id is required."]
     },
     balance: {
@@ -15,7 +16,9 @@ const walletSchemaModel = new Schema<IWallet>({
     },
     transaction: {
         type: [Schema.Types.ObjectId],
-        required: [true, "transaction id is required."]
+        ref: "Transaction",
+        required: [true, "transaction id is required."],
+        default: []
     }
 }, {
     versionKey: false,
