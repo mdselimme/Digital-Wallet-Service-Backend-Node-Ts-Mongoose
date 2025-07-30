@@ -28,6 +28,7 @@ export interface IUserModel {
     photo?: string,
     password: string,
     address?: string,
+    walletId?: Types.ObjectId,
     role?: IUserRole,
     isActive?: isActive,
     isVerified?: boolean,

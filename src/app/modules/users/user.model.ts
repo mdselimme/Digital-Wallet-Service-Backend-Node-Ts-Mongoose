@@ -18,6 +18,7 @@ const userSchemaModel = new Schema<IUserModel>({
         type: String,
         trim: true
     },
+    walletId: { type: Schema.Types.ObjectId },
     userStatus: { type: String, enum: Object.values(IStatus), default: IStatus.Pending },
 }, {
     versionKey: false,
