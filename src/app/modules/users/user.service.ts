@@ -98,9 +98,22 @@ const getMeUser = async (userId: string) => {
     return user;
 };
 
+// Get Single User
+const getSingleUser = async (userId: string) => {
+
+    const user = await User.findById(userId).select("-password");
+
+    return user;
+};
 
 
 
 
 
-export const UserService = { createAnUser, getAllUsers, getMeUser }
+
+export const UserService = {
+    createAnUser,
+    getAllUsers,
+    getMeUser,
+    getSingleUser
+}

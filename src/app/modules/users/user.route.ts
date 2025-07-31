@@ -24,5 +24,11 @@ router.get("/me",
     UserController.getMeUser
 )
 
+// Get Single User 
+router.get("/:userId",
+    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
+    UserController.getSingleUser
+)
+
 
 export const UserRouter = router;

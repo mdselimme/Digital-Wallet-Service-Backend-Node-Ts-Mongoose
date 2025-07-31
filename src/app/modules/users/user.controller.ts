@@ -46,6 +46,25 @@ const getMeUser = catchAsyncTryCatchHandler(async (req: Request, res: Response) 
         data: result,
         statusCode: StatusCodes.OK
     });
-})
+});
 
-export const UserController = { createAnUser, getAllUsers, getMeUser };
+// Get Single User 
+const getSingleUser = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+
+    const result = await UserService.getSingleUser(req.params.userId);
+
+    sendResponse(res, {
+        success: true,
+        message: "Get User Successfully",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+});
+
+export const UserController = {
+    createAnUser,
+    getAllUsers,
+    getMeUser,
+    getSingleUser
+};
