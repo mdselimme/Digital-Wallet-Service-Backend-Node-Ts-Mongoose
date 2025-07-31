@@ -35,4 +35,4 @@ export interface IUserModel {
     isVerified?: boolean,
     phone?: string,
     userStatus?: IStatus
-}
+};
