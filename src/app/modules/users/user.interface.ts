@@ -33,6 +33,6 @@ export interface IUserModel {
     role?: IUserRole,
     isActive?: isActive,
     isVerified?: boolean,
-    phone?: string,
+    phone: string,
     userStatus?: IStatus
 };

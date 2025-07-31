@@ -27,6 +27,7 @@ export const seedSuperAdmin = async () => {
             role: IUserRole.Super_Admin,
             email: envData.SUPER_ADMIN_EMAIL,
             password: hashPassword,
+            phone: envData.SUPER_ADMIN_PHONE,
             isVerified: true,
             userStatus: IStatus.Approve
         };

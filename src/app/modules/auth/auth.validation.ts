@@ -11,10 +11,8 @@ export const authLogInZodValidation = z.object({
 export const resetPasswordZodValidation = z.object({
     oldPassword: z.string({ error: "old password required and string type." }),
     newPassword: z
-        .string({ error: "new password required and string type." })
-        .min(8, { message: "Password minimum 8 characters long." })
-        .regex(/^(?=.*[A-Z])/, { message: "Password must be contain at least 1 uppercase letter" })
-        .regex(/^(?=.*[a-z])/, { message: "Password must be contain at least 1 lowercase letter" })
-        .regex(/^(?=.*[!@#$%^&*])/, { message: "Password must be contain at least 1 special character." })
-        .regex(/^(?=.*)/, { message: "Password must be contain at least 1 number" }),
+        .string({ error: "Password must be string type." })
+        .min(5, { message: "Password minimum 5 characters long." })
+        .max(5, { message: "Password maximum 5 characters long." })
+        .regex(/^(?!0).{5}$/, { message: "Password must be five character long and not started with 0." }),
 });

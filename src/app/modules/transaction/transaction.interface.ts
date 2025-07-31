@@ -19,6 +19,13 @@ export interface ITransaction {
     send: Types.ObjectId,
     to: Types.ObjectId,
     amount: number,
-    fee: ITransFee,
+    fee: number,
+    commission: number,
     type: IPaymentType
+}
+
+export interface ISendTransPayload {
+    receiverEmail: string,
+    senderPassword: string,
+    amount: number
 }

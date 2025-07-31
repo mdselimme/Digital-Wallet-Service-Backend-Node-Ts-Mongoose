@@ -24,9 +24,12 @@ const transactionSchemaModel = new Schema<ITransaction>({
         type: Number,
         required: [true, "Amount is required."]
     },
+    commission: {
+        type: Number,
+        required: [true, "Commission is required."]
+    },
     fee: {
         type: Number,
-        enum: [0.5, 1, 0],
         default: ITransFee.Free
     },
     type: {

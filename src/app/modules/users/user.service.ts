@@ -48,6 +48,7 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
             to: user[0]._id,
             amount: 50,
             fee: ITransFee.Free,
+            commission: ITransFee.Free,
             type: IPaymentType.BONUS
         };
 
@@ -157,7 +158,7 @@ const updateAnUserRole = async (userId: string, payload: Partial<IUserModel>, de
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
     }
     //If User is Super_Admin than he can't change his role.
-    if (decodedToken.role === IUserRole.Super_Admin) {
+    if (user.role === IUserRole.Super_Admin) {
         throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
     }
     // If user role is user | agent | admin he can't change role

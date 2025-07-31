@@ -12,13 +12,18 @@ export const createUserZodSchema = z.object({
         .email("Email must be string.")
         .min(5, "Email must be 5 character long.")
         .max(100, { message: "Email cannot exceed 100 character." }),
+    phone: z.string()
+        .min(11, "Phone number is too short")
+        .max(14, "Phone number is too long")
+        .regex(
+            /^(01|\+8801)\d{9}$/,
+            "Invalid Bangladeshi phone number. It must start with '01' or '+8801' and be 11 or 13 digits long respectively."
+        ),
     password: z
-        .string("password must be string.")
-        .min(8, { message: "Password minimum 8 characters long." })
-        .regex(/^(?=.*[A-Z])/, { message: "Password must be contain at least 1 uppercase letter" })
-        .regex(/^(?=.*[a-z])/, { message: "Password must be contain at least 1 lowercase letter" })
-        .regex(/^(?=.*[!@#$%^&*])/, { message: "Password must be contain at least 1 special character." })
-        .regex(/^(?=.*)/, { message: "Password must be contain at least 1 number" }),
+        .string({ error: "Password must be string type." })
+        .min(5, { message: "Password minimum 5 characters long." })
+        .max(5, { message: "Password maximum 5 characters long." })
+        .regex(/^(?!0).{5}$/, { message: "Password must be five character long and not started with 0." }),
 });
 
 // Update User Validation 
