@@ -9,7 +9,8 @@ export enum IPaymentType {
 
 export enum ITransFee {
     Agent = 0.5,
-    User = 1,
+    User = 0.3,
+    CashOut = 1,
     Free = 0
 }
 

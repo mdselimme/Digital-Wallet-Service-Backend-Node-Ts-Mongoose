@@ -81,7 +81,7 @@ const cashInTransfer = async (payload: ISendTransPayload, decodedToken: JwtPaylo
         }, { session });
         await session.commitTransaction();
         session.endSession();
-        return;
+        return transaction;
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
@@ -137,7 +137,7 @@ const sendMoneyTransfer = async (payload: ISendTransPayload, decodedToken: JwtPa
             amount: amount,
             fee: amount * (ITransFee.User / 100),
             commission: ITransFee.Free,
-            type: IPaymentType.CASH_IN
+            type: IPaymentType.SEND_MONEY
         };
         // transaction create 
         const transaction = await Transaction.create([transactionPayload], { session });
@@ -159,7 +159,85 @@ const sendMoneyTransfer = async (payload: ISendTransPayload, decodedToken: JwtPa
         }, { session });
         await session.commitTransaction();
         session.endSession();
-        return;
+        return transaction;
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        throw error;
+    }
+};
+
+// Cash Out User From Agent 
+const userCashOutAgent = async (payload: ISendTransPayload, decodedToken: JwtPayload) => {
+
+    const session = await Wallet.startSession();
+    session.startTransaction()
+
+    try {
+        // payment data 
+        const { receiverEmail, senderPassword, amount } = payload;
+        // receiverUser 
+        const receiverUser = await User.findOne({ email: receiverEmail });
+        // if receiver not found 
+        if (!receiverUser) {
+            throw new AppError(httpStatusCodes.NOT_FOUND, "Receiver User not found.");
+        };
+        // cash in receive only normal user 
+        if (receiverUser && receiverUser.role !== IUserRole.Agent) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, `This account type is ${receiverUser.role}. If you want to perform this you account have to need agent.`);
+        };
+        // who send the money 
+        const sendingUser = await User.findById(decodedToken.userId);
+        // if sender not found 
+        if (!sendingUser) {
+            throw new AppError(httpStatusCodes.NOT_FOUND, "Sending User not found.");
+        };
+        // cash in can do only agent user 
+        if (sendingUser && sendingUser.role !== IUserRole.User) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, `Your account type is ${sendingUser.role}. If you want to perform this you have to do agent.`);
+        };
+        // sender password check 
+        const passwordCheck = await bcrypt.compare(senderPassword as string, sendingUser.password);
+        // if password don't match 
+        if (!passwordCheck) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Wrong password! Try with right password.");
+        };
+        // sender wallet 
+        const senderWallet = await Wallet.findById(sendingUser.walletId);
+        // if sender balance 0 or big 
+        if (Number(senderWallet?.balance) < amount) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Insufficient balance. Please add money.");
+        }
+        // transaction payload 
+        const transactionPayload: ITransaction = {
+            send: sendingUser._id,
+            to: receiverUser._id,
+            amount: amount,
+            fee: amount * (ITransFee.CashOut / 100),
+            commission: amount * (ITransFee.Agent / 100),
+            type: IPaymentType.CASH_OUT
+        };
+        // transaction create 
+        const transaction = await Transaction.create([transactionPayload], { session });
+        // receiver wallet 
+        const receiverWallet = await Wallet.findById(receiverUser.walletId);
+        // receiver new balance 
+        const newReceiverBalance = Number(receiverWallet?.balance as number) + Number(transaction[0].amount) + Number(transaction[0].commission);
+        // receiver wallet update 
+        await Wallet.findByIdAndUpdate(receiverUser.walletId, {
+            balance: newReceiverBalance,
+            $push: { "transaction": transaction[0]._id }
+        }, { session });
+        // new sender balance 
+        const newSenderBalance = Number(senderWallet?.balance as number) - Number(transaction[0].amount + transaction[0].fee);
+        // update sender wallet 
+        await Wallet.findByIdAndUpdate(sendingUser.walletId, {
+            balance: newSenderBalance,
+            $push: { "transaction": transaction[0]._id }
+        }, { session });
+        await session.commitTransaction();
+        session.endSession();
+        return transaction;
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
@@ -172,5 +250,6 @@ const sendMoneyTransfer = async (payload: ISendTransPayload, decodedToken: JwtPa
 
 export const TransactionServices = {
     cashInTransfer,
-    sendMoneyTransfer
+    sendMoneyTransfer,
+    userCashOutAgent
 }

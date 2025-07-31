@@ -41,7 +41,7 @@ const userCashOutAgent = catchAsyncTryCatchHandler(async (req: Request, res: Res
 
     const decodedToken = req.user;
 
-    const transaction = await TransactionServices.sendMoneyTransfer(req.body, decodedToken);
+    const transaction = await TransactionServices.userCashOutAgent(req.body, decodedToken);
 
     sendResponse(res, {
         success: true,
