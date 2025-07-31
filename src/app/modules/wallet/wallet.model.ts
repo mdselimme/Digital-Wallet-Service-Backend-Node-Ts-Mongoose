@@ -15,8 +15,7 @@ const walletSchemaModel = new Schema<IWallet>({
         required: [true, "Balance is required."]
     },
     transaction: {
-        type: [Schema.Types.ObjectId],
-        ref: "Transaction",
+        type: [{ type: Schema.Types.ObjectId, ref: "Transaction" }],
         required: [true, "transaction id is required."],
         default: []
     }

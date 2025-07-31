@@ -97,6 +97,10 @@ const getMeUser = async (userId: string) => {
 
     const user = await User.findById(userId).select("-password");
 
+    if (!user) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "User not found.");
+    }
+
     return user;
 };
 
@@ -104,6 +108,10 @@ const getMeUser = async (userId: string) => {
 const getSingleUser = async (userId: string) => {
 
     const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "User not found.");
+    }
 
     return user;
 };

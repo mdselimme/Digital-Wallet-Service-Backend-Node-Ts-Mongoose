@@ -12,7 +12,8 @@ const getMySingleWallet = async (walletId: string, decodedToken: JwtPayload) => 
         throw new AppError(httpStatusCodes.BAD_REQUEST, "You are not authorized user.")
     }
 
-    const result = await Wallet.findById(walletId);
+    const result = await Wallet.findById(walletId).populate("transaction").lean();
+
 
     if (!result) {
         throw new AppError(httpStatusCodes.BAD_REQUEST, "Wallet data not found.")

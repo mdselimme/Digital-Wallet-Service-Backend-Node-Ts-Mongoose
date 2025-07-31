@@ -15,6 +15,13 @@ router.post("/cash-in",
     TransactionController.cashInTransfer
 );
 
+// Cash In User From agent 
+router.post("/add-money",
+    validateSchemaRequest(transactionDataZodSchema),
+    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
+    TransactionController.addMoneyToAgent
+);
+
 // Send Money User From User 
 router.post("/send-money",
     validateSchemaRequest(transactionDataZodSchema),
@@ -33,6 +40,12 @@ router.post("/cash-out",
 router.get("/get-all",
     checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
     TransactionController.getAllTransactionData
+)
+
+// Get A Single Transactions 
+router.get("/:id",
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    TransactionController.getASingleTransaction
 )
 
 export const TransactionRouter = router;

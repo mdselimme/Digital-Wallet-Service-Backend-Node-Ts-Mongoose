@@ -5,6 +5,7 @@ export enum IPaymentType {
     SEND_MONEY = "SEND_MONEY",
     CASH_OUT = "CASH_OUT",
     BONUS = "BONUS",
+    ADD_MONEY = "ADD_MONEY",
 };
 
 export enum ITransFee {

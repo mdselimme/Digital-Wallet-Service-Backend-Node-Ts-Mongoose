@@ -7,6 +7,21 @@ import { Transaction } from './transaction.model';
 
 
 
+// Add Money User and Agent 
+const addMoneyToAgent = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    const transaction = await TransactionServices.addMoneyToAgent(req.body, decodedToken);
+
+    sendResponse(res, {
+        success: true,
+        message: "Add money successful.",
+        data: transaction,
+        statusCode: httpStatusCodes.OK
+    });
+});
+
 //Cash In Agent to User
 const cashInTransfer = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
@@ -55,7 +70,6 @@ const userCashOutAgent = catchAsyncTryCatchHandler(async (req: Request, res: Res
 // Get All Transaction Data
 const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-
     const transaction = await Transaction.find({});
 
     const total = await Transaction.countDocuments();
@@ -72,11 +86,26 @@ const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res
     });
 });
 
+// Get Single Transaction 
+const getASingleTransaction = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const transaction = await Transaction.findById(req.params.id);
+
+    sendResponse(res, {
+        success: true,
+        message: "Transaction Retrieved Successfully.",
+        data: transaction,
+        statusCode: httpStatusCodes.OK
+    });
+});
+
 
 
 export const TransactionController = {
     cashInTransfer,
     sendMoneyTransfer,
     userCashOutAgent,
-    getAllTransactionData
+    getAllTransactionData,
+    getASingleTransaction,
+    addMoneyToAgent
 }
