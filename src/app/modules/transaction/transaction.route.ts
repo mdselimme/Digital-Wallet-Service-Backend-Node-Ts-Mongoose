@@ -36,6 +36,13 @@ router.post("/cash-out",
     TransactionController.userCashOutAgent
 );
 
+// Agent to agent b2b transaction
+router.post("/b-to-b",
+    validateSchemaRequest(transactionDataZodSchema),
+    checkAuthenticationUser(IUserRole.Agent),
+    TransactionController.agentToAgentB2b
+);
+
 // Get All Transactions 
 router.get("/get-all",
     checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),

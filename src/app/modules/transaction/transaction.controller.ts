@@ -67,6 +67,21 @@ const userCashOutAgent = catchAsyncTryCatchHandler(async (req: Request, res: Res
     });
 });
 
+// Agent to agent B2b
+const agentToAgentB2b = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    const transaction = await TransactionServices.agentToAgentB2b(req.body, decodedToken);
+
+    sendResponse(res, {
+        success: true,
+        message: "Your b2b transaction successful.",
+        data: transaction,
+        statusCode: httpStatusCodes.OK
+    });
+});
+
 // Get All Transaction Data
 const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
@@ -107,5 +122,6 @@ export const TransactionController = {
     userCashOutAgent,
     getAllTransactionData,
     getASingleTransaction,
-    addMoneyToAgent
+    addMoneyToAgent,
+    agentToAgentB2b
 }
