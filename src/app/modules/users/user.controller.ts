@@ -3,6 +3,7 @@ import { catchAsyncTryCatchHandler } from "../../utils/catchAsyncTryCatch";
 import { sendResponse } from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
 import { UserService } from "./user.service";
+import { JwtPayload } from "jsonwebtoken";
 
 
 
@@ -26,10 +27,25 @@ const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response
 
     sendResponse(res, {
         success: true,
-        message: "User Created Successfully.",
+        message: "All User Retrieved Successfully.",
         data: result,
-        statusCode: StatusCodes.CREATED
+        statusCode: StatusCodes.OK
     });
 })
 
-export const UserController = { createAnUser, getAllUsers };
+// Get Me Users 
+const getMeUser = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user as JwtPayload;
+
+    const result = await UserService.getMeUser(decodedToken.userId);
+
+    sendResponse(res, {
+        success: true,
+        message: "My profile retrieved Successfully.",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+})
+
+export const UserController = { createAnUser, getAllUsers, getMeUser };

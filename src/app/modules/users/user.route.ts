@@ -16,6 +16,13 @@ router.post("/register",
 router.get("/all-users",
     checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
     UserController.getAllUsers
+);
+
+// Get All Users 
+router.get("/me",
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    UserController.getMeUser
 )
+
 
 export const UserRouter = router;
