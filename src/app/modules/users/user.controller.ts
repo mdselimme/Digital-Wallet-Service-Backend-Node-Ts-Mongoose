@@ -76,10 +76,26 @@ const updateAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Respons
     });
 });
 
+// Update An User Role
+const updateAnUserRole = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    const result = await UserService.updateAnUserRole(req.params.id, req.body, decodedToken as JwtPayload);
+
+    sendResponse(res, {
+        success: true,
+        message: "Update User Role Successfully",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+});
+
 export const UserController = {
     createAnUser,
     getAllUsers,
     getMeUser,
     getSingleUser,
-    updateAnUser
+    updateAnUser,
+    updateAnUserRole
 };

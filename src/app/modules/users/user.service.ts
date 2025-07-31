@@ -62,7 +62,7 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 
         const wallet = await Wallet.create([walletPayload], { session });
 
-        const updateUser = await User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true });
+        const updateUser = await User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true }).select("-password");
 
         await session.commitTransaction();
 
@@ -143,6 +143,39 @@ const updateAnUser = async (userId: string, payload: Partial<IUserModel>, decode
     return newUpdateUser;
 };
 
+// Update An User Role
+const updateAnUserRole = async (userId: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
+        if (userId !== decodedToken.userId) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
+        }
+    }
+    // user find 
+    const user = await User.findById(userId);
+    // If User not found 
+    if (!user) {
+        throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
+    }
+    //If User is Super_Admin than he can't change his role.
+    if (decodedToken.role === IUserRole.Super_Admin) {
+        throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
+    }
+    // If user role is user | agent | admin he can't change role
+    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent || decodedToken.role === IUserRole.Admin) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
+    };
+    // if payload role is super admin or user role and payload role is equal 
+    if (payload.role) {
+        if (payload.role === IUserRole.Super_Admin || payload.role === user.role) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "You can't perform this work.");
+        };
+    }
+    // Update User role perform 
+    const newUpdateUser = await User.findByIdAndUpdate(userId, payload, { new: true, runValidators: true, }).select("-password");
+
+    return newUpdateUser;
+};
+
 
 
 
@@ -152,5 +185,6 @@ export const UserService = {
     getAllUsers,
     getMeUser,
     getSingleUser,
-    updateAnUser
+    updateAnUser,
+    updateAnUserRole
 }

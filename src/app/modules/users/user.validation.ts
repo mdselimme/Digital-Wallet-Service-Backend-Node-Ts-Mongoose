@@ -1,4 +1,5 @@
 import z from "zod";
+import { IUserRole } from "./user.interface";
 
 
 // Create User Validation 
@@ -42,4 +43,10 @@ export const updateUserZodSchema = z.object({
             /^(01|\+8801)\d{9}$/,
             "Invalid Bangladeshi phone number. It must start with '01' or '+8801' and be 11 or 13 digits long respectively."
         ).optional(),
+});
+
+
+export const updateRoleZodSchema = z.object({
+    role: z
+        .enum(Object.values(IUserRole), { error: "Value must be from these (User | Admin | Agent)" })
 });

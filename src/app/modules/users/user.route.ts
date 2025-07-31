@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
 import { validateSchemaRequest } from "../../middleware/validateSchemaRequest";
-import { createUserZodSchema, updateUserZodSchema } from "./user.validation";
+import { createUserZodSchema, updateRoleZodSchema, updateUserZodSchema } from "./user.validation";
 import { checkAuthenticationUser } from "../../middleware/checkAuthentication";
 import { IUserRole } from "./user.interface";
 
@@ -36,6 +36,13 @@ router.patch("/update/:id",
     validateSchemaRequest(updateUserZodSchema),
     checkAuthenticationUser(...Object.values(IUserRole)),
     UserController.updateAnUser
+);
+
+// Make User to Agent
+router.patch("/update-role/:id",
+    validateSchemaRequest(updateRoleZodSchema),
+    checkAuthenticationUser(IUserRole.Super_Admin),
+    UserController.updateAnUserRole
 );
 
 

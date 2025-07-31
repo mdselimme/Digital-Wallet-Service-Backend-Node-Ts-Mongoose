@@ -20,7 +20,7 @@ export const checkAuthenticationUser = (...authRoles: string[]) => async (req: R
 
         const verifiedToken = verifyJwtToken(accessToken, envData.JWT_ACCESS_SECRET) as JwtPayload;
 
-        const isUserExist = await User.findOne({ email: verifiedToken.email });
+        const isUserExist = await User.findOne({ email: verifiedToken.email }).select("-password");
 
         if (!isUserExist) {
             throw new AppError(httpStatusCodes.NOT_FOUND, "User does not found.");
