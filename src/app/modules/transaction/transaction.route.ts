@@ -29,4 +29,10 @@ router.post("/cash-out",
     TransactionController.userCashOutAgent
 );
 
+// Get All Transactions 
+router.get("/get-all",
+    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
+    TransactionController.getAllTransactionData
+)
+
 export const TransactionRouter = router;

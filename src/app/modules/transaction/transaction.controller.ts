@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { catchAsyncTryCatchHandler } from "../../utils/catchAsyncTryCatch"
 import { sendResponse } from "../../utils/sendResponse";
 import { TransactionServices } from './transaction.service';
+import { Transaction } from './transaction.model';
 
 
 
@@ -51,10 +52,31 @@ const userCashOutAgent = catchAsyncTryCatchHandler(async (req: Request, res: Res
     });
 });
 
+// Get All Transaction Data
+const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+
+    const transaction = await Transaction.find({});
+
+    const total = await Transaction.countDocuments();
+
+    sendResponse(res, {
+        success: true,
+        message: "All Transaction Retrieved Successfully.",
+        data: {
+            total: {
+                count: total
+            }, transaction
+        },
+        statusCode: httpStatusCodes.OK
+    });
+});
+
 
 
 export const TransactionController = {
     cashInTransfer,
     sendMoneyTransfer,
-    userCashOutAgent
+    userCashOutAgent,
+    getAllTransactionData
 }

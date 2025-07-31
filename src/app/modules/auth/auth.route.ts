@@ -22,7 +22,9 @@ router.post("/reset-password",
 );
 
 // Refresh Token route 
-router.post("/refresh-token", AuthController.getNewAccessTokenFromRefreshToken)
+router.post("/refresh-token",
+    AuthController.getNewAccessTokenFromRefreshToken
+)
 
 // User Logout Route 
 router.post("/logout",
