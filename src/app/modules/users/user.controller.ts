@@ -19,4 +19,17 @@ const createAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Respons
     });
 });
 
-export const UserController = { createAnUser };
+// Get All Users 
+const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const result = await UserService.getAllUsers();
+
+    sendResponse(res, {
+        success: true,
+        message: "User Created Successfully.",
+        data: result,
+        statusCode: StatusCodes.CREATED
+    });
+})
+
+export const UserController = { createAnUser, getAllUsers };

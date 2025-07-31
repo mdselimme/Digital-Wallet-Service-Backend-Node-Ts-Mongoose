@@ -75,11 +75,24 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
     }
 };
 
+// Get All Users Service 
+const getAllUsers = async () => {
+
+    const users = await User.find({}).select("-password");
+
+    const userCount = await User.countDocuments();
+
+    return {
+        total: {
+            count: userCount
+        },
+        users,
+    }
+};
 
 
 
 
 
 
-
-export const UserService = { createAnUser }
+export const UserService = { createAnUser, getAllUsers }
