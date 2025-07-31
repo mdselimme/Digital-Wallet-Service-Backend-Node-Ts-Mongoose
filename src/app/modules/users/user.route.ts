@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
 import { validateSchemaRequest } from "../../middleware/validateSchemaRequest";
-import { createUserZodSchema } from "./user.validation";
+import { createUserZodSchema, updateUserZodSchema } from "./user.validation";
 import { checkAuthenticationUser } from "../../middleware/checkAuthentication";
 import { IUserRole } from "./user.interface";
+
 
 const router = Router();
 
@@ -29,6 +30,13 @@ router.get("/:userId",
     checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
     UserController.getSingleUser
 )
+
+// Update User 
+router.patch("/update/:id",
+    validateSchemaRequest(updateUserZodSchema),
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    UserController.updateAnUser
+);
 
 
 export const UserRouter = router;

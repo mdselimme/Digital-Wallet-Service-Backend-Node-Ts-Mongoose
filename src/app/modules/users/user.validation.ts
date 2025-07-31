@@ -1,10 +1,8 @@
 import z from "zod";
-import { IUserModel } from "./user.interface";
-
 
 
 // Create User Validation 
-export const createUserZodSchema: z.ZodType<Partial<IUserModel>> = z.object({
+export const createUserZodSchema = z.object({
     name: z
         .string("Name must be string")
         .min(2, { message: "Name too short. Minimum 2 character long" })
@@ -23,7 +21,7 @@ export const createUserZodSchema: z.ZodType<Partial<IUserModel>> = z.object({
 });
 
 // Update User Validation 
-export const updateUserZodSchema: z.ZodType<Partial<IUserModel>> = z.object({
+export const updateUserZodSchema = z.object({
     name: z
         .string("Name must be string")
         .min(2, { message: "Name too short. Minimum 2 character long" })
@@ -32,7 +30,8 @@ export const updateUserZodSchema: z.ZodType<Partial<IUserModel>> = z.object({
     email: z
         .email("Email must be string.")
         .min(5, "Email must be 5 character long.")
-        .max(100, { message: "Email cannot exceed 100 character." }),
+        .max(100, { message: "Email cannot exceed 100 character." })
+        .optional(),
     address: z
         .string({ error: "address must be string." })
         .optional(),

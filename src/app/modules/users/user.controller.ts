@@ -51,7 +51,6 @@ const getMeUser = catchAsyncTryCatchHandler(async (req: Request, res: Response) 
 // Get Single User 
 const getSingleUser = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-
     const result = await UserService.getSingleUser(req.params.userId);
 
     sendResponse(res, {
@@ -62,9 +61,25 @@ const getSingleUser = catchAsyncTryCatchHandler(async (req: Request, res: Respon
     });
 });
 
+// Update An User 
+const updateAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    const result = await UserService.updateAnUser(req.params.id, req.body, decodedToken as JwtPayload);
+
+    sendResponse(res, {
+        success: true,
+        message: "Update User Successfully",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+});
+
 export const UserController = {
     createAnUser,
     getAllUsers,
     getMeUser,
-    getSingleUser
+    getSingleUser,
+    updateAnUser
 };

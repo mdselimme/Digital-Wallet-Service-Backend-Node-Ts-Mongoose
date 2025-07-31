@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { AppError } from "../../utils/AppError";
-import { IUserModel } from "./user.interface"
+import { IUserModel, IUserRole } from "./user.interface"
 import { User } from "./user.model";
 import bcrypt from "bcrypt";
 import { envData } from "../../config/envVariable";
@@ -8,6 +8,7 @@ import { Wallet } from "../wallet/wallet.model";
 import { IWallet } from "../wallet/wallet.interface";
 import { Transaction } from "../transaction/transaction.model";
 import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
+import { JwtPayload } from "jsonwebtoken";
 
 
 // Create An User 
@@ -106,6 +107,41 @@ const getSingleUser = async (userId: string) => {
     return user;
 };
 
+// Update An User 
+const updateAnUser = async (userId: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+
+    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
+        if (userId !== decodedToken.userId) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
+        }
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
+    }
+
+    if (decodedToken.role === IUserRole.Admin || decodedToken.role === IUserRole.Super_Admin) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
+    };
+
+    if (payload.role) {
+        if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
+            throw new AppError(StatusCodes.FORBIDDEN, "Your are not authorized.");
+        }
+    }
+
+    if (payload.isActive || payload.isVerified) {
+        if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
+            throw new AppError(StatusCodes.FORBIDDEN, "Your are not authorized.");
+        }
+    };
+
+    const newUpdateUser = await User.findByIdAndUpdate(userId, payload, { new: true, runValidators: true, }).select("-password");
+
+    return newUpdateUser;
+};
 
 
 
@@ -115,5 +151,6 @@ export const UserService = {
     createAnUser,
     getAllUsers,
     getMeUser,
-    getSingleUser
+    getSingleUser,
+    updateAnUser
 }
