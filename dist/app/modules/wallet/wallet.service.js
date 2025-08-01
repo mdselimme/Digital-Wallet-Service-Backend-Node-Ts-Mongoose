@@ -27,4 +27,20 @@ const getMySingleWallet = (walletId, decodedToken) => __awaiter(void 0, void 0, 
     ;
     return result;
 });
-exports.WalletService = { getMySingleWallet };
+// Get all wallet data 
+const getAllWalletData = (limit) => __awaiter(void 0, void 0, void 0, function* () {
+    let dataLimit = 10;
+    if (limit) {
+        dataLimit = Number(limit);
+    }
+    const result = yield wallet_model_1.Wallet.find({}).populate("user", "name email role phone").limit(dataLimit);
+    if (!result) {
+        throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Wallet data not found.");
+    }
+    ;
+    return result;
+});
+exports.WalletService = {
+    getMySingleWallet,
+    getAllWalletData
+};

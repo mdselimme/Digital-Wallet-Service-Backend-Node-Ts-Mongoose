@@ -19,7 +19,7 @@ router.post("/cash-out", (0, validateSchemaRequest_1.validateSchemaRequest)(tran
 // Agent to agent b2b transaction
 router.post("/b-to-b", (0, validateSchemaRequest_1.validateSchemaRequest)(transaction_validation_1.transactionDataZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Agent), transaction_controller_1.TransactionController.agentToAgentB2b);
 // Get All Transactions 
-router.get("/get-all", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Admin, user_interface_1.IUserRole.Super_Admin), transaction_controller_1.TransactionController.getAllTransactionData);
+router.get("/", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Admin, user_interface_1.IUserRole.Super_Admin), transaction_controller_1.TransactionController.getAllTransactionData);
 // Get A Single Transactions 
 router.get("/:id", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), transaction_controller_1.TransactionController.getASingleTransaction);
 exports.TransactionRouter = router;

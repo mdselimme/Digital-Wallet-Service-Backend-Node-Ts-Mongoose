@@ -17,6 +17,7 @@ const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const catchAsyncTryCatch_1 = require("../../utils/catchAsyncTryCatch");
 const sendResponse_1 = require("../../utils/sendResponse");
 const wallet_service_1 = require("./wallet.service");
+// Get Single Wallet data 
 const getMySingleWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
     const result = yield wallet_service_1.WalletService.getMySingleWallet(req.params.id, decodedToken);
@@ -27,4 +28,18 @@ const getMySingleWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((r
         statusCode: http_status_codes_1.default.OK
     });
 }));
-exports.WalletController = { getMySingleWallet };
+// Get All Wallet Data For admin 
+const getAllWalletData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { limit } = req.query;
+    const result = yield wallet_service_1.WalletService.getAllWalletData(Number(limit));
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: "All Wallet retrieved successfully.",
+        data: result,
+        statusCode: http_status_codes_1.default.OK
+    });
+}));
+exports.WalletController = {
+    getMySingleWallet,
+    getAllWalletData
+};

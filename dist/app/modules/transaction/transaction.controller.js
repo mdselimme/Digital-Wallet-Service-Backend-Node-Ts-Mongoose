@@ -18,6 +18,7 @@ const catchAsyncTryCatch_1 = require("../../utils/catchAsyncTryCatch");
 const sendResponse_1 = require("../../utils/sendResponse");
 const transaction_service_1 = require("./transaction.service");
 const transaction_model_1 = require("./transaction.model");
+const AppError_1 = require("../../utils/AppError");
 // Add Money User and Agent 
 const addMoneyToAgent = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
@@ -75,7 +76,14 @@ const agentToAgentB2b = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req
 }));
 // Get All Transaction Data
 const getAllTransactionData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const transaction = yield transaction_model_1.Transaction.find({});
+    const { limit } = req.query;
+    let dataLimit = 10;
+    if (limit) {
+        dataLimit = Number(limit);
+    }
+    const transaction = yield transaction_model_1.Transaction.find({})
+        .populate("send", "name email role phone")
+        .populate("to", "name email role phone").limit(dataLimit);
     const total = yield transaction_model_1.Transaction.countDocuments();
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
@@ -90,7 +98,12 @@ const getAllTransactionData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler
 }));
 // Get Single Transaction 
 const getASingleTransaction = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const transaction = yield transaction_model_1.Transaction.findById(req.params.id);
+    const transaction = yield transaction_model_1.Transaction.findById(req.params.id)
+        .populate("send")
+        .populate("to");
+    if (!transaction) {
+        throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "No transaction found. Please try with right id.");
+    }
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Transaction Retrieved Successfully.",

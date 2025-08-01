@@ -21,6 +21,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const transaction_model_1 = require("./transaction.model");
 const transaction_interface_1 = require("./transaction.interface");
 const wallet_model_1 = require("../wallet/wallet.model");
+const checkReceiverUser_1 = require("../../utils/checkReceiverUser");
 // Add Money User to Agent 
 const addMoneyToAgent = (payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield wallet_model_1.Wallet.startSession();
@@ -35,6 +36,8 @@ const addMoneyToAgent = (payload, decodedToken) => __awaiter(void 0, void 0, voi
             throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Receiver User not found.");
         }
         ;
+        // check receiver 
+        (0, checkReceiverUser_1.checkReceiverUser)(receiverUser);
         // add money receive only other user 
         if (receiverUser.role === user_interface_1.IUserRole.Super_Admin) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}.`);
@@ -115,14 +118,10 @@ const cashInTransfer = (payload, decodedToken) => __awaiter(void 0, void 0, void
             throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Receiver User not found.");
         }
         ;
+        (0, checkReceiverUser_1.checkReceiverUser)(receiverUser);
         // cash in receive only normal user 
         if (receiverUser.role !== user_interface_1.IUserRole.User) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. Only user can cash in.`);
-        }
-        ;
-        // cash in receive only normal user 
-        if (receiverUser.email === payload.receiverEmail) {
-            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Same Account can't perform transaction.`);
         }
         ;
         // who send the money 
@@ -135,6 +134,11 @@ const cashInTransfer = (payload, decodedToken) => __awaiter(void 0, void 0, void
         // cash in can do only agent user 
         if (sendingUser.role !== user_interface_1.IUserRole.Agent) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only agent account can cash in.`);
+        }
+        ;
+        // cash in receive only normal user 
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Same Account can't perform transaction.`);
         }
         ;
         // sender password check 
@@ -201,8 +205,10 @@ const sendMoneyTransfer = (payload, decodedToken) => __awaiter(void 0, void 0, v
             throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Receiver User not found.");
         }
         ;
+        // check receiver 
+        (0, checkReceiverUser_1.checkReceiverUser)(receiverUser);
         // cash in receive only normal user 
-        if (receiverUser && receiverUser.role !== user_interface_1.IUserRole.User) {
+        if (receiverUser.role !== user_interface_1.IUserRole.User) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. Only user can received money from user.`);
         }
         ;
@@ -282,6 +288,8 @@ const userCashOutAgent = (payload, decodedToken) => __awaiter(void 0, void 0, vo
             throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Receiver User not found.");
         }
         ;
+        // check receiver 
+        (0, checkReceiverUser_1.checkReceiverUser)(receiverUser);
         // cash in receive only normal user 
         if (receiverUser.role !== user_interface_1.IUserRole.Agent) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your Receiver account type is ${receiverUser.role}. Only agent account type can receive.`);
@@ -363,6 +371,8 @@ const agentToAgentB2b = (payload, decodedToken) => __awaiter(void 0, void 0, voi
             throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Receiver User not found.");
         }
         ;
+        // check receiver 
+        (0, checkReceiverUser_1.checkReceiverUser)(receiverUser);
         // cash in receive only normal user 
         if (receiverUser.role !== user_interface_1.IUserRole.Agent) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your Receiver account type is ${receiverUser.role}. Only agent account type can receive b2b.`);

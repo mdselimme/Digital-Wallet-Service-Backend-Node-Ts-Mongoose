@@ -8,4 +8,6 @@ const wallet_controller_1 = require("./wallet.controller");
 const router = (0, express_1.Router)();
 // get single wallet by id 
 router.get("/:id", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), wallet_controller_1.WalletController.getMySingleWallet);
+// Get All Wallet 
+router.get("/", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), wallet_controller_1.WalletController.getAllWalletData);
 exports.WalletRouter = router;

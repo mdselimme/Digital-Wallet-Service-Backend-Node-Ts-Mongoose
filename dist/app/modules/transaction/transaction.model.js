@@ -3,18 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transaction = void 0;
 const mongoose_1 = require("mongoose");
 const transaction_interface_1 = require("./transaction.interface");
+const user_model_1 = require("../users/user.model");
 const transactionSchemaModel = new mongoose_1.Schema({
     // _id: {
     //     type: Schema.Types.ObjectId
     // },
     send: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
+        ref: user_model_1.User,
         required: [true, "Sender id is required."]
     },
     to: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
+        ref: user_model_1.User,
         required: [true, "Receiver id is required."]
     },
     amount: {

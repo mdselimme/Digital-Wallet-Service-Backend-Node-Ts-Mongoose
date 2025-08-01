@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wallet = void 0;
 const mongoose_1 = require("mongoose");
+const user_model_1 = require("../users/user.model");
 const walletSchemaModel = new mongoose_1.Schema({
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
+        ref: user_model_1.User,
         required: [true, "User id is required."]
     },
     balance: {

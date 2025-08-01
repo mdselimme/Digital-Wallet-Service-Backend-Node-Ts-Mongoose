@@ -35,12 +35,12 @@ const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
         const hashedPassword = yield bcrypt_1.default.hash(password, Number(envVariable_1.envData.BCRYPT_HASH_ROUND));
         const userData = Object.assign(Object.assign({}, payload), { email, password: hashedPassword });
         const user = yield user_model_1.User.create([userData], { session });
-        const digitalWallet = yield user_model_1.User.findOne({ email: envVariable_1.envData.SUPER_ADMIN_EMAIL });
-        if (!digitalWallet) {
+        const superAdminWallet = yield user_model_1.User.findOne({ email: envVariable_1.envData.SUPER_ADMIN_EMAIL });
+        if (!superAdminWallet) {
             throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "Server Response Problem");
         }
         const transactionPayload = {
-            send: digitalWallet._id,
+            send: superAdminWallet._id,
             to: user[0]._id,
             amount: 50,
             fee: transaction_interface_1.ITransFee.Free,
@@ -48,13 +48,21 @@ const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
             type: transaction_interface_1.IPaymentType.BONUS
         };
         const transaction = yield transaction_model_1.Transaction.create([transactionPayload], { session });
+        const digitalWallet = yield wallet_model_1.Wallet.findById(superAdminWallet.walletId);
+        const updateDigitalWalletBalance = Number(digitalWallet === null || digitalWallet === void 0 ? void 0 : digitalWallet.balance) - Number(transaction[0].amount);
         const walletPayload = {
             user: user[0]._id,
             balance: transaction[0].amount,
             transaction: [transaction[0]._id]
         };
         const wallet = yield wallet_model_1.Wallet.create([walletPayload], { session });
-        const updateUser = yield user_model_1.User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true }).select("-password");
+        yield wallet_model_1.Wallet.findByIdAndUpdate(superAdminWallet.walletId, {
+            balance: updateDigitalWalletBalance,
+            $push: {
+                "transaction": transaction[0]._id
+            }
+        }, { session });
+        const updateUser = yield user_model_1.User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true }).select("-password").populate("walletId");
         yield session.commitTransaction();
         session.endSession();
         return updateUser;
@@ -66,8 +74,8 @@ const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 // Get All Users Service 
-const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield user_model_1.User.find({}).select("-password");
+const getAllUsers = (limit) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield user_model_1.User.find({}).populate("walletId", "balance").limit(limit).select("-password");
     const userCount = yield user_model_1.User.countDocuments();
     return {
         total: {
@@ -78,7 +86,7 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 // Get Me User
 const getMeUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(userId).populate("walletId").select("-password");
+    const user = yield user_model_1.User.findById(userId).populate("walletId", "balance").select("-password");
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "User not found.");
     }

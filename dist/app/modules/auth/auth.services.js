@@ -28,11 +28,11 @@ exports.AuthServices = void 0;
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const AppError_1 = require("../../utils/AppError");
-const user_interface_1 = require("../users/user.interface");
 const user_model_1 = require("../users/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userTokens_1 = require("../../utils/userTokens");
 const envVariable_1 = require("../../config/envVariable");
+const checkReceiverUser_1 = require("../../utils/checkReceiverUser");
 // User login with email and password and cookie set
 const AuthLogIn = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
@@ -40,13 +40,8 @@ const AuthLogIn = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (!isUserExist) {
         throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "User not found.");
     }
-    if (isUserExist.isActive === user_interface_1.isActive.Blocked) {
-        throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "User is blocked. Contact support session.");
-    }
-    if (isUserExist.isActive === user_interface_1.isActive.Deleted) {
-        throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "User is deleted.");
-    }
-    ;
+    // check receiver 
+    (0, checkReceiverUser_1.checkReceiverUser)(isUserExist);
     const comparePassword = yield bcrypt_1.default.compare(password, isUserExist.password);
     if (!comparePassword) {
         throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Password does not match.");

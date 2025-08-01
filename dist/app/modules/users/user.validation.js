@@ -21,7 +21,7 @@ exports.createUserZodSchema = zod_1.default.object({
         .max(14, "Phone number is too long")
         .regex(/^(01|\+8801)\d{9}$/, "Invalid Bangladeshi phone number. It must start with '01' or '+8801' and be 11 or 13 digits long respectively."),
     role: zod_1.default
-        .enum(Object.values(user_interface_1.IUserRole), { error: "Value must be from these (User | Agent)" }),
+        .enum(["User", "Agent"], { error: "Value must be from these (User | Agent)" }),
     password: zod_1.default
         .string({ error: "Password must be string type." })
         .min(5, { message: "Password minimum 5 characters long." })

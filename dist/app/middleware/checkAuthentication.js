@@ -22,17 +22,26 @@ const user_interface_1 = require("../modules/users/user.interface");
 const checkAuthenticationUser = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accessToken = req.headers.authorization;
+        // if access token not found 
         if (!accessToken) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_GATEWAY, "No token found! Please give token.");
         }
+        // verify access token 
         const verifiedToken = (0, jwtTokenGenerate_1.verifyJwtToken)(accessToken, envVariable_1.envData.JWT_ACCESS_SECRET);
-        const isUserExist = yield user_model_1.User.findOne({ email: verifiedToken.email }).select("-password");
+        // user find by email 
+        const isUserExist = yield user_model_1.User.findOne({ email: verifiedToken.email });
+        // If user not found 
         if (!isUserExist) {
             throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "User does not found.");
         }
         ;
         // if user delete or blocked 
         if (isUserExist.isActive === user_interface_1.isActive.Blocked || isUserExist.isActive === user_interface_1.isActive.Deleted) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `User is ${isUserExist.isActive}. Contact our support session.`);
+        }
+        ;
+        // if user delete or blocked 
+        if (isUserExist.userStatus === user_interface_1.IStatus.Pending || isUserExist.userStatus === user_interface_1.IStatus.Suspend) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `User is ${isUserExist.isActive}. Contact our support session.`);
         }
         ;
