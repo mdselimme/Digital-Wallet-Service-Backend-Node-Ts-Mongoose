@@ -2,11 +2,12 @@ import httpStatusCodes from 'http-status-codes';
 import { AppError } from "../../utils/AppError";
 import { User } from "../users/user.model";
 import { JwtPayload } from 'jsonwebtoken';
-import { IUserRole } from '../users/user.interface';
+import { IUserModel, IUserRole } from '../users/user.interface';
 import bcrypt from 'bcrypt';
 import { Transaction } from './transaction.model';
 import { IPaymentType, ISendTransPayload, ITransaction, ITransFee } from './transaction.interface';
 import { Wallet } from '../wallet/wallet.model';
+import { checkReceiverUser } from '../../utils/checkReceiverUser';
 
 
 // Add Money User to Agent 
@@ -24,6 +25,8 @@ const addMoneyToAgent = async (payload: ISendTransPayload, decodedToken: JwtPayl
         if (!receiverUser) {
             throw new AppError(httpStatusCodes.NOT_FOUND, "Receiver User not found.");
         };
+        // check receiver 
+        checkReceiverUser(receiverUser as IUserModel)
         // add money receive only other user 
         if (receiverUser.role === IUserRole.Super_Admin) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}.`);
@@ -103,6 +106,7 @@ const cashInTransfer = async (payload: ISendTransPayload, decodedToken: JwtPaylo
         if (!receiverUser) {
             throw new AppError(httpStatusCodes.NOT_FOUND, "Receiver User not found.");
         };
+        checkReceiverUser(receiverUser as IUserModel)
         // cash in receive only normal user 
         if (receiverUser.role !== IUserRole.User) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. Only user can cash in.`);
@@ -185,8 +189,10 @@ const sendMoneyTransfer = async (payload: ISendTransPayload, decodedToken: JwtPa
         if (!receiverUser) {
             throw new AppError(httpStatusCodes.NOT_FOUND, "Receiver User not found.");
         };
+        // check receiver 
+        checkReceiverUser(receiverUser as IUserModel)
         // cash in receive only normal user 
-        if (receiverUser && receiverUser.role !== IUserRole.User) {
+        if (receiverUser.role !== IUserRole.User) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. Only user can received money from user.`);
         };
         // who send the money 
@@ -263,6 +269,8 @@ const userCashOutAgent = async (payload: ISendTransPayload, decodedToken: JwtPay
         if (!receiverUser) {
             throw new AppError(httpStatusCodes.NOT_FOUND, "Receiver User not found.");
         };
+        // check receiver 
+        checkReceiverUser(receiverUser as IUserModel)
         // cash in receive only normal user 
         if (receiverUser.role !== IUserRole.Agent) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your Receiver account type is ${receiverUser.role}. Only agent account type can receive.`);
@@ -341,6 +349,8 @@ const agentToAgentB2b = async (payload: ISendTransPayload, decodedToken: JwtPayl
         if (!receiverUser) {
             throw new AppError(httpStatusCodes.NOT_FOUND, "Receiver User not found.");
         };
+        // check receiver 
+        checkReceiverUser(receiverUser as IUserModel)
         // cash in receive only normal user 
         if (receiverUser.role !== IUserRole.Agent) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your Receiver account type is ${receiverUser.role}. Only agent account type can receive b2b.`);

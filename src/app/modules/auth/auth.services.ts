@@ -8,6 +8,7 @@ import bcrypt from "bcrypt";
 import { createUserJwtToken } from '../../utils/userTokens';
 import { JwtPayload } from 'jsonwebtoken';
 import { envData } from '../../config/envVariable';
+import { checkReceiverUser } from '../../utils/checkReceiverUser';
 
 // User login with email and password and cookie set
 const AuthLogIn = async (payload: Partial<IUserModel>) => {
@@ -19,15 +20,8 @@ const AuthLogIn = async (payload: Partial<IUserModel>) => {
     if (!isUserExist) {
         throw new AppError(httpStatusCodes.NOT_FOUND, "User not found.");
     }
-
-    if (isUserExist.isActive === isActive.Blocked) {
-        throw new AppError(httpStatusCodes.BAD_REQUEST, "User is blocked. Contact support session.");
-    }
-
-    if (isUserExist.isActive === isActive.Deleted) {
-        throw new AppError(httpStatusCodes.BAD_REQUEST, "User is deleted.");
-    };
-
+    // check receiver 
+    checkReceiverUser(isUserExist as IUserModel)
     const comparePassword = await bcrypt.compare(password as string, isUserExist.password);
 
     if (!comparePassword) {

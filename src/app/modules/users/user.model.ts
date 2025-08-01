@@ -11,7 +11,7 @@ const userSchemaModel = new Schema<IUserModel>({
     address: { type: String, trim: true },
     role: { type: String, enum: Object.values(IUserRole), default: IUserRole.User },
     isActive: { type: String, enum: Object.values(isActive), default: isActive.Active },
-    isVerified: { type: String, default: true },
+    isVerified: { type: Boolean, default: true },
     phone: {
         type: String,
         trim: true,
