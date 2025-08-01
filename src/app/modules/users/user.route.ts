@@ -14,7 +14,7 @@ router.post("/register",
     UserController.createAnUser);
 
 // Get All Users 
-router.get("/all-users",
+router.get("/get-all",
     checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
     UserController.getAllUsers
 );

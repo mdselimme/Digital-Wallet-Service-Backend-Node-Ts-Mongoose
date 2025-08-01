@@ -23,4 +23,19 @@ const getMySingleWallet = async (walletId: string, decodedToken: JwtPayload) => 
 
 };
 
-export const WalletService = { getMySingleWallet }
+const getAllWalletData = async () => {
+
+    const result = await Wallet.find({});
+
+    if (!result) {
+        throw new AppError(httpStatusCodes.BAD_REQUEST, "Wallet data not found.")
+    };
+
+    return result;
+
+};
+
+export const WalletService = {
+    getMySingleWallet,
+    getAllWalletData
+}

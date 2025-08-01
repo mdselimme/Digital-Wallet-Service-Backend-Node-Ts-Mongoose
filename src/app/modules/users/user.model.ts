@@ -8,7 +8,7 @@ import { isActive, IStatus, IUserModel, IUserRole } from "./user.interface";
 const userSchemaModel = new Schema<IUserModel>({
     // _id: { type: Schema.Types.ObjectId },
     name: { type: String, trim: true },
-    email: { type: String, unique: [true, "Email must be unique."], trim: true, required: [true, "Email is required."] },
+    email: { type: String, unique: [true, "Email already taken. Email must be unique."], trim: true, required: [true, "Email is required."] },
     password: { type: String, required: true, minlength: [5, "min 8 character long."] },
     photo: { type: String, trim: true },
     address: { type: String, trim: true },

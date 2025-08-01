@@ -10,7 +10,13 @@ const router = Router();
 router.get("/:id",
     checkAuthenticationUser(...Object.values(IUserRole)),
     WalletController.getMySingleWallet
-)
+);
+
+// Get All Wallet 
+router.get("/get-all",
+    checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
+    WalletController.getAllWalletData
+);
 
 
 

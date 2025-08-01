@@ -77,9 +77,10 @@ const addMoneyToAgent = async (payload: ISendTransPayload, decodedToken: JwtPayl
             balance: newSenderBalance,
             $push: { "transaction": transaction[0]._id }
         }, { session });
+        const trResult = await Transaction.findById(transaction[0]._id).populate("send").populate("to");
         await session.commitTransaction();
         session.endSession();
-        return transaction;
+        return trResult;
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
