@@ -14,7 +14,7 @@ router.post("/register",
     UserController.createAnUser);
 
 // Get All Users 
-router.get("/get-all",
+router.get("/",
     checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
     UserController.getAllUsers
 );
@@ -27,7 +27,7 @@ router.get("/me",
 
 // Get Single User 
 router.get("/:userId",
-    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
+    checkAuthenticationUser(...Object.values(IUserRole)),
     UserController.getSingleUser
 )
 

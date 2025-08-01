@@ -4,6 +4,7 @@ import { catchAsyncTryCatchHandler } from "../../utils/catchAsyncTryCatch"
 import { sendResponse } from "../../utils/sendResponse";
 import { TransactionServices } from './transaction.service';
 import { Transaction } from './transaction.model';
+import { AppError } from '../../utils/AppError';
 
 
 
@@ -85,7 +86,17 @@ const agentToAgentB2b = catchAsyncTryCatchHandler(async (req: Request, res: Resp
 // Get All Transaction Data
 const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const transaction = await Transaction.find({});
+    const { limit } = req.query;
+
+    let dataLimit = 10
+
+    if (limit) {
+        dataLimit = Number(limit)
+    }
+
+    const transaction = await Transaction.find({})
+        .populate("send", "name email role phone")
+        .populate("to", "name email role phone").limit(dataLimit)
 
     const total = await Transaction.countDocuments();
 
@@ -104,7 +115,13 @@ const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res
 // Get Single Transaction 
 const getASingleTransaction = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const transaction = await Transaction.findById(req.params.id);
+    const transaction = await Transaction.findById(req.params.id)
+        .populate("send")
+        .populate("to");
+
+    if (!transaction) {
+        throw new AppError(httpStatusCodes.NOT_FOUND, "No transaction found. Please try with right id.")
+    }
 
     sendResponse(res, {
         success: true,

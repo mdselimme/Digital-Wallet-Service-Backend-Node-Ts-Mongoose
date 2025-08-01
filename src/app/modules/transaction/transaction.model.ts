@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IPaymentType, ITransaction, ITransFee } from "./transaction.interface";
+import { User } from "../users/user.model";
 
 
 
@@ -12,12 +13,12 @@ const transactionSchemaModel = new Schema<ITransaction>({
     // },
     send: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: User,
         required: [true, "Sender id is required."]
     },
     to: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: User,
         required: [true, "Receiver id is required."]
     },
     amount: {

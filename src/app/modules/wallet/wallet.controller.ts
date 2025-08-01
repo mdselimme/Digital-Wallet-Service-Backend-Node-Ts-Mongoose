@@ -5,6 +5,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import { WalletService } from './wallet.service';
 
 
+
 // Get Single Wallet data 
 const getMySingleWallet = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
@@ -23,7 +24,9 @@ const getMySingleWallet = catchAsyncTryCatchHandler(async (req: Request, res: Re
 // Get All Wallet Data For admin 
 const getAllWalletData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const result = await WalletService.getAllWalletData();
+    const { limit } = req.query;
+
+    const result = await WalletService.getAllWalletData(Number(limit));
 
     sendResponse(res, {
         success: true,

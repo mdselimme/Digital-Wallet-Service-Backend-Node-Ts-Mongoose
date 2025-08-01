@@ -20,7 +20,7 @@ export const createUserZodSchema = z.object({
             "Invalid Bangladeshi phone number. It must start with '01' or '+8801' and be 11 or 13 digits long respectively."
         ),
     role: z
-        .enum(Object.values(IUserRole), { error: "Value must be from these (User | Agent)" }),
+        .enum(["User", "Agent"], { error: "Value must be from these (User | Agent)" }),
     password: z
         .string({ error: "Password must be string type." })
         .min(5, { message: "Password minimum 5 characters long." })

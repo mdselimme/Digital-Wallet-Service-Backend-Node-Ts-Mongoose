@@ -38,10 +38,6 @@ export const checkAuthenticationUser = (...authRoles: string[]) => async (req: R
             throw new AppError(httpStatusCodes.BAD_REQUEST, "You are not authorized for this route.");
         };
 
-        console.log(req.user)
-
-        console.log(verifiedToken)
-
         req.user = verifiedToken;
 
         next();

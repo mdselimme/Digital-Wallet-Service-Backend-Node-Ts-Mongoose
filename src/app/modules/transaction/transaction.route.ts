@@ -44,7 +44,7 @@ router.post("/b-to-b",
 );
 
 // Get All Transactions 
-router.get("/get-all",
+router.get("/",
     checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
     TransactionController.getAllTransactionData
 )

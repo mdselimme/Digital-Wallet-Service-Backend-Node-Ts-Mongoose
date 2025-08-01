@@ -23,9 +23,16 @@ const getMySingleWallet = async (walletId: string, decodedToken: JwtPayload) => 
 
 };
 
-const getAllWalletData = async () => {
+// Get all wallet data 
+const getAllWalletData = async (limit: number) => {
 
-    const result = await Wallet.find({});
+    let dataLimit = 10
+
+    if (limit) {
+        dataLimit = Number(limit)
+    }
+
+    const result = await Wallet.find({}).populate("user", "name email role phone").limit(dataLimit);
 
     if (!result) {
         throw new AppError(httpStatusCodes.BAD_REQUEST, "Wallet data not found.")

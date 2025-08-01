@@ -13,7 +13,7 @@ router.get("/:id",
 );
 
 // Get All Wallet 
-router.get("/get-all",
+router.get("/",
     checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
     WalletController.getAllWalletData
 );

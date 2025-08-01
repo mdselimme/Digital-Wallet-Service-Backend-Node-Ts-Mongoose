@@ -37,14 +37,14 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 
         const user = await User.create([userData], { session });
 
-        const digitalWallet = await User.findOne({ email: envData.SUPER_ADMIN_EMAIL });
+        const superAdminWallet = await User.findOne({ email: envData.SUPER_ADMIN_EMAIL });
 
-        if (!digitalWallet) {
+        if (!superAdminWallet) {
             throw new AppError(StatusCodes.BAD_REQUEST, "Server Response Problem");
         }
 
         const transactionPayload: ITransaction = {
-            send: digitalWallet._id,
+            send: superAdminWallet._id,
             to: user[0]._id,
             amount: 50,
             fee: ITransFee.Free,
@@ -54,6 +54,9 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 
         const transaction = await Transaction.create([transactionPayload], { session });
 
+        const digitalWallet = await Wallet.findById(superAdminWallet.walletId);
+
+        const updateDigitalWalletBalance = Number(digitalWallet?.balance) as number - Number(transaction[0].amount);
 
         const walletPayload: IWallet = {
             user: user[0]._id,
@@ -62,6 +65,13 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
         };
 
         const wallet = await Wallet.create([walletPayload], { session });
+
+        await Wallet.findByIdAndUpdate(superAdminWallet.walletId, {
+            balance: updateDigitalWalletBalance,
+            $push: {
+                "transaction": transaction[0]._id
+            }
+        }, { session });
 
         const updateUser = await User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true }).select("-password").populate("walletId");
 
@@ -78,9 +88,9 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 };
 
 // Get All Users Service 
-const getAllUsers = async () => {
+const getAllUsers = async (limit: number) => {
 
-    const users = await User.find({}).select("-password");
+    const users = await User.find({}).populate("walletId", "balance").limit(limit).select("-password");
 
     const userCount = await User.countDocuments();
 
@@ -95,7 +105,7 @@ const getAllUsers = async () => {
 // Get Me User
 const getMeUser = async (userId: string) => {
 
-    const user = await User.findById(userId).populate("walletId").select("-password");
+    const user = await User.findById(userId).populate("walletId", "balance").select("-password");
 
     if (!user) {
         throw new AppError(StatusCodes.BAD_REQUEST, "User not found.");
