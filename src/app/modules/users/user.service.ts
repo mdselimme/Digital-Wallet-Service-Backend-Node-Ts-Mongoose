@@ -63,7 +63,7 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 
         const wallet = await Wallet.create([walletPayload], { session });
 
-        const updateUser = await User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true }).select("-password");
+        const updateUser = await User.findByIdAndUpdate(user[0]._id, { walletId: wallet[0]._id }, { session, new: true }).select("-password").populate("walletId");
 
         await session.commitTransaction();
 
