@@ -77,10 +77,9 @@ const addMoneyToAgent = async (payload: ISendTransPayload, decodedToken: JwtPayl
             balance: newSenderBalance,
             $push: { "transaction": transaction[0]._id }
         }, { session });
-        const trResult = await Transaction.findById(transaction[0]._id).populate("send").populate("to");
         await session.commitTransaction();
         session.endSession();
-        return trResult;
+        return transaction;
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
@@ -108,10 +107,6 @@ const cashInTransfer = async (payload: ISendTransPayload, decodedToken: JwtPaylo
         if (receiverUser.role !== IUserRole.User) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. Only user can cash in.`);
         };
-        // cash in receive only normal user 
-        if (receiverUser.email === payload.receiverEmail) {
-            throw new AppError(httpStatusCodes.BAD_REQUEST, `Same Account can't perform transaction.`);
-        };
         // who send the money 
         const sendingUser = await User.findById(decodedToken.userId);
         // if sender not found 
@@ -121,6 +116,10 @@ const cashInTransfer = async (payload: ISendTransPayload, decodedToken: JwtPaylo
         // cash in can do only agent user 
         if (sendingUser.role !== IUserRole.Agent) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only agent account can cash in.`);
+        };
+        // cash in receive only normal user 
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, `Same Account can't perform transaction.`);
         };
         // sender password check 
         const passwordCheck = await bcrypt.compare(senderPassword as string, sendingUser.password);

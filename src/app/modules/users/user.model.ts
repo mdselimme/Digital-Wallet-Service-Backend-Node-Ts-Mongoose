@@ -2,9 +2,6 @@ import { model, Schema } from "mongoose";
 import { isActive, IStatus, IUserModel, IUserRole } from "./user.interface";
 
 
-
-
-
 const userSchemaModel = new Schema<IUserModel>({
     // _id: { type: Schema.Types.ObjectId },
     name: { type: String, trim: true },

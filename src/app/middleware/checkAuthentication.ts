@@ -5,7 +5,7 @@ import { envData } from '../config/envVariable';
 import { JwtPayload } from 'jsonwebtoken';
 import { verifyJwtToken } from '../utils/jwtTokenGenerate';
 import { User } from '../modules/users/user.model';
-import { isActive } from '../modules/users/user.interface';
+import { isActive, IStatus } from '../modules/users/user.interface';
 
 
 
@@ -27,6 +27,10 @@ export const checkAuthenticationUser = (...authRoles: string[]) => async (req: R
         };
         // if user delete or blocked 
         if (isUserExist.isActive === isActive.Blocked || isUserExist.isActive === isActive.Deleted) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, `User is ${isUserExist.isActive}. Contact our support session.`);
+        };
+        // if user delete or blocked 
+        if (isUserExist.userStatus === IStatus.Pending || isUserExist.userStatus === IStatus.Suspend) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `User is ${isUserExist.isActive}. Contact our support session.`);
         };
         // if user is not verified 
