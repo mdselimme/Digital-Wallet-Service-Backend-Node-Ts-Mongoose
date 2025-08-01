@@ -95,7 +95,7 @@ const getAllUsers = async () => {
 // Get Me User
 const getMeUser = async (userId: string) => {
 
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId).populate("walletId").select("-password");
 
     if (!user) {
         throw new AppError(StatusCodes.BAD_REQUEST, "User not found.");
@@ -107,7 +107,7 @@ const getMeUser = async (userId: string) => {
 // Get Single User
 const getSingleUser = async (userId: string) => {
 
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId).populate("walletId").select("-password");
 
     if (!user) {
         throw new AppError(StatusCodes.BAD_REQUEST, "User not found.");

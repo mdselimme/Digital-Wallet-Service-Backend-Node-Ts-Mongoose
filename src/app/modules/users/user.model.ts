@@ -21,7 +21,7 @@ const userSchemaModel = new Schema<IUserModel>({
         required: [true, "phone number is required."],
         unique: [true, "phone number is must be unique."]
     },
-    walletId: { type: Schema.Types.ObjectId },
+    walletId: { type: Schema.Types.ObjectId, ref: "Wallet" },
     userStatus: { type: String, enum: Object.values(IStatus), default: IStatus.Pending },
 }, {
     versionKey: false,
