@@ -555,7 +555,22 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-
+    "message": "Add money successful.",
+    "statusCode": 200,
+    "success": true,
+    "data": [
+        {
+            "send": "688d3e151f118caa42601a57",
+            "to": "688de4b223f59fd18d7967b7",
+            "amount": 650,
+            "commission": 0,
+            "fee": 0,
+            "type": "ADD_MONEY",
+            "_id": "688e51898cc4ba0301c3bfae",
+            "createdAt": "2025-08-02T17:57:29.785Z",
+            "updatedAt": "2025-08-02T17:57:29.785Z"
+        }
+    ]
 }
 ```
 
@@ -596,7 +611,22 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
+    "message": "Cash In Successful.",
+    "statusCode": 200,
+    "success": true,
+    "data": [
+        {
+            "send": "688de43123f59fd18d7967a8",
+            "to": "688de4e123f59fd18d7967c3",
+            "amount": 30,
+            "commission": 0.15,
+            "fee": 0,
+            "type": "CASH_IN",
+            "_id": "688e52d68cc4ba0301c3bfbd",
+            "createdAt": "2025-08-02T18:03:02.555Z",
+            "updatedAt": "2025-08-02T18:03:02.555Z"
+        }
+    ]
 }
 ```
 
@@ -628,9 +658,9 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    "receiverEmail": "mdmahabub@gamil.com",
+    "receiverEmail": "selinaakter@gmail.com",
     "senderPassword": "54321",
-    "amount": 500
+    "amount": 5
 }
 ```
 
@@ -638,7 +668,22 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
+    "message": "Your b2b transaction successful.",
+    "statusCode": 200,
+    "success": true,
+    "data": [
+        {
+            "send": "688de43123f59fd18d7967a8",
+            "to": "688de4b223f59fd18d7967b7",
+            "amount": 5,
+            "commission": 0,
+            "fee": 0,
+            "type": "B2B",
+            "_id": "688e54038cc4ba0301c3bfcc",
+            "createdAt": "2025-08-02T18:08:03.290Z",
+            "updatedAt": "2025-08-02T18:08:03.290Z"
+        }
+    ]
 }
 ```
 

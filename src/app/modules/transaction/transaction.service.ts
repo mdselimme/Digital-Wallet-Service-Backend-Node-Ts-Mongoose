@@ -28,7 +28,7 @@ const addMoneyToAll = async (payload: ISendTransPayload, decodedToken: JwtPayloa
         // check receiver 
         checkReceiverUser(receiverUser as IUserModel)
         // add money receive only other user 
-        if (receiverUser.role !== IUserRole.Super_Admin) {
+        if (receiverUser.role === IUserRole.Super_Admin) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. You can't add money.`);
         };
         // who send the money 
