@@ -13,11 +13,13 @@ router.post("/register",
     validateSchemaRequest(createUserZodSchema),
     UserController.createAnUser);
 
-// Get All Users 
-router.get("/",
-    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
-    UserController.getAllUsers
+// Update User 
+router.patch("/update/:id",
+    validateSchemaRequest(updateUserZodSchema),
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    UserController.updateAnUser
 );
+
 
 // Get All Users 
 router.get("/me",
@@ -31,32 +33,31 @@ router.get("/:userId",
     UserController.getSingleUser
 )
 
-// Update User 
-router.patch("/update/:id",
-    validateSchemaRequest(updateUserZodSchema),
-    checkAuthenticationUser(...Object.values(IUserRole)),
-    UserController.updateAnUser
-);
-
 // Make User to Agent
 router.patch("/role",
     validateSchemaRequest(updateRoleZodSchema),
-    checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
+    checkAuthenticationUser(IUserRole.Super_Admin),
     UserController.updateAnUserRole
 );
 
-// Make User to Agent
+// User suspend or suspend
 router.patch("/status",
     validateSchemaRequest(updateRoleZodSchema),
     checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
     UserController.updateAnUserStatus
 );
 
-// Make User to Agent
+// Make User blocked and deleted
 router.patch("/active",
     validateSchemaRequest(updateRoleZodSchema),
     checkAuthenticationUser(...Object.values(IUserRole)),
     UserController.updateAnUserIsActive
+);
+
+// Get All Users 
+router.get("/",
+    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
+    UserController.getAllUsers
 );
 
 

@@ -168,8 +168,8 @@ const updateAnUserRole = async (email: string, payload: Partial<IUserModel>, dec
     if (decodedToken.role === payload.role) {
         throw new AppError(StatusCodes.BAD_REQUEST, "You can not perform this role change.")
     }
-    if (decodedToken.role !== IUserRole.Super_Admin && payload.role === IUserRole.Admin) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "You can not perform this role change.")
+    if (decodedToken.role !== IUserRole.Super_Admin) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this route.")
     }
     // user find 
     const user = await User.findOne({ email });

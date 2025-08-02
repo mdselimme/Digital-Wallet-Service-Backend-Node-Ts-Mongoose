@@ -147,7 +147,216 @@
 
 ```json
 {
+    "message": "Get User Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688be198d8dec19a99b16ab1",
+        "name": "Md Usuf",
+        "email": "usufahmed@gmail.com",
+        "role": "Agent",
+        "isActive": "Active",
+        "isVerified": "true",
+        "phone": "+8801932770803",
+        "userStatus": "Pending",
+        "createdAt": "2025-07-31T21:35:20.830Z",
+        "updatedAt": "2025-08-01T12:14:15.455Z",
+        "walletId": "688be198d8dec19a99b16ab6",
+        "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
+#### Get Single User
+
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/{ObjectId}
+- credentials: true
+- Super Admin and Admin can access this route.
+
+#### Response:
+
+```json
+{
+    "message": "Get User Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688be198d8dec19a99b16ab1",
+        "name": "Md Usuf",
+        "email": "usufahmed@gmail.com",
+        "role": "Agent",
+        "isActive": "Active",
+        "isVerified": "true",
+        "phone": "+8801932770803",
+        "userStatus": "Pending",
+        "createdAt": "2025-07-31T21:35:20.830Z",
+        "updatedAt": "2025-08-01T12:14:15.455Z",
+        "walletId": "688be198d8dec19a99b16ab6",
+        "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
+
+#### Role user to admin update
+
+- method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/role?email={useremail}
+- credentials: true.
+- Super Admin Only Access this route
+
+##### schema body design:
+
+* Role Will be Admin
+
+```json
+{
+    "role": string // Role can be User to Admin (Only Admin Value support this.)
+}
+```
+
+##### Request:
+
+example: https://digital-wallet-server.vercel.app/api/v1/user/role?email=usufahmed@gmail.com
+
+```json
+{
+    "role":"Admin"
+}
+```
+
+#### Response:
+
+```json
+{
     "message": "Update User Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688be198d8dec19a99b16ab1",
+        "name": "Md Usuf",
+        "email": "usufahmed@gmail.com",
+        "role": "Admin",
+        "isActive": "Active",
+        "isVerified": true,
+        "phone": "+8801932770803",
+        "userStatus": "Approve",
+        "createdAt": "2025-07-31T21:35:20.830Z",
+        "updatedAt": "2025-08-01T12:14:15.455Z",
+        "walletId": "688be198d8dec19a99b16ab6",
+        "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
+#### User Status Change Api
+
+- method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/status?email={useremail}
+- credentials: true.
+- Super Admin And Admin can Access this route
+
+##### schema body design:
+
+```json
+{
+    "userStatus": string // Value Will be Suspend or Approve
+}
+```
+
+##### Request:
+
+example: https://digital-wallet-server.vercel.app/api/v1/user/status?email=usufahmed@gmail.com
+
+```json
+{
+    "userStatus":"Approve"
+}
+```
+
+#### Response:
+
+```json
+{
+    "message": "Update User Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688be198d8dec19a99b16ab1",
+        "name": "Md Usuf",
+        "email": "usufahmed@gmail.com",
+        "role": "Admin",
+        "isActive": "Active",
+        "isVerified": true,
+        "phone": "+8801932770803",
+        "userStatus": "Approve",
+        "createdAt": "2025-07-31T21:35:20.830Z",
+        "updatedAt": "2025-08-01T12:14:15.455Z",
+        "walletId": "688be198d8dec19a99b16ab6",
+        "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
+#### User Activity Update Api
+
+- method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/active?email={useremail}
+- credentials: true.
+- Super Admin And Admin Can Access this route
+
+##### schema body design:
+
+* Value must be from these (Active | Blocked | Deleted)
+
+```json
+{
+    "isActive": string //Value must be from these (Active | Blocked | Deleted)
+}
+```
+
+##### Request:
+
+example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufahmed@gmail.com
+
+```json
+{
+    "isActive":"Blocked"
+}
+```
+
+#### Response:
+
+```json
+{
+    "message": "Update User Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688be198d8dec19a99b16ab1",
+        "name": "Md Usuf",
+        "email": "usufahmed@gmail.com",
+        "role": "Admin",
+        "isActive": "Blocked",
+        "isVerified": true,
+        "phone": "+8801932770803",
+        "userStatus": "Approve",
+        "createdAt": "2025-07-31T21:35:20.830Z",
+        "updatedAt": "2025-08-01T12:14:15.455Z",
+        "walletId": "688be198d8dec19a99b16ab6",
+        "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
+#### Get All Users
+
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user
+- credentials: true
+- Super Admin and Admin can access this route.
+
+#### Response:
+
+```json
+{
+    "message": "Get User Successfully",
     "statusCode": 200,
     "success": true,
     "data": {
