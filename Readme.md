@@ -413,7 +413,29 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 #### Response:
 
 ```json
-
+{
+    "message": "User logged in Successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRiMjIzZjU5ZmQxOGQ3OTY3YjciLCJ",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+        "user": {
+            "_id": "688de4b223f59fd18d7967b7",
+            "name": "Selina Akter",
+            "email": "selinaakter@gmail.com",
+            "role": "Agent",
+            "isActive": "Active",
+            "isVerified": true,
+            "phone": "01932770808",
+            "userStatus": "Approve",
+            "createdAt": "2025-08-02T10:13:06.592Z",
+            "updatedAt": "2025-08-02T10:45:17.104Z",
+            "walletId": "688de4b223f59fd18d7967bd",
+            "address": "Niguary, Gafargaon, Mymensingh"
+        }
+    }
+}
 ```
 
 #### Auth User Reset Password
@@ -443,7 +465,10 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
+    "message": "User password reset successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": null
 }
 ```
 
@@ -456,8 +481,12 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
-}
+    "message": "Access Token find Successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRiMjIzZjU5ZmQxOGQ3OTY3YjciLCJlbWFpbCI6InNlbGluYWFrdGVyQGdtYWlsLmNvbSIsInJvbGUiOiJBZ2VudCIsImlhdCI6MTc1NDE1NTk0MCwiZXhwIjoxNzU0MjQyMzQwfQ.HF2k7aW6T3pPbDTckNwpEbB880YZHvYgmyxvFVQlL_4"
+} 
+
 ```
 
 #### Auth Log out api
@@ -469,7 +498,10 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
+    "message": "User logged out Successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": null
 }
 ```
 
