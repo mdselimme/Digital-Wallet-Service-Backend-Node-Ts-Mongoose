@@ -95,7 +95,6 @@
 - You can update one or more components.
 - first login to user and you will find and accessToken and refreshToken
 
-
 ```json
 {
     "name": string,
@@ -197,7 +196,6 @@
 }
 ```
 
-
 #### Role user to admin update
 
 - method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/role?email={useremail}
@@ -206,7 +204,7 @@
 
 ##### schema body design:
 
-* Role Will be Admin
+- Role Will be Admin
 
 ```json
 {
@@ -304,7 +302,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/status?email=usufa
 
 ##### schema body design:
 
-* Value must be from these (Active | Blocked | Deleted)
+- Value must be from these (Active | Blocked | Deleted)
 
 ```json
 {
@@ -348,7 +346,8 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 #### Get All Users
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user?limit={number}
+- limit : default : 10
 - credentials: true
 - Super Admin and Admin can access this route.
 
@@ -356,22 +355,32 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    "message": "Get User Successfully",
+    "message": "All User Retrieved Successfully.",
     "statusCode": 200,
     "success": true,
     "data": {
-        "_id": "688be198d8dec19a99b16ab1",
-        "name": "Md Usuf",
-        "email": "usufahmed@gmail.com",
-        "role": "Agent",
-        "isActive": "Active",
-        "isVerified": "true",
-        "phone": "+8801932770803",
-        "userStatus": "Pending",
-        "createdAt": "2025-07-31T21:35:20.830Z",
-        "updatedAt": "2025-08-01T12:14:15.455Z",
-        "walletId": "688be198d8dec19a99b16ab6",
-        "address": "Niguary, Gafargaon, Mymensingh"
+        "total": {
+            "count": 8
+        },
+        "users": [
+            {
+                "_id": "688d3e151f118caa42601a57",
+                "name": "Digital Wallet",
+                "email": "digitalwallet@gmail.com",
+                "role": "Super_Admin",
+                "isActive": "Active",
+                "isVerified": true,
+                "phone": "01737210235",
+                "userStatus": "Approve",
+                "createdAt": "2025-08-01T22:22:13.442Z",
+                "updatedAt": "2025-08-02T11:06:49.161Z",
+                "walletId": {
+                    "_id": "688d3e151f118caa42601a5d",
+                    "balance": 99650
+                }
+            },
+            ....
+        ]
     }
 }
 ```
