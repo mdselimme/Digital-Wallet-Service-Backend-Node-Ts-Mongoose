@@ -9,6 +9,7 @@ import { IWallet } from "../wallet/wallet.interface";
 import { Transaction } from "../transaction/transaction.model";
 import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
 import { JwtPayload } from "jsonwebtoken";
+import { checkReceiverUser } from "../../utils/checkReceiverUser";
 
 
 // Create An User 
@@ -163,24 +164,27 @@ const updateAnUser = async (userId: string, payload: Partial<IUserModel>, decode
 };
 
 // Update An User Role
-const updateAnUserRole = async (userId: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
-    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
-        if (userId !== decodedToken.userId) {
-            throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
-        }
+const updateAnUserRole = async (email: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+    if (decodedToken.role === payload.role) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You can not perform this role change.")
+    }
+    if (decodedToken.role !== IUserRole.Super_Admin && payload.role === IUserRole.Admin) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You can not perform this role change.")
     }
     // user find 
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email });
     // If User not found 
     if (!user) {
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
     }
+    // check User status or is active 
+    checkReceiverUser(user as IUserModel)
     //If User is Super_Admin than he can't change his role.
     if (user.role === IUserRole.Super_Admin) {
         throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
     }
     // If user role is user | agent | admin he can't change role
-    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent || decodedToken.role === IUserRole.Admin) {
+    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
         throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
     };
     // if payload role is super admin or user role and payload role is equal 
@@ -190,12 +194,71 @@ const updateAnUserRole = async (userId: string, payload: Partial<IUserModel>, de
         };
     }
     // Update User role perform 
-    const newUpdateUser = await User.findByIdAndUpdate(userId, payload, { new: true, runValidators: true, }).select("-password");
+    const newUpdateUser = await User.findByIdAndUpdate(user._id, payload, { new: true, runValidators: true, }).select("-password");
 
     return newUpdateUser;
 };
 
+// User Status Update 
+const updateAnUserStatus = async (email: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+    if (decodedToken.role !== IUserRole.Super_Admin || decodedToken.role !== IUserRole.Admin) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You can not perform user status change.")
+    }
+    // user find 
+    const user = await User.findOne({ email });
+    // If User not found 
+    if (!user) {
+        throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
+    }
+    // check User status or is active 
+    checkReceiverUser(user as IUserModel)
+    //If User is Super_Admin than he can't change his role.
+    if (user.role === IUserRole.Super_Admin || user.role === IUserRole.Admin) {
+        throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
+    }
+    // if payload role is super admin or user role and payload role is equal 
+    if (payload.userStatus) {
+        if (payload.userStatus === user.userStatus) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "You can't perform this work.");
+        };
+    }
+    // Update User role perform 
+    const newUpdateUser = await User.findByIdAndUpdate(user._id, payload, { new: true, runValidators: true, }).select("-password");
 
+    return newUpdateUser;
+    return
+}
+
+const updateAnUserIsActive = async (email: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+    // user find 
+    const user = await User.findOne({ email });
+    // If User not found 
+    if (!user) {
+        throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
+    }
+    // check User status or is active 
+    checkReceiverUser(user as IUserModel)
+    //If User is Super_Admin than he can't change his role.
+    if (user.role === IUserRole.Super_Admin) {
+        throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
+    }
+    // If user role is user | agent | admin he can't change role
+    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
+    };
+    // if payload role is super admin or user role and payload role is equal 
+    if (payload.role) {
+        if (payload.role === IUserRole.Super_Admin || payload.role === user.role) {
+            throw new AppError(StatusCodes.BAD_REQUEST, "You can't perform this work.");
+        };
+    }
+    // Update User role perform 
+    const newUpdateUser = await User.findByIdAndUpdate(user._id, payload, { new: true, runValidators: true, }).select("-password");
+
+    return newUpdateUser;
+
+    return
+}
 
 
 
@@ -205,5 +268,7 @@ export const UserService = {
     getMeUser,
     getSingleUser,
     updateAnUser,
-    updateAnUserRole
+    updateAnUserRole,
+    updateAnUserStatus,
+    updateAnUserIsActive
 }

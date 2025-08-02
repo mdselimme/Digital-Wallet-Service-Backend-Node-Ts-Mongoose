@@ -1,5 +1,5 @@
 import z from "zod";
-import { IUserRole } from "./user.interface";
+import { isActive } from "./user.interface";
 
 
 // Create User Validation 
@@ -55,5 +55,12 @@ export const updateUserZodSchema = z.object({
 
 export const updateRoleZodSchema = z.object({
     role: z
-        .enum(Object.values(IUserRole), { error: "Value must be from these (User | Admin | Agent)" })
+        .enum(["User", "Admin", "Agent"], { error: "Value must be from these (User | Admin | Agent)" })
+        .optional(),
+    isActive: z
+        .enum(Object.values(isActive), { error: "Value must be from these (Active | Blocked | Deleted" })
+        .optional(),
+    userStatus: z
+        .enum(["Approve", "Suspend"], { error: "Value must be from these (Approve | Suspend" })
+        .optional(),
 });

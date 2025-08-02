@@ -89,11 +89,47 @@ const updateAnUserRole = catchAsyncTryCatchHandler(async (req: Request, res: Res
 
     const decodedToken = req.user;
 
-    const result = await UserService.updateAnUserRole(req.params.id, req.body, decodedToken as JwtPayload);
+    const { email } = req.query;
+
+    const result = await UserService.updateAnUserRole(email as string, req.body, decodedToken as JwtPayload);
 
     sendResponse(res, {
         success: true,
-        message: "Update User Role Successfully",
+        message: "Update User Successfully",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+});
+
+// Update An User Role
+const updateAnUserStatus = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    const { email } = req.query;
+
+    const result = await UserService.updateAnUserRole(email as string, req.body, decodedToken as JwtPayload);
+
+    sendResponse(res, {
+        success: true,
+        message: "Update User Successfully",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+});
+
+// Update An User Role
+const updateAnUserIsActive = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    const { email } = req.query;
+
+    const result = await UserService.updateAnUserRole(email as string, req.body, decodedToken as JwtPayload);
+
+    sendResponse(res, {
+        success: true,
+        message: "Update User Successfully",
         data: result,
         statusCode: StatusCodes.OK
     });
@@ -105,5 +141,7 @@ export const UserController = {
     getMeUser,
     getSingleUser,
     updateAnUser,
-    updateAnUserRole
+    updateAnUserRole,
+    updateAnUserStatus,
+    updateAnUserIsActive
 };

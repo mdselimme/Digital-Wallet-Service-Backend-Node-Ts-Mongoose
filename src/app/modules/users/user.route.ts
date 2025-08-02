@@ -32,17 +32,31 @@ router.get("/:userId",
 )
 
 // Update User 
-router.patch("/update/:id",
+router.patch("/:id",
     validateSchemaRequest(updateUserZodSchema),
     checkAuthenticationUser(...Object.values(IUserRole)),
     UserController.updateAnUser
 );
 
 // Make User to Agent
-router.patch("/update-role/:id",
+router.patch("/role",
     validateSchemaRequest(updateRoleZodSchema),
-    checkAuthenticationUser(IUserRole.Super_Admin),
+    checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
     UserController.updateAnUserRole
+);
+
+// Make User to Agent
+router.patch("/status",
+    validateSchemaRequest(updateRoleZodSchema),
+    checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
+    UserController.updateAnUserStatus
+);
+
+// Make User to Agent
+router.patch("/active",
+    validateSchemaRequest(updateRoleZodSchema),
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    UserController.updateAnUserIsActive
 );
 
 
