@@ -4,7 +4,7 @@
 
 ### Features:
 
-- In this server user can create an Account with role of User and Agent.
+- In this server user can create an Account with role of User and Agent. When A user create an account he will get 50 taka bonus.
 - Super admin can change their user role or update their account status.
 - Super admin can blocked or delete account of user and agent.
 - General user can cash in from agent, send money to user and cash out from agent and add money from super admin or admin.
@@ -27,7 +27,7 @@
 
 #### user create api
 
-- method: `POST` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/create
+- method: `POST` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/register
 
 ##### schema design:
 
@@ -37,7 +37,7 @@
     "email": string,
     "password":string, //Password should be five character long and number format
     "phone": string, //11 digit bd format
-    "role": string //Only role is Agent or User
+    "role": string //Only role is Agent or User (default user) and optional
 }
 ```
 
@@ -49,7 +49,7 @@
     "email": "selimakondo58@gmail.com",
     "password":"65421", //Password should be five character long and number format
     "phone": "01700000000", //11 digit bd format
-    "role": "User" //Only role is Agent or User (default: User)
+    "role": "User" //optional Only role is Agent or User (default: User)
 }
 ```
 
@@ -88,10 +88,13 @@
 #### user update api
 
 - method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/update/:id
+- credentials: true.
 
 ##### schema design:
 
 - You can update one or more components.
+- first login to user and you will find and accessToken and refreshToken
+
 
 ```json
 {
@@ -110,6 +113,35 @@
     "address":"Niguary, Gafargaon, Mymensingh"
 }
 ```
+
+#### Response:
+
+```json
+{
+    "message": "Update User Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688be198d8dec19a99b16ab1",
+        "name": "Md Usuf",
+        "email": "usufahmed@gmail.com",
+        "role": "Agent",
+        "isActive": "Active",
+        "isVerified": "true",
+        "phone": "+8801932770803",
+        "userStatus": "Pending",
+        "createdAt": "2025-07-31T21:35:20.830Z",
+        "updatedAt": "2025-08-01T12:14:15.455Z",
+        "walletId": "688be198d8dec19a99b16ab6",
+        "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
+#### Get Me (self user)
+
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/me
+- credentials: true.
 
 #### Response:
 

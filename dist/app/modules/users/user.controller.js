@@ -74,10 +74,35 @@ const updateAnUser = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, r
 // Update An User Role
 const updateAnUserRole = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
-    const result = yield user_service_1.UserService.updateAnUserRole(req.params.id, req.body, decodedToken);
+    const { email } = req.query;
+    const result = yield user_service_1.UserService.updateAnUserRole(email, req.body, decodedToken);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
-        message: "Update User Role Successfully",
+        message: "Update User Successfully",
+        data: result,
+        statusCode: http_status_codes_1.StatusCodes.OK
+    });
+}));
+// Update An User Role
+const updateAnUserStatus = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const decodedToken = req.user;
+    const { email } = req.query;
+    const result = yield user_service_1.UserService.updateAnUserRole(email, req.body, decodedToken);
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: "Update User Successfully",
+        data: result,
+        statusCode: http_status_codes_1.StatusCodes.OK
+    });
+}));
+// Update An User Role
+const updateAnUserIsActive = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const decodedToken = req.user;
+    const { email } = req.query;
+    const result = yield user_service_1.UserService.updateAnUserRole(email, req.body, decodedToken);
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: "Update User Successfully",
         data: result,
         statusCode: http_status_codes_1.StatusCodes.OK
     });
@@ -88,5 +113,7 @@ exports.UserController = {
     getMeUser,
     getSingleUser,
     updateAnUser,
-    updateAnUserRole
+    updateAnUserRole,
+    updateAnUserStatus,
+    updateAnUserIsActive
 };

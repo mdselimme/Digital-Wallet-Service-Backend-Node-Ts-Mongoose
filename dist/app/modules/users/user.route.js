@@ -19,5 +19,9 @@ router.get("/:userId", (0, checkAuthentication_1.checkAuthenticationUser)(...Obj
 // Update User 
 router.patch("/update/:id", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateUserZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.updateAnUser);
 // Make User to Agent
-router.patch("/update-role/:id", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin), user_controller_1.UserController.updateAnUserRole);
+router.patch("/role", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), user_controller_1.UserController.updateAnUserRole);
+// Make User to Agent
+router.patch("/status", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), user_controller_1.UserController.updateAnUserStatus);
+// Make User to Agent
+router.patch("/active", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.updateAnUserIsActive);
 exports.UserRouter = router;

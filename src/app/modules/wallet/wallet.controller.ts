@@ -4,7 +4,22 @@ import { catchAsyncTryCatchHandler } from "../../utils/catchAsyncTryCatch"
 import { sendResponse } from "../../utils/sendResponse";
 import { WalletService } from './wallet.service';
 
+// Add money to super admin wallet 
+const addMoneyToSuperAdminWallet = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
+    const decodedToken = req.user;
+
+    const { amount } = req.body;
+
+    const result = await WalletService.addMoneyToSuperAdminWallet(Number(amount), decodedToken);
+
+    sendResponse(res, {
+        success: true,
+        message: "Add money successfully.",
+        data: result,
+        statusCode: httpStatusCodes.OK
+    });
+});
 
 // Get Single Wallet data 
 const getMySingleWallet = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
@@ -39,5 +54,6 @@ const getAllWalletData = catchAsyncTryCatchHandler(async (req: Request, res: Res
 
 export const WalletController = {
     getMySingleWallet,
-    getAllWalletData
+    getAllWalletData,
+    addMoneyToSuperAdminWallet
 }

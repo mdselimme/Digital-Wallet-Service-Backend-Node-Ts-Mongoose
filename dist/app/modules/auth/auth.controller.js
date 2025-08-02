@@ -54,7 +54,7 @@ const getNewAccessTokenFromRefreshToken = (0, catchAsyncTryCatch_1.catchAsyncTry
     (0, setTokenInCookie_1.setTokenInCookie)(res, { accessToken: tokenInfo });
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
-        message: "User logged out Successfully.",
+        message: "Access Token find Successfully.",
         data: tokenInfo,
         statusCode: http_status_codes_1.default.OK
     });

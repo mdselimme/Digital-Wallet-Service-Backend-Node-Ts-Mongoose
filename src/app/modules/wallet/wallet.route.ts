@@ -6,6 +6,12 @@ import { WalletController } from "./wallet.controller";
 
 const router = Router();
 
+// Update Super Admin Wallet Balance 
+router.patch("/add/super",
+    checkAuthenticationUser(IUserRole.Super_Admin),
+    WalletController.addMoneyToSuperAdminWallet
+)
+
 // get single wallet by id 
 router.get("/:id",
     checkAuthenticationUser(...Object.values(IUserRole)),

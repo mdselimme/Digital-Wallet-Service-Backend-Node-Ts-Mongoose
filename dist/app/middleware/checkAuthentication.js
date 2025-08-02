@@ -32,7 +32,7 @@ const checkAuthenticationUser = (...authRoles) => (req, res, next) => __awaiter(
         const isUserExist = yield user_model_1.User.findOne({ email: verifiedToken.email });
         // If user not found 
         if (!isUserExist) {
-            throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "User does not found.");
+            throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Authentice user does not found. Token is not valid.");
         }
         ;
         // if user delete or blocked 
