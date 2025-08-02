@@ -17,6 +17,18 @@ const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const catchAsyncTryCatch_1 = require("../../utils/catchAsyncTryCatch");
 const sendResponse_1 = require("../../utils/sendResponse");
 const wallet_service_1 = require("./wallet.service");
+// Add money to super admin wallet 
+const addMoneyToSuperAdminWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const decodedToken = req.user;
+    const { amount } = req.body;
+    const result = yield wallet_service_1.WalletService.addMoneyToSuperAdminWallet(Number(amount), decodedToken);
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: "Add money successfully.",
+        data: result,
+        statusCode: http_status_codes_1.default.OK
+    });
+}));
 // Get Single Wallet data 
 const getMySingleWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
@@ -41,5 +53,6 @@ const getAllWalletData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((re
 }));
 exports.WalletController = {
     getMySingleWallet,
-    getAllWalletData
+    getAllWalletData,
+    addMoneyToSuperAdminWallet
 };

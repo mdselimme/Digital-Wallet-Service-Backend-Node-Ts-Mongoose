@@ -135,8 +135,8 @@ const updateAnUserRole = (email, payload, decodedToken) => __awaiter(void 0, voi
     if (decodedToken.role === payload.role) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You can not perform this role change.");
     }
-    if (decodedToken.role !== user_interface_1.IUserRole.Super_Admin && payload.role === user_interface_1.IUserRole.Admin) {
-        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You can not perform this role change.");
+    if (decodedToken.role !== user_interface_1.IUserRole.Super_Admin) {
+        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized for this route.");
     }
     // user find 
     const user = yield user_model_1.User.findOne({ email });
