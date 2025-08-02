@@ -6,6 +6,8 @@ const checkAuthentication_1 = require("../../middleware/checkAuthentication");
 const user_interface_1 = require("../users/user.interface");
 const wallet_controller_1 = require("./wallet.controller");
 const router = (0, express_1.Router)();
+// Update Super Admin Wallet Balance 
+router.patch("/add/super", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin), wallet_controller_1.WalletController.addMoneyToSuperAdminWallet);
 // get single wallet by id 
 router.get("/:id", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), wallet_controller_1.WalletController.getMySingleWallet);
 // Get All Wallet 
