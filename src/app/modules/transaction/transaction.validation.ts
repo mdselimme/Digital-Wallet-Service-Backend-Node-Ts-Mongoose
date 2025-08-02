@@ -8,5 +8,5 @@ export const transactionDataZodSchema = z.object({
         .string({ error: "Sender password need and password type is string." }),
     amount: z
         .number({ error: "amount is number type and value need greater then 0." })
-        .min(1, { error: "Minimum value need 0" })
+        .min(1, { error: "Minimum value need 1" })
 })

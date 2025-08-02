@@ -10,8 +10,8 @@ import { Wallet } from '../wallet/wallet.model';
 import { checkReceiverUser } from '../../utils/checkReceiverUser';
 
 
-// Add Money User to Agent 
-const addMoneyToAgent = async (payload: ISendTransPayload, decodedToken: JwtPayload) => {
+// Add Money Super Admin to Admin User Agent
+const addMoneyToAll = async (payload: ISendTransPayload, decodedToken: JwtPayload) => {
 
     const session = await Wallet.startSession();
     session.startTransaction()
@@ -28,8 +28,8 @@ const addMoneyToAgent = async (payload: ISendTransPayload, decodedToken: JwtPayl
         // check receiver 
         checkReceiverUser(receiverUser as IUserModel)
         // add money receive only other user 
-        if (receiverUser.role === IUserRole.Super_Admin) {
-            throw new AppError(httpStatusCodes.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}.`);
+        if (receiverUser.role !== IUserRole.Super_Admin) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. You can't add money.`);
         };
         // who send the money 
         const sendingUser = await User.findById(decodedToken.userId);
@@ -205,6 +205,10 @@ const sendMoneyTransfer = async (payload: ISendTransPayload, decodedToken: JwtPa
         if (sendingUser.role !== IUserRole.User) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only user can send money another user.`);
         };
+        // if sender and receiver same email
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Same user! Can't transaction.");
+        }
         // sender password check 
         const passwordCheck = await bcrypt.compare(senderPassword as string, sendingUser.password);
         // if password don't match 
@@ -285,6 +289,10 @@ const userCashOutAgent = async (payload: ISendTransPayload, decodedToken: JwtPay
         if (sendingUser.role !== IUserRole.User) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only user account can cash out.`);
         };
+        // if sender and receiver same email
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Same user! Can't transaction.");
+        }
         // sender password check 
         const passwordCheck = await bcrypt.compare(senderPassword as string, sendingUser.password);
         // if password don't match 
@@ -365,6 +373,10 @@ const agentToAgentB2b = async (payload: ISendTransPayload, decodedToken: JwtPayl
         if (sendingUser.role !== IUserRole.Agent) {
             throw new AppError(httpStatusCodes.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only agent account type can send b2b.`);
         };
+        // if sender and receiver same email
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Same user! Can't transaction.");
+        }
         // sender password check 
         const passwordCheck = await bcrypt.compare(senderPassword as string, sendingUser.password);
         // if password don't match 
@@ -421,6 +433,6 @@ export const TransactionServices = {
     cashInTransfer,
     sendMoneyTransfer,
     userCashOutAgent,
-    addMoneyToAgent,
+    addMoneyToAll,
     agentToAgentB2b
 }

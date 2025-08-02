@@ -8,18 +8,20 @@ import { transactionDataZodSchema } from "./transaction.validation";
 
 const router = Router();
 
+
+// Add money super admin to Other
+router.post("/add-money",
+    validateSchemaRequest(transactionDataZodSchema),
+    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
+    TransactionController.addMoneyToAll
+);
+
+
 // Cash In User From agent 
 router.post("/cash-in",
     validateSchemaRequest(transactionDataZodSchema),
     checkAuthenticationUser(IUserRole.Agent),
     TransactionController.cashInTransfer
-);
-
-// Cash In User From agent 
-router.post("/add-money",
-    validateSchemaRequest(transactionDataZodSchema),
-    checkAuthenticationUser(IUserRole.Admin, IUserRole.Super_Admin),
-    TransactionController.addMoneyToAgent
 );
 
 // Send Money User From User 

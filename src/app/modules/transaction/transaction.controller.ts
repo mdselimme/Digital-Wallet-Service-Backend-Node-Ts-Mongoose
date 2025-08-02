@@ -8,12 +8,12 @@ import { AppError } from '../../utils/AppError';
 
 
 
-// Add Money User and Agent 
-const addMoneyToAgent = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+// Add Money Super Admin to Other
+const addMoneyToAll = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
     const decodedToken = req.user;
 
-    const transaction = await TransactionServices.addMoneyToAgent(req.body, decodedToken);
+    const transaction = await TransactionServices.addMoneyToAll(req.body, decodedToken);
 
     sendResponse(res, {
         success: true,
@@ -139,6 +139,6 @@ export const TransactionController = {
     userCashOutAgent,
     getAllTransactionData,
     getASingleTransaction,
-    addMoneyToAgent,
+    addMoneyToAll,
     agentToAgentB2b
 }
