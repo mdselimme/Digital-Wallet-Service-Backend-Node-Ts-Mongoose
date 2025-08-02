@@ -9,7 +9,6 @@ import { newAccessTokenFromRefreshToken } from "../../utils/userTokens";
 import { JwtPayload } from "jsonwebtoken";
 
 
-
 // User login with email and password and cookie set
 const AuthLogIn = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
@@ -57,7 +56,7 @@ const getNewAccessTokenFromRefreshToken = catchAsyncTryCatchHandler(async (req: 
 
     sendResponse(res, {
         success: true,
-        message: "User logged out Successfully.",
+        message: "Access Token find Successfully.",
         data: tokenInfo,
         statusCode: httpStatusCodes.OK
     });

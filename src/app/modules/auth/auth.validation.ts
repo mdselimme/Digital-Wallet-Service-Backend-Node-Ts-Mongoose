@@ -2,7 +2,7 @@ import z from "zod";
 
 export const authLogInZodValidation = z.object({
     email: z
-        .email("Email must be string and email format."),
+        .email({ error: "Email must be string and email format." }),
     password: z
         .string({ error: "Password required and string." })
 });

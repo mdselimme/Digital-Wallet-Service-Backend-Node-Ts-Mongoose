@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IWallet } from "./wallet.interface";
+import { User } from "../users/user.model";
 
 
 
@@ -7,7 +8,7 @@ import { IWallet } from "./wallet.interface";
 const walletSchemaModel = new Schema<IWallet>({
     user: {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: User,
         required: [true, "User id is required."]
     },
     balance: {
@@ -15,8 +16,7 @@ const walletSchemaModel = new Schema<IWallet>({
         required: [true, "Balance is required."]
     },
     transaction: {
-        type: [Schema.Types.ObjectId],
-        ref: "Transaction",
+        type: [{ type: Schema.Types.ObjectId, ref: "Transaction" }],
         required: [true, "transaction id is required."],
         default: []
     }

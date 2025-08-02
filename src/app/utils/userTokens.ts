@@ -13,7 +13,8 @@ export const createUserJwtToken = (user: Partial<IUserModel>) => {
     const jwtPayload = {
         userId: user._id,
         email: user.email,
-        role: user.role
+        role: user.role,
+        walletId: user.walletId
     };
 
     const accessToken = generateJwtToken(jwtPayload, envData.JWT_ACCESS_SECRET, envData.JWT_ACCESS_EXPIRED);

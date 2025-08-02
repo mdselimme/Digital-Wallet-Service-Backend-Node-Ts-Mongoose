@@ -1,5 +1,5 @@
 import z from "zod";
-import { IUserRole } from "./user.interface";
+import { isActive } from "./user.interface";
 
 
 // Create User Validation 
@@ -19,6 +19,9 @@ export const createUserZodSchema = z.object({
             /^(01|\+8801)\d{9}$/,
             "Invalid Bangladeshi phone number. It must start with '01' or '+8801' and be 11 or 13 digits long respectively."
         ),
+    role: z
+        .enum(["User", "Agent"], { error: "Value must be from these (User | Agent)" })
+        .optional(),
     password: z
         .string({ error: "Password must be string type." })
         .min(5, { message: "Password minimum 5 characters long." })
@@ -53,5 +56,12 @@ export const updateUserZodSchema = z.object({
 
 export const updateRoleZodSchema = z.object({
     role: z
-        .enum(Object.values(IUserRole), { error: "Value must be from these (User | Admin | Agent)" })
+        .enum(["User", "Admin", "Agent"], { error: "Value must be from these (User | Admin | Agent)" })
+        .optional(),
+    isActive: z
+        .enum(Object.values(isActive), { error: "Value must be from these (Active | Blocked | Deleted" })
+        .optional(),
+    userStatus: z
+        .enum(["Approve", "Suspend"], { error: "Value must be from these (Approve | Suspend" })
+        .optional(),
 });
