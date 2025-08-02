@@ -23,7 +23,7 @@ export const checkAuthenticationUser = (...authRoles: string[]) => async (req: R
         const isUserExist = await User.findOne({ email: verifiedToken.email });
         // If user not found 
         if (!isUserExist) {
-            throw new AppError(httpStatusCodes.NOT_FOUND, "User does not found.");
+            throw new AppError(httpStatusCodes.NOT_FOUND, "Authentice user does not found. Token is not valid.");
         };
         // if user delete or blocked 
         if (isUserExist.isActive === isActive.Blocked || isUserExist.isActive === isActive.Deleted) {

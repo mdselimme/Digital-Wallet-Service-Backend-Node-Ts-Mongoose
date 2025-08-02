@@ -32,7 +32,7 @@ router.get("/:userId",
 )
 
 // Update User 
-router.patch("/:id",
+router.patch("/update/:id",
     validateSchemaRequest(updateUserZodSchema),
     checkAuthenticationUser(...Object.values(IUserRole)),
     UserController.updateAnUser
