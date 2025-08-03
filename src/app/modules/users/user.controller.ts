@@ -25,13 +25,15 @@ const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response
 
     const { limit, sort, role } = req.query;
 
+    const decodedToken = req.user;
+
     let dataLimit = 10
 
     if (limit) {
         dataLimit = Number(limit)
     }
 
-    const result = await UserService.getAllUsers(dataLimit, sort as string, role as string);
+    const result = await UserService.getAllUsers(dataLimit, sort as string, role as string, decodedToken);
 
     sendResponse(res, {
         success: true,

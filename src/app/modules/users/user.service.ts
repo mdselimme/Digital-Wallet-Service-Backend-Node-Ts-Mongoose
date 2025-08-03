@@ -90,7 +90,11 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 };
 
 // Get All Users Service 
-const getAllUsers = async (limit: number, sort: string, role: string) => {
+const getAllUsers = async (limit: number, sort: string, role: string, decodedToken: JwtPayload) => {
+
+    if (role === IUserRole.Super_Admin && role !== decodedToken.role) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this data.");
+    }
 
     let dataSort: -1 | 1 = -1;
     const filter: any = {};

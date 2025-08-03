@@ -76,7 +76,10 @@ const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 // Get All Users Service 
-const getAllUsers = (limit, sort, role) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllUsers = (limit, sort, role, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
+    if (role === user_interface_1.IUserRole.Super_Admin && role !== decodedToken.role) {
+        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized for this data.");
+    }
     let dataSort = -1;
     const filter = {};
     if (sort === "asc") {
