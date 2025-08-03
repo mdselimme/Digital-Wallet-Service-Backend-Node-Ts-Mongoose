@@ -387,6 +387,38 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 }
 ```
 
+#### Get Single User By id
+
+- method: `GET` api endpoint: http://localhost:5000/api/v1/user/{objectid}
+- credentials: true
+
+#### Response:
+
+```json
+{
+    "message": "Get User Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688f9d4409c0934c438d0ea7",
+        "name": "Abu Bakar",
+        "email": "abubakar@gmail.com",
+        "role": "Admin",
+        "isActive": "Active",
+        "isVerified": true,
+        "phone": "01700000006",
+        "userStatus": "Approve",
+        "createdAt": "2025-08-03T17:32:52.327Z",
+        "updatedAt": "2025-08-03T17:47:44.859Z",
+        "walletId": {
+            "_id": "688f9d4409c0934c438d0ead",
+            "balance": 50
+        },
+        "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
 ## Auth Api Description:
 
 - User can login with email and password and find accesstoken and refreshtoken.
@@ -809,30 +841,37 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
     "message": "Transaction Retrieved Successfully.",
     "statusCode": 200,
     "success": true,
-    "data": [
-        {
-            "_id": "688f1a51b59f247aee9346c8",
-            "send": {
-                "_id": "688de43123f59fd18d7967a8",
-                "name": "Md. Usuf",
-                "email": "mdusuf@gmail.com",
-                "role": "Agent",
-                "phone": "01932770805"
-            },
-            "to": {
-                "_id": "688de4b223f59fd18d7967b7",
-                "name": "Selina Akter",
-                "email": "selinaakter@gmail.com",
-                "role": "Agent",
-                "phone": "01932770808"
-            },
-            "amount": 500,
-            "commission": 0,
-            "fee": 0,
-            "type": "B2B",
-            "createdAt": "2025-08-03T08:14:09.671Z"
-        }
-    ]
+    "data": {
+        "total": {
+            "limit": 1,
+            "sort": "asc",
+            "count": 7
+        },
+        "transactions": [
+            {
+                "_id": "688de4b223f59fd18d7967ba",
+                "send": {
+                    "_id": "688d3e151f118caa42601a57",
+                    "name": "Digital Wallet",
+                    "email": "digitalwallet@gmail.com",
+                    "role": "Super_Admin",
+                    "phone": "01737210235"
+                },
+                "to": {
+                    "_id": "688de4b223f59fd18d7967b7",
+                    "name": "Selina Akter",
+                    "email": "selinaakter@gmail.com",
+                    "role": "Agent",
+                    "phone": "01932770808"
+                },
+                "amount": 50,
+                "commission": 0,
+                "fee": 0,
+                "type": "BONUS",
+                "createdAt": "2025-08-02T10:13:06.794Z"
+            }
+        ]
+    }
 }
 ```
 
@@ -980,7 +1019,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 #### 2. Get A Single Wallet by Id
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet/{ObjectId}
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet/find/{ObjectId}
 - credentials: true.
 - See every one wallet by id.
 - User and admin can see their wallet.
@@ -1020,7 +1059,42 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
 }
 ```
 
-#### 3. Get All Wallet Details
+#### 3. Get My Wallet
+
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet/me
+- credentials: true.
+
+#### Response:
+
+```json
+{
+    "message": "Wallet retrieved successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688de36823f59fd18d796796",
+        "user": "688de36723f59fd18d796790",
+        "balance": 50,
+        "transaction": [
+            {
+                "_id": "688de36723f59fd18d796793",
+                "send": "688d3e151f118caa42601a57",
+                "to": "688de36723f59fd18d796790",
+                "amount": 50,
+                "commission": 0,
+                "fee": 0,
+                "type": "BONUS",
+                "createdAt": "2025-08-02T10:07:35.985Z",
+                "updatedAt": "2025-08-02T10:07:35.985Z"
+            }
+        ],
+        "createdAt": "2025-08-02T10:07:36.146Z",
+        "updatedAt": "2025-08-02T10:07:36.146Z"
+    }
+}
+```
+
+#### 4. Get All Wallet Details
 
 - method: `GET` api endpoint: http://localhost:5000/api/v1/wallet?limit=2&sort=desc
 - credentials: true.
@@ -1035,32 +1109,39 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
     "message": "All Wallet retrieved successfully.",
     "statusCode": 200,
     "success": true,
-    "data": [
-        {
-            "_id": "688d3e151f118caa42601a5d",
-            "user": {
-                "_id": "688d3e151f118caa42601a57",
-                "name": "Digital Wallet",
-                "email": "digitalwallet@gmail.com",
-                "role": "Super_Admin",
-                "phone": "01737210235"
-            },
-            "balance": 94500,
-            "createdAt": "2025-08-01T22:22:13.955Z"
+    "data": {
+        "total": {
+            "count": 9,
+            "limit": 2,
+            "sort": "desc"
         },
-        {
-            "_id": "688de266613ce0cb20c1e970",
-            "user": {
-                "_id": "688de266613ce0cb20c1e96a",
-                "name": "Contact Selim",
-                "email": "contact.mdselim.dev@gmail.com",
-                "role": "User",
-                "phone": "01700000002"
+        "result": [
+            {
+                "_id": "688f9d4409c0934c438d0ead",
+                "user": {
+                    "_id": "688f9d4409c0934c438d0ea7",
+                    "name": "Abu Bakar",
+                    "email": "abubakar@gmail.com",
+                    "role": "Admin",
+                    "phone": "01700000006"
+                },
+                "balance": 50,
+                "createdAt": "2025-08-03T17:32:52.805Z"
             },
-            "balance": 50,
-            "createdAt": "2025-08-02T10:03:18.755Z"
-        }
-    ]
+            {
+                "_id": "688de51323f59fd18d7967d5",
+                "user": {
+                    "_id": "688de51223f59fd18d7967cf",
+                    "name": "Md Moin",
+                    "email": "mdmoin@gmail.com",
+                    "role": "Admin",
+                    "phone": "01932770807"
+                },
+                "balance": 50,
+                "createdAt": "2025-08-02T10:14:43.111Z"
+            }
+        ]
+    }
 }
 ```
 

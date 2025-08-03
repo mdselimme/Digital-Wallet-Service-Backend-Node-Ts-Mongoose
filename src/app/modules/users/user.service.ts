@@ -111,11 +111,14 @@ const getAllUsers = async (limit: number, sort: string, role: string) => {
         .limit(limit)
         .select("-password");
 
-    const userCount = await User.countDocuments();
+    const userCount = await User.countDocuments(filter);
 
     return {
         total: {
-            count: userCount
+            count: userCount,
+            limit: limit,
+            sort: sort,
+            role: role
         },
         users,
     }
@@ -124,7 +127,9 @@ const getAllUsers = async (limit: number, sort: string, role: string) => {
 // Get Me User
 const getMeUser = async (userId: string) => {
 
-    const user = await User.findById(userId).populate("walletId", "balance").select("-password");
+    const user = await User.findById(userId)
+        .populate("walletId", "balance")
+        .select("-password");
 
     if (!user) {
         throw new AppError(StatusCodes.BAD_REQUEST, "User not found.");
@@ -136,7 +141,10 @@ const getMeUser = async (userId: string) => {
 // Get Single User
 const getSingleUser = async (userId: string) => {
 
-    const user = await User.findById(userId).populate("walletId").select("-password");
+    const user = await User.findById(userId).populate({
+        path: "walletId",
+        select: "-transaction -user -updatedAt -createdAt"
+    }).select("-password");
 
     if (!user) {
         throw new AppError(StatusCodes.BAD_REQUEST, "User not found.");
@@ -147,6 +155,7 @@ const getSingleUser = async (userId: string) => {
 
 // Update An User 
 const updateAnUser = async (userId: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+
 
     if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
         if (userId !== decodedToken.userId) {
@@ -159,10 +168,6 @@ const updateAnUser = async (userId: string, payload: Partial<IUserModel>, decode
     if (!user) {
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
     }
-
-    if (decodedToken.role === IUserRole.Admin || decodedToken.role === IUserRole.Super_Admin) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
-    };
 
     if (payload.role) {
         if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {

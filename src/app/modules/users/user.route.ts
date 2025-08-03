@@ -33,7 +33,7 @@ router.get("/:userId",
     UserController.getSingleUser
 )
 
-// Make User to Agent
+// Make User to Admin
 router.patch("/role",
     validateSchemaRequest(updateRoleZodSchema),
     checkAuthenticationUser(IUserRole.Super_Admin),

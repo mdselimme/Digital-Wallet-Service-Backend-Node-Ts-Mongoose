@@ -475,9 +475,20 @@ const getMyTransaction = async (tranLimit: number, sortTran: string, decodedToke
         .populate("send", "name email phone role")
         .populate("to", "name email phone role")
         .sort({ createdAt: sort })
-        .limit(tranLimit)
+        .limit(tranLimit);
 
-    return transactions;
+    const total = await Transaction.countDocuments({
+        _id: { $in: myWallet.transaction }
+    });
+
+    return {
+        total: {
+            limit: tranLimit,
+            sort: sortTran,
+            count: total
+        },
+        transactions
+    };
 }
 
 

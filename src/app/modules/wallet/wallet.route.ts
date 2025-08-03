@@ -13,9 +13,9 @@ router.patch("/add/super",
 )
 
 // get single wallet by id 
-router.get("/:id",
+router.get("/find/:id",
     checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
-    WalletController.getMySingleWallet
+    WalletController.getSingleWallet
 );
 
 // Get All Wallet 
@@ -24,9 +24,9 @@ router.get("/",
     WalletController.getAllWalletData
 );
 // Get All Wallet 
-router.get("/my-wallet",
-    checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
-    WalletController.getAllWalletData
+router.get("/me",
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    WalletController.getMyWallet
 );
 
 

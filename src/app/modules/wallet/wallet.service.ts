@@ -49,7 +49,7 @@ const addMoneyToSuperAdminWallet = async (amount: number, decodedToken: JwtPaylo
 
 
 // Get single wallet 
-const getMySingleWallet = async (walletId: string) => {
+const getSingleWallet = async (walletId: string) => {
 
     const result = await Wallet.findById(walletId)
         .populate("transaction").lean();
@@ -91,15 +91,32 @@ const getAllWalletData = async (limit: number, sort: string) => {
 
     return {
         total: {
-            count: total
+            count: total,
+            limit: dataLimit,
+            sort: sort
         },
         result
     };
 
 };
 
+// Get all wallet data 
+const getMyWallet = async (decodedToken: JwtPayload) => {
+
+    const wallet = await Wallet.findById(decodedToken.walletId)
+        .populate("user", "name email phone type").select("-transaction");
+
+    if (!wallet) {
+        throw new AppError(httpStatusCodes.BAD_REQUEST, "Wallet data not found.")
+    }
+
+    return wallet;
+
+};
+
 export const WalletService = {
-    getMySingleWallet,
+    getSingleWallet,
     getAllWalletData,
+    getMyWallet,
     addMoneyToSuperAdminWallet
 }
