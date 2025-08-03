@@ -9,9 +9,9 @@ const router = (0, express_1.Router)();
 // Update Super Admin Wallet Balance 
 router.patch("/add/super", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin), wallet_controller_1.WalletController.addMoneyToSuperAdminWallet);
 // get single wallet by id 
-router.get("/:id", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), wallet_controller_1.WalletController.getMySingleWallet);
+router.get("/find/:id", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), wallet_controller_1.WalletController.getSingleWallet);
 // Get All Wallet 
 router.get("/", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), wallet_controller_1.WalletController.getAllWalletData);
 // Get All Wallet 
-router.get("/my-wallet", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), wallet_controller_1.WalletController.getAllWalletData);
+router.get("/me", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), wallet_controller_1.WalletController.getMyWallet);
 exports.WalletRouter = router;

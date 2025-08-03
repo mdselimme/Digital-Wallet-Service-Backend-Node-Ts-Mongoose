@@ -16,7 +16,7 @@ router.patch("/update/:id", (0, validateSchemaRequest_1.validateSchemaRequest)(u
 router.get("/me", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.getMeUser);
 // Get Single User 
 router.get("/:userId", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.getSingleUser);
-// Make User to Agent
+// Make User to Admin
 router.patch("/role", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin), user_controller_1.UserController.updateAnUserRole);
 // User suspend or suspend
 router.patch("/status", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), user_controller_1.UserController.updateAnUserStatus);

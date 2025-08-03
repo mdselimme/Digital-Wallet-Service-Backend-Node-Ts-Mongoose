@@ -493,7 +493,17 @@ const getMyTransaction = (tranLimit, sortTran, decodedToken) => __awaiter(void 0
         .populate("to", "name email phone role")
         .sort({ createdAt: sort })
         .limit(tranLimit);
-    return transactions;
+    const total = yield transaction_model_1.Transaction.countDocuments({
+        _id: { $in: myWallet.transaction }
+    });
+    return {
+        total: {
+            limit: tranLimit,
+            sort: sortTran,
+            count: total
+        },
+        transactions
+    };
 });
 exports.TransactionServices = {
     cashInTransfer,

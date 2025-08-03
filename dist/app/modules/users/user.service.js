@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = require("../../utils/AppError");
 const user_interface_1 = require("./user.interface");
@@ -75,19 +76,39 @@ const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 // Get All Users Service 
-const getAllUsers = (limit) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield user_model_1.User.find({}).populate("walletId", "balance").limit(limit).select("-password");
-    const userCount = yield user_model_1.User.countDocuments();
+const getAllUsers = (limit, sort, role) => __awaiter(void 0, void 0, void 0, function* () {
+    let dataSort = -1;
+    const filter = {};
+    if (sort === "asc") {
+        dataSort = 1;
+    }
+    else {
+        dataSort = -1;
+    }
+    if (role) {
+        filter.role = role;
+    }
+    const users = yield user_model_1.User.find(filter)
+        .populate("walletId", "balance")
+        .sort({ createdAt: dataSort })
+        .limit(limit)
+        .select("-password");
+    const userCount = yield user_model_1.User.countDocuments(filter);
     return {
         total: {
-            count: userCount
+            count: userCount,
+            limit: limit,
+            sort: sort,
+            role: role
         },
         users,
     };
 });
 // Get Me User
 const getMeUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(userId).populate("walletId", "balance").select("-password");
+    const user = yield user_model_1.User.findById(userId)
+        .populate("walletId", "balance")
+        .select("-password");
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "User not found.");
     }
@@ -95,7 +116,10 @@ const getMeUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // Get Single User
 const getSingleUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findById(userId).populate("walletId").select("-password");
+    const user = yield user_model_1.User.findById(userId).populate({
+        path: "walletId",
+        select: "-transaction -user -updatedAt -createdAt"
+    }).select("-password");
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "User not found.");
     }
@@ -112,10 +136,6 @@ const updateAnUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "User does not found.");
     }
-    if (decodedToken.role === user_interface_1.IUserRole.Admin || decodedToken.role === user_interface_1.IUserRole.Super_Admin) {
-        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized.");
-    }
-    ;
     if (payload.role) {
         if (decodedToken.role === user_interface_1.IUserRole.User || decodedToken.role === user_interface_1.IUserRole.Agent) {
             throw new AppError_1.AppError(http_status_codes_1.StatusCodes.FORBIDDEN, "Your are not authorized.");

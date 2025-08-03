@@ -26,12 +26,12 @@ const createAnUser = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, r
 }));
 // Get All Users 
 const getAllUsers = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limit } = req.query;
+    const { limit, sort, role } = req.query;
     let dataLimit = 10;
     if (limit) {
         dataLimit = Number(limit);
     }
-    const result = yield user_service_1.UserService.getAllUsers(dataLimit);
+    const result = yield user_service_1.UserService.getAllUsers(dataLimit, sort, role);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "All User Retrieved Successfully.",

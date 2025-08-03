@@ -30,8 +30,8 @@ const addMoneyToSuperAdminWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHa
     });
 }));
 // Get Single Wallet data 
-const getMySingleWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield wallet_service_1.WalletService.getMySingleWallet(req.params.id);
+const getSingleWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield wallet_service_1.WalletService.getSingleWallet(req.params.id);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Wallet retrieved successfully.",
@@ -50,8 +50,20 @@ const getAllWalletData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((re
         statusCode: http_status_codes_1.default.OK
     });
 }));
+// Get All Wallet Data For admin 
+const getMyWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const decodedToken = req.user;
+    const result = yield wallet_service_1.WalletService.getMyWallet(decodedToken);
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: "My Wallet retrieved successfully.",
+        data: result,
+        statusCode: http_status_codes_1.default.OK
+    });
+}));
 exports.WalletController = {
-    getMySingleWallet,
+    getSingleWallet,
+    getMyWallet,
     getAllWalletData,
     addMoneyToSuperAdminWallet
 };

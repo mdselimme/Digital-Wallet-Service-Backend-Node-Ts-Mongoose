@@ -49,7 +49,7 @@ const addMoneyToSuperAdminWallet = (amount, decodedToken) => __awaiter(void 0, v
     return transaction;
 });
 // Get single wallet 
-const getMySingleWallet = (walletId) => __awaiter(void 0, void 0, void 0, function* () {
+const getSingleWallet = (walletId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield wallet_model_1.Wallet.findById(walletId)
         .populate("transaction").lean();
     if (!result) {
@@ -83,13 +83,25 @@ const getAllWalletData = (limit, sort) => __awaiter(void 0, void 0, void 0, func
     ;
     return {
         total: {
-            count: total
+            count: total,
+            limit: dataLimit,
+            sort: sort
         },
         result
     };
 });
+// Get all wallet data 
+const getMyWallet = (decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
+    const wallet = yield wallet_model_1.Wallet.findById(decodedToken.walletId)
+        .populate("user", "name email phone type").select("-transaction");
+    if (!wallet) {
+        throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Wallet data not found.");
+    }
+    return wallet;
+});
 exports.WalletService = {
-    getMySingleWallet,
+    getSingleWallet,
     getAllWalletData,
+    getMyWallet,
     addMoneyToSuperAdminWallet
 };
