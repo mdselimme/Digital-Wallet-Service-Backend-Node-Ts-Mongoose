@@ -23,7 +23,7 @@ const createAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Respons
 // Get All Users 
 const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { limit } = req.query;
+    const { limit, sort, role } = req.query;
 
     let dataLimit = 10
 
@@ -31,7 +31,7 @@ const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response
         dataLimit = Number(limit)
     }
 
-    const result = await UserService.getAllUsers(dataLimit);
+    const result = await UserService.getAllUsers(dataLimit, sort as string, role as string);
 
     sendResponse(res, {
         success: true,

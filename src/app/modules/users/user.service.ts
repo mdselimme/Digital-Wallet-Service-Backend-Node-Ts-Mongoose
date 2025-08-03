@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
 import { AppError } from "../../utils/AppError";
 import { isActive, IUserModel, IUserRole } from "./user.interface"
@@ -89,9 +90,26 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 };
 
 // Get All Users Service 
-const getAllUsers = async (limit: number) => {
+const getAllUsers = async (limit: number, sort: string, role: string) => {
 
-    const users = await User.find({}).populate("walletId", "balance").limit(limit).select("-password");
+    let dataSort: -1 | 1 = -1;
+    const filter: any = {};
+
+    if (sort === "asc") {
+        dataSort = 1;
+    } else {
+        dataSort = -1
+    }
+
+    if (role) {
+        filter.role = role;
+    }
+
+    const users = await User.find(filter)
+        .populate("walletId", "balance")
+        .sort({ createdAt: dataSort })
+        .limit(limit)
+        .select("-password");
 
     const userCount = await User.countDocuments();
 

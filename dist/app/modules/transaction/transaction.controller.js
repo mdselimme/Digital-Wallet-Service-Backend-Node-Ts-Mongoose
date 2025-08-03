@@ -18,7 +18,6 @@ const catchAsyncTryCatch_1 = require("../../utils/catchAsyncTryCatch");
 const sendResponse_1 = require("../../utils/sendResponse");
 const transaction_service_1 = require("./transaction.service");
 const transaction_model_1 = require("./transaction.model");
-const AppError_1 = require("../../utils/AppError");
 // Add Money Super Admin to Other
 const addMoneyToAll = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
@@ -76,14 +75,23 @@ const agentToAgentB2b = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req
 }));
 // Get All Transaction Data
 const getAllTransactionData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limit } = req.query;
+    const { limit, sort } = req.query;
     let dataLimit = 10;
+    let sortTran = -1;
     if (limit) {
         dataLimit = Number(limit);
     }
+    if (sort === "desc") {
+        sortTran = -1;
+    }
+    else {
+        sortTran = 1;
+    }
     const transaction = yield transaction_model_1.Transaction.find({})
         .populate("send", "name email role phone")
-        .populate("to", "name email role phone").limit(dataLimit);
+        .populate("to", "name email role phone")
+        .limit(dataLimit)
+        .sort({ createdAt: sortTran });
     const total = yield transaction_model_1.Transaction.countDocuments();
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
@@ -91,7 +99,8 @@ const getAllTransactionData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler
         data: {
             total: {
                 count: total
-            }, transaction
+            },
+            transaction
         },
         statusCode: http_status_codes_1.default.OK
     });
@@ -100,9 +109,26 @@ const getAllTransactionData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler
 const getASingleTransaction = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
     const transaction = yield transaction_service_1.TransactionServices.getASingleTransaction(req.params.id, decodedToken);
-    if (!transaction) {
-        throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "No transaction found. Please try with right id.");
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: "Transaction Retrieved Successfully.",
+        data: transaction,
+        statusCode: http_status_codes_1.default.OK
+    });
+}));
+// Get My Transaction 
+const getMyTransaction = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const decodedToken = req.user;
+    const { limit, sort } = req.query;
+    let tranLimit = 10;
+    let sortTran = "asc";
+    if (limit) {
+        tranLimit = Number(limit);
     }
+    if (sort) {
+        sortTran = sort;
+    }
+    const transaction = yield transaction_service_1.TransactionServices.getMyTransaction(tranLimit, sortTran, decodedToken);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Transaction Retrieved Successfully.",
@@ -117,5 +143,6 @@ exports.TransactionController = {
     getAllTransactionData,
     getASingleTransaction,
     addMoneyToAll,
-    agentToAgentB2b
+    agentToAgentB2b,
+    getMyTransaction
 };

@@ -479,11 +479,28 @@ const getASingleTransaction = (id, decodedToken) => __awaiter(void 0, void 0, vo
     }
     return transaction;
 });
+// Get My Transaction 
+const getMyTransaction = (tranLimit, sortTran, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
+    const myWallet = yield wallet_model_1.Wallet.findById(decodedToken.walletId);
+    if (!myWallet) {
+        throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Invalid Wallet Id. Wallet Not found.");
+    }
+    const sort = sortTran === "asc" ? 1 : -1;
+    const transactions = yield transaction_model_1.Transaction.find({
+        _id: { $in: myWallet.transaction }
+    }).select("send to amount commission fee type createdAt")
+        .populate("send", "name email phone role")
+        .populate("to", "name email phone role")
+        .sort({ createdAt: sort })
+        .limit(tranLimit);
+    return transactions;
+});
 exports.TransactionServices = {
     cashInTransfer,
     sendMoneyTransfer,
     userCashOutAgent,
     addMoneyToAll,
     agentToAgentB2b,
-    getASingleTransaction
+    getASingleTransaction,
+    getMyTransaction
 };

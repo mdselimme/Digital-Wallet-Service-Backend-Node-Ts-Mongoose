@@ -22,4 +22,6 @@ router.post("/b-to-b", (0, validateSchemaRequest_1.validateSchemaRequest)(transa
 router.get("/", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Admin, user_interface_1.IUserRole.Super_Admin), transaction_controller_1.TransactionController.getAllTransactionData);
 // Get A Single Transactions 
 router.get("/:id", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), transaction_controller_1.TransactionController.getASingleTransaction);
+//Get my transaction 
+router.get("/get/me", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), transaction_controller_1.TransactionController.getMyTransaction);
 exports.TransactionRouter = router;

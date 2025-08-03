@@ -31,8 +31,7 @@ const addMoneyToSuperAdminWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHa
 }));
 // Get Single Wallet data 
 const getMySingleWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const decodedToken = req.user;
-    const result = yield wallet_service_1.WalletService.getMySingleWallet(req.params.id, decodedToken);
+    const result = yield wallet_service_1.WalletService.getMySingleWallet(req.params.id);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Wallet retrieved successfully.",
@@ -42,8 +41,8 @@ const getMySingleWallet = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((r
 }));
 // Get All Wallet Data For admin 
 const getAllWalletData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limit } = req.query;
-    const result = yield wallet_service_1.WalletService.getAllWalletData(Number(limit));
+    const { limit, sort } = req.query;
+    const result = yield wallet_service_1.WalletService.getAllWalletData(Number(limit), sort);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "All Wallet retrieved successfully.",

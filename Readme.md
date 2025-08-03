@@ -85,7 +85,7 @@
 }
 ```
 
-#### user update api
+#### User update api
 
 - method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/update/:id
 - credentials: true.
@@ -346,8 +346,10 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 #### Get All Users
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user?limit={number}
+- method: `GET` api endpoint: http://localhost:5000/api/v1/user?limit=5&sort=asc&role=User
 - limit : default : 10
+- sort : default desc newest first and asc oldest first.
+- role: If you want to see role based user then you need to give a query role from these (Admin|User|Agent)
 - credentials: true
 - Super Admin and Admin can access this route.
 
