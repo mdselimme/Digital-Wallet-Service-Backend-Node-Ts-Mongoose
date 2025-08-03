@@ -715,9 +715,9 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    "receiverEmail": "mdmahabub@gamil.com",
+    "receiverEmail": "mdmahabub@gmail.com",
     "senderPassword": "54321",
-    "amount": 500
+    "amount": 1000
 }
 ```
 
@@ -725,7 +725,22 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
+    "message": "Send Money Successful.",
+    "statusCode": 200,
+    "success": true,
+    "data": [
+        {
+            "send": "688de4e123f59fd18d7967c3",
+            "to": "688de3b423f59fd18d79679c",
+            "amount": 1000,
+            "commission": 0,
+            "fee": 3,
+            "type": "SEND_MONEY",
+            "_id": "688f1914b59f247aee9346bc",
+            "createdAt": "2025-08-03T08:08:52.299Z",
+            "updatedAt": "2025-08-03T08:08:52.299Z"
+        }
+    ]
 }
 ```
 
@@ -756,7 +771,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    "receiverEmail": "mdmahabub@gamil.com",
+    "receiverEmail": "selinaakter@gmail.com",
     "senderPassword": "54321",
     "amount": 500
 }
@@ -766,7 +781,22 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
+    "message": "Your b2b transaction successful.",
+    "statusCode": 200,
+    "success": true,
+    "data": [
+        {
+            "send": "688de43123f59fd18d7967a8",
+            "to": "688de4b223f59fd18d7967b7",
+            "amount": 500,
+            "commission": 0,
+            "fee": 0,
+            "type": "B2B",
+            "_id": "688f1a51b59f247aee9346c8",
+            "createdAt": "2025-08-03T08:14:09.671Z",
+            "updatedAt": "2025-08-03T08:14:09.671Z"
+        }
+    ]
 }
 ```
 
@@ -781,21 +811,80 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-    
+    "message": "Transaction Retrieved Successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688e52d68cc4ba0301c3bfbd",
+        "send": {
+            "_id": "688de43123f59fd18d7967a8",
+            "name": "Md. Usuf",
+            "email": "mdusuf@gmail.com",
+            "role": "Agent",
+            "phone": "01932770805"
+        },
+        "to": {
+            "_id": "688de4e123f59fd18d7967c3",
+            "name": "Mst. Fatema",
+            "email": "mstfatema@gmail.com",
+            "role": "User",
+            "phone": "01932770806"
+        },
+        "amount": 30,
+        "commission": 0.15,
+        "fee": 0,
+        "type": "CASH_IN",
+        "createdAt": "2025-08-02T18:03:02.555Z",
+        "updatedAt": "2025-08-02T18:03:02.555Z"
+    }
 }
 ```
 
 #### 7. Get All Transaction
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction?limit={number}
 - credentials: true. 
+- default limit: 10. with out list see all transaction.
 - Super Admin And Admin Can Access This route.
 
 #### Response:
 
 ```json
 {
-    
+    "message": "All Transaction Retrieved Successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "total": {
+            "count": 15
+        },
+        "transaction": [
+            {
+                "_id": "688d3e151f118caa42601a5b",
+                "send": {
+                    "_id": "688d3e151f118caa42601a57",
+                    "name": "Digital Wallet",
+                    "email": "digitalwallet@gmail.com",
+                    "role": "Super_Admin",
+                    "phone": "01737210235"
+                },
+                "to": {
+                    "_id": "688d3e151f118caa42601a57",
+                    "name": "Digital Wallet",
+                    "email": "digitalwallet@gmail.com",
+                    "role": "Super_Admin",
+                    "phone": "01737210235"
+                },
+                "amount": 100000,
+                "commission": 0,
+                "fee": 0,
+                "type": "BONUS",
+                "createdAt": "2025-08-01T22:22:13.845Z",
+                "updatedAt": "2025-08-01T22:22:13.845Z"
+            },
+            {.....}
+        ]
+    }
 }
 ```
 
@@ -837,7 +926,20 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ```json
 {
-
+    "message": "Add money successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "send": "688d3e151f118caa42601a57",
+        "to": "688d3e151f118caa42601a57",
+        "amount": 500,
+        "commission": 0,
+        "fee": 0,
+        "type": "ADD_MONEY",
+        "_id": "688f344b7199b937e99bdc77",
+        "createdAt": "2025-08-03T10:04:59.783Z",
+        "updatedAt": "2025-08-03T10:04:59.783Z"
+    }
 }
 ```
 
@@ -846,23 +948,48 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 - method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet/{ObjectId}
 - credentials: true.
 - See every one wallet by id.
+- User and admin can see their wallet.
+- Super admin and admin can see everyone wallet
 
 ##### Request:
 
-example: https://digital-wallet-server.vercel.app/api/v1/wallet/{ObjectId}
+example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd18d796796
 
 #### Response:
 
 ```json
 {
-    
+    "message": "Wallet retrieved successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "_id": "688de36823f59fd18d796796",
+        "user": "688de36723f59fd18d796790",
+        "balance": 50,
+        "transaction": [
+            {
+                "_id": "688de36723f59fd18d796793",
+                "send": "688d3e151f118caa42601a57",
+                "to": "688de36723f59fd18d796790",
+                "amount": 50,
+                "commission": 0,
+                "fee": 0,
+                "type": "BONUS",
+                "createdAt": "2025-08-02T10:07:35.985Z",
+                "updatedAt": "2025-08-02T10:07:35.985Z"
+            }
+        ],
+        "createdAt": "2025-08-02T10:07:36.146Z",
+        "updatedAt": "2025-08-02T10:07:36.146Z"
+    }
 }
 ```
 
 #### 3. Get All Wallet Details
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet?limit=2
 - credentials: true. 
+- default limit: 10;
 - Super Admin And Admin can access this route.
 
 
@@ -870,7 +997,52 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/{ObjectId}
 
 ```json
 {
-    
+    "message": "All Wallet retrieved successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": [
+        {
+            "_id": "688d3e151f118caa42601a5d",
+            "user": {
+                "_id": "688d3e151f118caa42601a57",
+                "name": "Digital Wallet",
+                "email": "digitalwallet@gmail.com",
+                "role": "Super_Admin",
+                "phone": "01737210235"
+            },
+            "balance": 94000,
+            "transaction": [
+                "688d3e151f118caa42601a5b",
+                "688de266613ce0cb20c1e96d",
+                "688de36723f59fd18d796793",
+                "688de3b423f59fd18d79679f",
+                "688de43123f59fd18d7967ab",
+                "688de4b223f59fd18d7967ba",
+                "688de4e223f59fd18d7967c6",
+                "688de51223f59fd18d7967d2",
+                "688e51898cc4ba0301c3bfae",
+                "688f1835b59f247aee9346a5"
+            ],
+            "createdAt": "2025-08-01T22:22:13.955Z",
+            "updatedAt": "2025-08-03T08:05:10.017Z"
+        },
+        {
+            "_id": "688de266613ce0cb20c1e970",
+            "user": {
+                "_id": "688de266613ce0cb20c1e96a",
+                "name": "Contact Selim",
+                "email": "contact.mdselim.dev@gmail.com",
+                "role": "User",
+                "phone": "01700000002"
+            },
+            "balance": 50,
+            "transaction": [
+                "688de266613ce0cb20c1e96d"
+            ],
+            "createdAt": "2025-08-02T10:03:18.755Z",
+            "updatedAt": "2025-08-02T10:03:18.755Z"
+        }
+    ]
 }
 ```
 
@@ -880,13 +1052,15 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/{ObjectId}
 
 ```json
 {
-    success:false,
-    message: "Server Response Problem",
-    errorSource: [
+    "success":false,
+    "message": "Server Response Problem",
+    "data": null
+    "errorSource": [
         {....}
     ], //If source has any problem
-    error: {
+    "error": {
         .......
     }, //development mode
+    "stack": .... //development mode
 }
 ```

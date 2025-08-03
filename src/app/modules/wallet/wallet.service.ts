@@ -5,6 +5,8 @@ import { JwtPayload } from "jsonwebtoken";
 import { IUserRole } from "../users/user.interface";
 import { Transaction } from "../transaction/transaction.model";
 import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
+import { User } from "../users/user.model";
+import mongoose from "mongoose";
 
 // add money to super admin wallet id 
 const addMoneyToSuperAdminWallet = async (amount: number, decodedToken: JwtPayload) => {
@@ -50,11 +52,23 @@ const addMoneyToSuperAdminWallet = async (amount: number, decodedToken: JwtPaylo
 // Get single wallet 
 const getMySingleWallet = async (walletId: string, decodedToken: JwtPayload) => {
 
-    if (decodedToken.walletId !== walletId) {
-        throw new AppError(httpStatusCodes.BAD_REQUEST, "You are not authorized user.")
+    if (decodedToken.role === IUserRole.Agent || decodedToken.role === IUserRole.User) {
+        const user = await User.findById(decodedToken.userId);
+        if (!user) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Not a valid user");
+        }
+        const walId = new mongoose.Types.ObjectId(walletId);
+        const wallet = await Wallet.findById(decodedToken.walletId);
+        if (!wallet) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Not a valid wallet.");
+        }
+        // check same user wallet transaction match 
+        if (!user.walletId?.equals(walId) && !wallet._id.equals(walId)) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "It's not your wallet.");
+        }
     }
-
-    const result = await Wallet.findById(walletId).populate("transaction").lean();
+    const result = await Wallet.findById(walletId)
+        .populate("transaction").lean();
 
 
     if (!result) {

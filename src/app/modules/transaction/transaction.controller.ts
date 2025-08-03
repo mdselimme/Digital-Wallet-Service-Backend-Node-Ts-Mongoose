@@ -115,9 +115,11 @@ const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res
 // Get Single Transaction 
 const getASingleTransaction = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const transaction = await Transaction.findById(req.params.id)
-        .populate("send")
-        .populate("to");
+    const decodedToken = req.user;
+
+
+    const transaction = await TransactionServices.getASingleTransaction(req.params.id, decodedToken);
+
 
     if (!transaction) {
         throw new AppError(httpStatusCodes.NOT_FOUND, "No transaction found. Please try with right id.")

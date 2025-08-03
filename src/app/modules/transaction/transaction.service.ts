@@ -8,6 +8,7 @@ import { Transaction } from './transaction.model';
 import { IPaymentType, ISendTransPayload, ITransaction, ITransFee } from './transaction.interface';
 import { Wallet } from '../wallet/wallet.model';
 import { checkReceiverUser } from '../../utils/checkReceiverUser';
+import mongoose from 'mongoose';
 
 
 // Add Money Super Admin to Admin User Agent
@@ -426,6 +427,37 @@ const agentToAgentB2b = async (payload: ISendTransPayload, decodedToken: JwtPayl
     }
 };
 
+// Get A Single Transaction 
+const getASingleTransaction = async (id: string, decodedToken: JwtPayload) => {
+
+    if (decodedToken.role === IUserRole.Agent || decodedToken.role === IUserRole.User) {
+        const user = await User.findById(decodedToken.userId);
+        if (!user) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Not a valid user");
+        }
+        const tranId = new mongoose.Types.ObjectId(id);
+        const wallet = await Wallet.findById(decodedToken.walletId);
+        if (!wallet) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "Not a valid transaction");
+        }
+        // check same user wallet transaction match 
+        const isTransactionValid = wallet.transaction.some((trxId) => trxId.equals(tranId));
+        if (!isTransactionValid) {
+            throw new AppError(httpStatusCodes.BAD_REQUEST, "It's not your transaction.");
+        }
+    }
+
+    const transaction = await Transaction.findById(id)
+        .populate("send", "name email phone role")
+        .populate("to", "name email phone role");
+
+    if (!transaction) {
+        throw new AppError(httpStatusCodes.BAD_REQUEST, "Transaction id is not valid.");
+    }
+
+    return transaction;
+}
+
 
 
 
@@ -434,5 +466,6 @@ export const TransactionServices = {
     sendMoneyTransfer,
     userCashOutAgent,
     addMoneyToAll,
-    agentToAgentB2b
+    agentToAgentB2b,
+    getASingleTransaction
 }
