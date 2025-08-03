@@ -467,7 +467,7 @@ const getMyTransaction = async (tranLimit: number, sortTran: string, decodedToke
         throw new AppError(httpStatusCodes.BAD_REQUEST, "Invalid Wallet Id. Wallet Not found.");
     }
 
-    const sort = sortTran === "asc" ? -1 : 1;
+    const sort = sortTran === "asc" ? 1 : -1;
 
     const transactions = await Transaction.find({
         _id: { $in: myWallet.transaction }

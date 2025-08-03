@@ -14,12 +14,17 @@ router.patch("/add/super",
 
 // get single wallet by id 
 router.get("/:id",
-    checkAuthenticationUser(...Object.values(IUserRole)),
+    checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
     WalletController.getMySingleWallet
 );
 
 // Get All Wallet 
 router.get("/",
+    checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
+    WalletController.getAllWalletData
+);
+// Get All Wallet 
+router.get("/my-wallet",
     checkAuthenticationUser(IUserRole.Super_Admin, IUserRole.Admin),
     WalletController.getAllWalletData
 );

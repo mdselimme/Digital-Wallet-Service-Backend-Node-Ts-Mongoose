@@ -1020,9 +1020,10 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
 
 #### 3. Get All Wallet Details
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet?limit=2
+- method: `GET` api endpoint: http://localhost:5000/api/v1/wallet?limit=2&sort=desc
 - credentials: true.
 - default limit: 10;
+- You can sort data by by sort (default desc for newest firstly and asc for old firstly)
 - Super Admin And Admin can access this route.
 
 #### Response:
@@ -1042,21 +1043,8 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
                 "role": "Super_Admin",
                 "phone": "01737210235"
             },
-            "balance": 94000,
-            "transaction": [
-                "688d3e151f118caa42601a5b",
-                "688de266613ce0cb20c1e96d",
-                "688de36723f59fd18d796793",
-                "688de3b423f59fd18d79679f",
-                "688de43123f59fd18d7967ab",
-                "688de4b223f59fd18d7967ba",
-                "688de4e223f59fd18d7967c6",
-                "688de51223f59fd18d7967d2",
-                "688e51898cc4ba0301c3bfae",
-                "688f1835b59f247aee9346a5"
-            ],
-            "createdAt": "2025-08-01T22:22:13.955Z",
-            "updatedAt": "2025-08-03T08:05:10.017Z"
+            "balance": 94500,
+            "createdAt": "2025-08-01T22:22:13.955Z"
         },
         {
             "_id": "688de266613ce0cb20c1e970",
@@ -1068,11 +1056,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
                 "phone": "01700000002"
             },
             "balance": 50,
-            "transaction": [
-                "688de266613ce0cb20c1e96d"
-            ],
-            "createdAt": "2025-08-02T10:03:18.755Z",
-            "updatedAt": "2025-08-02T10:03:18.755Z"
+            "createdAt": "2025-08-02T10:03:18.755Z"
         }
     ]
 }
@@ -1087,6 +1071,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
     "success":false,
     "message": "Server Response Problem",
     "data": null
+    "statusCode":500,
     "errorSource": [
         {....}
     ], //If source has any problem

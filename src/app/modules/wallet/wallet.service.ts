@@ -5,8 +5,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { IUserRole } from "../users/user.interface";
 import { Transaction } from "../transaction/transaction.model";
 import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
-import { User } from "../users/user.model";
-import mongoose from "mongoose";
+
 
 // add money to super admin wallet id 
 const addMoneyToSuperAdminWallet = async (amount: number, decodedToken: JwtPayload) => {
@@ -50,26 +49,10 @@ const addMoneyToSuperAdminWallet = async (amount: number, decodedToken: JwtPaylo
 
 
 // Get single wallet 
-const getMySingleWallet = async (walletId: string, decodedToken: JwtPayload) => {
+const getMySingleWallet = async (walletId: string) => {
 
-    if (decodedToken.role === IUserRole.Agent || decodedToken.role === IUserRole.User) {
-        const user = await User.findById(decodedToken.userId);
-        if (!user) {
-            throw new AppError(httpStatusCodes.BAD_REQUEST, "Not a valid user");
-        }
-        const walId = new mongoose.Types.ObjectId(walletId);
-        const wallet = await Wallet.findById(decodedToken.walletId);
-        if (!wallet) {
-            throw new AppError(httpStatusCodes.BAD_REQUEST, "Not a valid wallet.");
-        }
-        // check same user wallet transaction match 
-        if (!user.walletId?.equals(walId) && !wallet._id.equals(walId)) {
-            throw new AppError(httpStatusCodes.BAD_REQUEST, "It's not your wallet.");
-        }
-    }
     const result = await Wallet.findById(walletId)
         .populate("transaction").lean();
-
 
     if (!result) {
         throw new AppError(httpStatusCodes.BAD_REQUEST, "Wallet data not found.")
@@ -80,21 +63,38 @@ const getMySingleWallet = async (walletId: string, decodedToken: JwtPayload) => 
 };
 
 // Get all wallet data 
-const getAllWalletData = async (limit: number) => {
+const getAllWalletData = async (limit: number, sort: string) => {
 
     let dataLimit = 10
+    let sortData: 1 | -1 = -1;
+
+    if (sort === "asc") {
+        sortData = 1
+    } else {
+        sortData = -1
+    }
 
     if (limit) {
         dataLimit = Number(limit)
     }
 
-    const result = await Wallet.find({}).populate("user", "name email role phone").limit(dataLimit);
+    const result = await Wallet.find({})
+        .select("-transaction -updatedAt")
+        .populate("user", "name email role phone")
+        .limit(dataLimit)
+        .sort({ createdAt: sortData });
+    const total = await Wallet.countDocuments();
 
     if (!result) {
         throw new AppError(httpStatusCodes.BAD_REQUEST, "Wallet data not found.")
     };
 
-    return result;
+    return {
+        total: {
+            count: total
+        },
+        result
+    };
 
 };
 

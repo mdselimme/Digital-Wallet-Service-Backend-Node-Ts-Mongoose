@@ -24,9 +24,7 @@ const addMoneyToSuperAdminWallet = catchAsyncTryCatchHandler(async (req: Request
 // Get Single Wallet data 
 const getMySingleWallet = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const decodedToken = req.user;
-
-    const result = await WalletService.getMySingleWallet(req.params.id, decodedToken);
+    const result = await WalletService.getMySingleWallet(req.params.id);
 
     sendResponse(res, {
         success: true,
@@ -39,9 +37,9 @@ const getMySingleWallet = catchAsyncTryCatchHandler(async (req: Request, res: Re
 // Get All Wallet Data For admin 
 const getAllWalletData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { limit } = req.query;
+    const { limit, sort } = req.query;
 
-    const result = await WalletService.getAllWalletData(Number(limit));
+    const result = await WalletService.getAllWalletData(Number(limit), sort as string);
 
     sendResponse(res, {
         success: true,
