@@ -17,7 +17,7 @@ app.use("/api/v1/", routes_1.router);
 // Default Route 
 app.get("/", (req, res) => {
     res.json({
-        version: "0.1",
+        version: "0.2",
         message: "Digital Wallet Server is running."
     });
 });

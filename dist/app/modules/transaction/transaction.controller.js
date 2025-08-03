@@ -19,10 +19,10 @@ const sendResponse_1 = require("../../utils/sendResponse");
 const transaction_service_1 = require("./transaction.service");
 const transaction_model_1 = require("./transaction.model");
 const AppError_1 = require("../../utils/AppError");
-// Add Money User and Agent 
-const addMoneyToAgent = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// Add Money Super Admin to Other
+const addMoneyToAll = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
-    const transaction = yield transaction_service_1.TransactionServices.addMoneyToAgent(req.body, decodedToken);
+    const transaction = yield transaction_service_1.TransactionServices.addMoneyToAll(req.body, decodedToken);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Add money successful.",
@@ -98,9 +98,8 @@ const getAllTransactionData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler
 }));
 // Get Single Transaction 
 const getASingleTransaction = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const transaction = yield transaction_model_1.Transaction.findById(req.params.id)
-        .populate("send")
-        .populate("to");
+    const decodedToken = req.user;
+    const transaction = yield transaction_service_1.TransactionServices.getASingleTransaction(req.params.id, decodedToken);
     if (!transaction) {
         throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "No transaction found. Please try with right id.");
     }
@@ -117,6 +116,6 @@ exports.TransactionController = {
     userCashOutAgent,
     getAllTransactionData,
     getASingleTransaction,
-    addMoneyToAgent,
+    addMoneyToAll,
     agentToAgentB2b
 };

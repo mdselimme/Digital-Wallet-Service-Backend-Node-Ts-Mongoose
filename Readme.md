@@ -384,6 +384,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
     }
 }
 ```
+
 ## Auth Api Description:
 
 - User can login with email and password and find accesstoken and refreshtoken.
@@ -485,7 +486,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
     "statusCode": 200,
     "success": true,
     "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRiMjIzZjU5ZmQxOGQ3OTY3YjciLCJlbWFpbCI6InNlbGluYWFrdGVyQGdtYWlsLmNvbSIsInJvbGUiOiJBZ2VudCIsImlhdCI6MTc1NDE1NTk0MCwiZXhwIjoxNzU0MjQyMzQwfQ.HF2k7aW6T3pPbDTckNwpEbB880YZHvYgmyxvFVQlL_4"
-} 
+}
 
 ```
 
@@ -517,20 +518,19 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 5. B2B Agent To Agent
 
-
 #### 1. Add Money Super Admin To Other Api
 
 - method: `POST` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction/add-money
 - credentials: true. (Sender Credentials)
 - Super Admin And Admin Only Access this route
-- When User Create An Account He has no money in his account than  without bonus. That's why he take money from the Super Admin. 
+- When User Create An Account He has no money in his account than without bonus. That's why he take money from the Super Admin.
 
 ##### schema body design:
 
-* Receiver Email must be valid and not super admin user also first time not admin user.
-* sender password must be right.
-* amount must be greater than 0 and no negative number.
-* Transaction fee will be 0
+- Receiver Email must be valid and not super admin user also first time not admin user.
+- sender password must be right.
+- amount must be greater than 0 and no negative number.
+- Transaction fee will be 0
 
 ```json
 {
@@ -541,7 +541,6 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 ```
 
 ##### Request:
-
 
 ```json
 {
@@ -583,10 +582,10 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ##### schema body design:
 
-* Receiver Email must be valid and not super admin user also first time not admin user.
-* sender password must be right.
-* amount must be greater than 0 and no negative number.
-* Transaction fee will be 0
+- Receiver Email must be valid and not super admin user also first time not admin user.
+- sender password must be right.
+- amount must be greater than 0 and no negative number.
+- Transaction fee will be 0
 
 ```json
 {
@@ -597,7 +596,6 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 ```
 
 ##### Request:
-
 
 ```json
 {
@@ -640,10 +638,9 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ##### schema body design:
 
-* Receiver Email must be valid and not super admin user also first time not admin user.
-* sender password must be right.
-* amount must be greater than 0 and no negative number.
-
+- Receiver Email must be valid and not super admin user also first time not admin user.
+- sender password must be right.
+- amount must be greater than 0 and no negative number.
 
 ```json
 {
@@ -654,7 +651,6 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 ```
 
 ##### Request:
-
 
 ```json
 {
@@ -697,10 +693,9 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ##### schema body design:
 
-* Receiver Email must be valid and not super admin user also first time not admin user.
-* sender password must be right.
-* amount must be greater than 0 and no negative number.
-
+- Receiver Email must be valid and not super admin user also first time not admin user.
+- sender password must be right.
+- amount must be greater than 0 and no negative number.
 
 ```json
 {
@@ -711,7 +706,6 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 ```
 
 ##### Request:
-
 
 ```json
 {
@@ -754,10 +748,9 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ##### schema body design:
 
-* Receiver Email must be valid and not super admin user also first time not admin user.
-* sender password must be right.
-* amount must be greater than 0 and no negative number.
-
+- Receiver Email must be valid and not super admin user also first time not admin user.
+- sender password must be right.
+- amount must be greater than 0 and no negative number.
 
 ```json
 {
@@ -800,10 +793,51 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 }
 ```
 
-#### 6. Get All Transaction
+#### 6. Get My transaction
+
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction/get/me?limit=1&sort=asc
+- credentials: true. (Sender Credentials)
+- limit default 10 sort by new transaction.
+- sort (desc or asc) asc give new transaction first desc give old transaction first.
+
+#### Response:
+
+```json
+{
+    "message": "Transaction Retrieved Successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": [
+        {
+            "_id": "688f1a51b59f247aee9346c8",
+            "send": {
+                "_id": "688de43123f59fd18d7967a8",
+                "name": "Md. Usuf",
+                "email": "mdusuf@gmail.com",
+                "role": "Agent",
+                "phone": "01932770805"
+            },
+            "to": {
+                "_id": "688de4b223f59fd18d7967b7",
+                "name": "Selina Akter",
+                "email": "selinaakter@gmail.com",
+                "role": "Agent",
+                "phone": "01932770808"
+            },
+            "amount": 500,
+            "commission": 0,
+            "fee": 0,
+            "type": "B2B",
+            "createdAt": "2025-08-03T08:14:09.671Z"
+        }
+    ]
+}
+```
+
+#### 7. Get Single Transaction
 
 - method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction/{objectId}
-- credentials: true. 
+- credentials: true.
 - If User And Agent can Access Their transaction.
 - Admin And Super Admin Get All User Transaction.
 
@@ -840,12 +874,13 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 }
 ```
 
-#### 7. Get All Transaction
+#### 8. Get All Transaction
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction?limit={number}
-- credentials: true. 
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction?limit={number}&sort=asc
+- credentials: true.
 - default limit: 10. with out list see all transaction.
 - Super Admin And Admin Can Access This route.
+- sort (desc or asc) asc give new transaction first desc give old transaction first.
 
 #### Response:
 
@@ -888,21 +923,19 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 }
 ```
 
-
 ## Wallet Api Description:
 
 1. Add Money Super Admin
 
-2. Get Single Wallet 
+2. Get Single Wallet
 
 3. Get All Wallet
-
 
 #### 1. Add Money Super Admin
 
 - method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet/add/super
-- credentials: true. 
-- Super Admin  Can Access This route.
+- credentials: true.
+- Super Admin Can Access This route.
 
 ##### schema body design:
 
@@ -914,7 +947,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 ##### Request:
 
-* amount must be a positive number and greater than 0.
+- amount must be a positive number and greater than 0.
 
 ```json
 {
@@ -988,10 +1021,9 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
 #### 3. Get All Wallet Details
 
 - method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/wallet?limit=2
-- credentials: true. 
+- credentials: true.
 - default limit: 10;
 - Super Admin And Admin can access this route.
-
 
 #### Response:
 

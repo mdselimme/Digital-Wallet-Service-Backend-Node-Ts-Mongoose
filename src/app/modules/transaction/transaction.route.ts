@@ -57,5 +57,11 @@ router.get("/:id",
     TransactionController.getASingleTransaction
 );
 
+//Get my transaction 
+router.get("/get/me",
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    TransactionController.getMyTransaction
+)
+
 
 export const TransactionRouter = router;

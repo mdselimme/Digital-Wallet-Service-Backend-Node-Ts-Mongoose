@@ -22,8 +22,9 @@ const transaction_model_1 = require("./transaction.model");
 const transaction_interface_1 = require("./transaction.interface");
 const wallet_model_1 = require("../wallet/wallet.model");
 const checkReceiverUser_1 = require("../../utils/checkReceiverUser");
-// Add Money User to Agent 
-const addMoneyToAgent = (payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
+const mongoose_1 = __importDefault(require("mongoose"));
+// Add Money Super Admin to Admin User Agent
+const addMoneyToAll = (payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield wallet_model_1.Wallet.startSession();
     session.startTransaction();
     try {
@@ -40,7 +41,7 @@ const addMoneyToAgent = (payload, decodedToken) => __awaiter(void 0, void 0, voi
         (0, checkReceiverUser_1.checkReceiverUser)(receiverUser);
         // add money receive only other user 
         if (receiverUser.role === user_interface_1.IUserRole.Super_Admin) {
-            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}.`);
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your receiver account type is ${receiverUser.role}. You can't add money.`);
         }
         ;
         // who send the money 
@@ -224,6 +225,10 @@ const sendMoneyTransfer = (payload, decodedToken) => __awaiter(void 0, void 0, v
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only user can send money another user.`);
         }
         ;
+        // if sender and receiver same email
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Same user! Can't transaction.");
+        }
         // sender password check 
         const passwordCheck = yield bcrypt_1.default.compare(senderPassword, sendingUser.password);
         // if password don't match 
@@ -307,6 +312,10 @@ const userCashOutAgent = (payload, decodedToken) => __awaiter(void 0, void 0, vo
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only user account can cash out.`);
         }
         ;
+        // if sender and receiver same email
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Same user! Can't transaction.");
+        }
         // sender password check 
         const passwordCheck = yield bcrypt_1.default.compare(senderPassword, sendingUser.password);
         // if password don't match 
@@ -390,6 +399,10 @@ const agentToAgentB2b = (payload, decodedToken) => __awaiter(void 0, void 0, voi
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, `Your sender account type is ${sendingUser.role}. Only agent account type can send b2b.`);
         }
         ;
+        // if sender and receiver same email
+        if (sendingUser.email === payload.receiverEmail) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Same user! Can't transaction.");
+        }
         // sender password check 
         const passwordCheck = yield bcrypt_1.default.compare(senderPassword, sendingUser.password);
         // if password don't match 
@@ -440,10 +453,37 @@ const agentToAgentB2b = (payload, decodedToken) => __awaiter(void 0, void 0, voi
         throw error;
     }
 });
+// Get A Single Transaction 
+const getASingleTransaction = (id, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
+    if (decodedToken.role === user_interface_1.IUserRole.Agent || decodedToken.role === user_interface_1.IUserRole.User) {
+        const user = yield user_model_1.User.findById(decodedToken.userId);
+        if (!user) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Not a valid user");
+        }
+        const tranId = new mongoose_1.default.Types.ObjectId(id);
+        const wallet = yield wallet_model_1.Wallet.findById(decodedToken.walletId);
+        if (!wallet) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Not a valid transaction");
+        }
+        // check same user wallet transaction match 
+        const isTransactionValid = wallet.transaction.some((trxId) => trxId.equals(tranId));
+        if (!isTransactionValid) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "It's not your transaction.");
+        }
+    }
+    const transaction = yield transaction_model_1.Transaction.findById(id)
+        .populate("send", "name email phone role")
+        .populate("to", "name email phone role");
+    if (!transaction) {
+        throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Transaction id is not valid.");
+    }
+    return transaction;
+});
 exports.TransactionServices = {
     cashInTransfer,
     sendMoneyTransfer,
     userCashOutAgent,
-    addMoneyToAgent,
-    agentToAgentB2b
+    addMoneyToAll,
+    agentToAgentB2b,
+    getASingleTransaction
 };

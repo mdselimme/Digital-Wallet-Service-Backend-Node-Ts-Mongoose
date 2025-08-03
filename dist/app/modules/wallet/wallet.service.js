@@ -19,6 +19,8 @@ const AppError_1 = require("../../utils/AppError");
 const user_interface_1 = require("../users/user.interface");
 const transaction_model_1 = require("../transaction/transaction.model");
 const transaction_interface_1 = require("../transaction/transaction.interface");
+const user_model_1 = require("../users/user.model");
+const mongoose_1 = __importDefault(require("mongoose"));
 // add money to super admin wallet id 
 const addMoneyToSuperAdminWallet = (amount, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
     if (amount <= 0) {
@@ -50,10 +52,24 @@ const addMoneyToSuperAdminWallet = (amount, decodedToken) => __awaiter(void 0, v
 });
 // Get single wallet 
 const getMySingleWallet = (walletId, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
-    if (decodedToken.walletId !== walletId) {
-        throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "You are not authorized user.");
+    var _a;
+    if (decodedToken.role === user_interface_1.IUserRole.Agent || decodedToken.role === user_interface_1.IUserRole.User) {
+        const user = yield user_model_1.User.findById(decodedToken.userId);
+        if (!user) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Not a valid user");
+        }
+        const walId = new mongoose_1.default.Types.ObjectId(walletId);
+        const wallet = yield wallet_model_1.Wallet.findById(decodedToken.walletId);
+        if (!wallet) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Not a valid wallet.");
+        }
+        // check same user wallet transaction match 
+        if (!((_a = user.walletId) === null || _a === void 0 ? void 0 : _a.equals(walId)) && !wallet._id.equals(walId)) {
+            throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "It's not your wallet.");
+        }
     }
-    const result = yield wallet_model_1.Wallet.findById(walletId).populate("transaction").lean();
+    const result = yield wallet_model_1.Wallet.findById(walletId)
+        .populate("transaction").lean();
     if (!result) {
         throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Wallet data not found.");
     }

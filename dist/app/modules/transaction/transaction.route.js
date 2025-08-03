@@ -8,10 +8,10 @@ const transaction_controller_1 = require("./transaction.controller");
 const validateSchemaRequest_1 = require("../../middleware/validateSchemaRequest");
 const transaction_validation_1 = require("./transaction.validation");
 const router = (0, express_1.Router)();
+// Add money super admin to Other
+router.post("/add-money", (0, validateSchemaRequest_1.validateSchemaRequest)(transaction_validation_1.transactionDataZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Admin, user_interface_1.IUserRole.Super_Admin), transaction_controller_1.TransactionController.addMoneyToAll);
 // Cash In User From agent 
 router.post("/cash-in", (0, validateSchemaRequest_1.validateSchemaRequest)(transaction_validation_1.transactionDataZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Agent), transaction_controller_1.TransactionController.cashInTransfer);
-// Cash In User From agent 
-router.post("/add-money", (0, validateSchemaRequest_1.validateSchemaRequest)(transaction_validation_1.transactionDataZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Admin, user_interface_1.IUserRole.Super_Admin), transaction_controller_1.TransactionController.addMoneyToAgent);
 // Send Money User From User 
 router.post("/send-money", (0, validateSchemaRequest_1.validateSchemaRequest)(transaction_validation_1.transactionDataZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.User), transaction_controller_1.TransactionController.sendMoneyTransfer);
 // Cash Out User From Agent

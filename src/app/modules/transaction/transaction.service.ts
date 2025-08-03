@@ -458,6 +458,27 @@ const getASingleTransaction = async (id: string, decodedToken: JwtPayload) => {
     return transaction;
 }
 
+// Get My Transaction 
+const getMyTransaction = async (tranLimit: number, sortTran: string, decodedToken: JwtPayload) => {
+
+    const myWallet = await Wallet.findById(decodedToken.walletId);
+
+    if (!myWallet) {
+        throw new AppError(httpStatusCodes.BAD_REQUEST, "Invalid Wallet Id. Wallet Not found.");
+    }
+
+    const sort = sortTran === "asc" ? -1 : 1;
+
+    const transactions = await Transaction.find({
+        _id: { $in: myWallet.transaction }
+    }).select("send to amount commission fee type createdAt")
+        .populate("send", "name email phone role")
+        .populate("to", "name email phone role")
+        .sort({ createdAt: sort })
+        .limit(tranLimit)
+
+    return transactions;
+}
 
 
 
@@ -467,5 +488,6 @@ export const TransactionServices = {
     userCashOutAgent,
     addMoneyToAll,
     agentToAgentB2b,
-    getASingleTransaction
+    getASingleTransaction,
+    getMyTransaction
 }

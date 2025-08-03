@@ -4,7 +4,7 @@ import { catchAsyncTryCatchHandler } from "../../utils/catchAsyncTryCatch"
 import { sendResponse } from "../../utils/sendResponse";
 import { TransactionServices } from './transaction.service';
 import { Transaction } from './transaction.model';
-import { AppError } from '../../utils/AppError';
+
 
 
 
@@ -86,17 +86,27 @@ const agentToAgentB2b = catchAsyncTryCatchHandler(async (req: Request, res: Resp
 // Get All Transaction Data
 const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { limit } = req.query;
+    const { limit, sort } = req.query;
 
-    let dataLimit = 10
+    let dataLimit = 10;
+
+    let sortTran: 1 | -1 = -1;
 
     if (limit) {
         dataLimit = Number(limit)
     }
 
+    if (sort === "desc") {
+        sortTran = -1;
+    } else {
+        sortTran = 1;
+    }
+
     const transaction = await Transaction.find({})
         .populate("send", "name email role phone")
-        .populate("to", "name email role phone").limit(dataLimit)
+        .populate("to", "name email role phone")
+        .limit(dataLimit)
+        .sort({ createdAt: sortTran });
 
     const total = await Transaction.countDocuments();
 
@@ -106,7 +116,8 @@ const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res
         data: {
             total: {
                 count: total
-            }, transaction
+            },
+            transaction
         },
         statusCode: httpStatusCodes.OK
     });
@@ -121,9 +132,34 @@ const getASingleTransaction = catchAsyncTryCatchHandler(async (req: Request, res
     const transaction = await TransactionServices.getASingleTransaction(req.params.id, decodedToken);
 
 
-    if (!transaction) {
-        throw new AppError(httpStatusCodes.NOT_FOUND, "No transaction found. Please try with right id.")
+    sendResponse(res, {
+        success: true,
+        message: "Transaction Retrieved Successfully.",
+        data: transaction,
+        statusCode: httpStatusCodes.OK
+    });
+});
+
+// Get My Transaction 
+const getMyTransaction = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const decodedToken = req.user;
+
+    const { limit, sort } = req.query;
+
+    let tranLimit = 10;
+
+    let sortTran = "asc"
+
+    if (limit) {
+        tranLimit = Number(limit);
     }
+
+    if (sort) {
+        sortTran = sort as string;
+    }
+
+    const transaction = await TransactionServices.getMyTransaction(tranLimit, sortTran, decodedToken);
 
     sendResponse(res, {
         success: true,
@@ -133,8 +169,6 @@ const getASingleTransaction = catchAsyncTryCatchHandler(async (req: Request, res
     });
 });
 
-
-
 export const TransactionController = {
     cashInTransfer,
     sendMoneyTransfer,
@@ -142,5 +176,6 @@ export const TransactionController = {
     getAllTransactionData,
     getASingleTransaction,
     addMoneyToAll,
-    agentToAgentB2b
+    agentToAgentB2b,
+    getMyTransaction
 }
