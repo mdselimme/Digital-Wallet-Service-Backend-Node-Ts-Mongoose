@@ -1128,18 +1128,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
                 "balance": 50,
                 "createdAt": "2025-08-03T17:32:52.805Z"
             },
-            {
-                "_id": "688de51323f59fd18d7967d5",
-                "user": {
-                    "_id": "688de51223f59fd18d7967cf",
-                    "name": "Md Moin",
-                    "email": "mdmoin@gmail.com",
-                    "role": "Admin",
-                    "phone": "01932770807"
-                },
-                "balance": 50,
-                "createdAt": "2025-08-02T10:14:43.111Z"
-            }
+            {...}
         ]
     }
 }
