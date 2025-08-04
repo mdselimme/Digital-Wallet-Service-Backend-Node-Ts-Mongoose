@@ -100,7 +100,7 @@ const updateAnUserStatus = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((
 const updateAnUserIsActive = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
     const { email } = req.query;
-    const result = yield user_service_1.UserService.updateAnUserRole(email, req.body, decodedToken);
+    const result = yield user_service_1.UserService.updateAnUserIsActive(email, req.body, decodedToken);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Update User Successfully",

@@ -296,7 +296,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/status?email=usufa
 
 #### User Activity Update Api
 
-- method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/active?email={useremail}
+- method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/activity?email={useremail}
 - credentials: true.
 - Super Admin And Admin Can Access this route
 

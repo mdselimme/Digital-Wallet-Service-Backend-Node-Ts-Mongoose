@@ -229,7 +229,7 @@ const updateAnUserRole = async (email: string, payload: Partial<IUserModel>, dec
 // User Status Update 
 const updateAnUserStatus = async (email: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
     if (decodedToken.role !== IUserRole.Super_Admin || decodedToken.role !== IUserRole.Admin) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "You can not perform user status change.")
+        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized user. You can not perform user status change.")
     }
     // user find 
     const user = await User.findOne({ email });
@@ -246,7 +246,7 @@ const updateAnUserStatus = async (email: string, payload: Partial<IUserModel>, d
     // if payload role is super admin or user role and payload role is equal 
     if (payload.userStatus) {
         if (payload.userStatus === user.userStatus) {
-            throw new AppError(StatusCodes.BAD_REQUEST, "You can't perform this work.");
+            throw new AppError(StatusCodes.BAD_REQUEST, `You are already ${payload.userStatus}. So you can't do this.`);
         };
     }
     // Update User role perform 
@@ -257,17 +257,18 @@ const updateAnUserStatus = async (email: string, payload: Partial<IUserModel>, d
 }
 
 const updateAnUserIsActive = async (email: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
-
     // user find 
     const user = await User.findOne({ email });
     // If User not found 
     if (!user) {
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
     }
-    // check User status or is active 
-    checkReceiverUser(user as IUserModel);
+
     // super admin adn admin can only do bloced user account 
     if (payload.isActive === isActive.Blocked && decodedToken.role !== (IUserRole.Super_Admin || IUserRole.Admin)) {
+        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this perform.");
+    }
+    if (payload.isActive === isActive.Active && decodedToken.role !== (IUserRole.Super_Admin || IUserRole.Admin)) {
         throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this perform.");
     }
     //If User is Super_Admin than he can't change his role.
@@ -279,8 +280,8 @@ const updateAnUserIsActive = async (email: string, payload: Partial<IUserModel>,
         throw new AppError(StatusCodes.BAD_REQUEST, `Your account already ${user.isActive}.`);
     }
     // if role is not super admin or admin then it check token userid and user id 
-    if (decodedToken.role !== IUserRole.Super_Admin || decodedToken.role !== IUserRole.Admin) {
-        if (user._id !== decodedToken.userId) {
+    if (decodedToken.role !== (IUserRole.Super_Admin || IUserRole.Admin)) {
+        if (user.email !== decodedToken.email) {
             throw new AppError(StatusCodes.BAD_REQUEST, `You are not authorized.`);
         }
     }

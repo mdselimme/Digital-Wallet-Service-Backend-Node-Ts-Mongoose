@@ -127,7 +127,7 @@ const updateAnUserIsActive = catchAsyncTryCatchHandler(async (req: Request, res:
 
     const { email } = req.query;
 
-    const result = await UserService.updateAnUserRole(email as string, req.body, decodedToken as JwtPayload);
+    const result = await UserService.updateAnUserIsActive(email as string, req.body, decodedToken as JwtPayload);
 
     sendResponse(res, {
         success: true,

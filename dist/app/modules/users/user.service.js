@@ -192,7 +192,7 @@ const updateAnUserRole = (email, payload, decodedToken) => __awaiter(void 0, voi
 // User Status Update 
 const updateAnUserStatus = (email, payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
     if (decodedToken.role !== user_interface_1.IUserRole.Super_Admin || decodedToken.role !== user_interface_1.IUserRole.Admin) {
-        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You can not perform user status change.");
+        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized user. You can not perform user status change.");
     }
     // user find 
     const user = yield user_model_1.User.findOne({ email });
@@ -209,7 +209,7 @@ const updateAnUserStatus = (email, payload, decodedToken) => __awaiter(void 0, v
     // if payload role is super admin or user role and payload role is equal 
     if (payload.userStatus) {
         if (payload.userStatus === user.userStatus) {
-            throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You can't perform this work.");
+            throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, `You are already ${payload.userStatus}. So you can't do this.`);
         }
         ;
     }
@@ -225,10 +225,11 @@ const updateAnUserIsActive = (email, payload, decodedToken) => __awaiter(void 0,
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "User does not found.");
     }
-    // check User status or is active 
-    (0, checkReceiverUser_1.checkReceiverUser)(user);
     // super admin adn admin can only do bloced user account 
     if (payload.isActive === user_interface_1.isActive.Blocked && decodedToken.role !== (user_interface_1.IUserRole.Super_Admin || user_interface_1.IUserRole.Admin)) {
+        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized for this perform.");
+    }
+    if (payload.isActive === user_interface_1.isActive.Active && decodedToken.role !== (user_interface_1.IUserRole.Super_Admin || user_interface_1.IUserRole.Admin)) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized for this perform.");
     }
     //If User is Super_Admin than he can't change his role.
@@ -240,8 +241,8 @@ const updateAnUserIsActive = (email, payload, decodedToken) => __awaiter(void 0,
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, `Your account already ${user.isActive}.`);
     }
     // if role is not super admin or admin then it check token userid and user id 
-    if (decodedToken.role !== user_interface_1.IUserRole.Super_Admin || decodedToken.role !== user_interface_1.IUserRole.Admin) {
-        if (user._id !== decodedToken.userId) {
+    if (decodedToken.role !== (user_interface_1.IUserRole.Super_Admin || user_interface_1.IUserRole.Admin)) {
+        if (user.email !== decodedToken.email) {
             throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, `You are not authorized.`);
         }
     }

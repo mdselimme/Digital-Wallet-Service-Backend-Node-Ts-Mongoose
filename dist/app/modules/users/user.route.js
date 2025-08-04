@@ -21,7 +21,7 @@ router.patch("/role", (0, validateSchemaRequest_1.validateSchemaRequest)(user_va
 // User suspend or suspend
 router.patch("/status", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Super_Admin, user_interface_1.IUserRole.Admin), user_controller_1.UserController.updateAnUserStatus);
 // Make User blocked and deleted
-router.patch("/active", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.updateAnUserIsActive);
+router.patch("/activity", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateRoleZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.updateAnUserIsActive);
 // Get All Users 
 router.get("/", (0, checkAuthentication_1.checkAuthenticationUser)(user_interface_1.IUserRole.Admin, user_interface_1.IUserRole.Super_Admin), user_controller_1.UserController.getAllUsers);
 exports.UserRouter = router;
