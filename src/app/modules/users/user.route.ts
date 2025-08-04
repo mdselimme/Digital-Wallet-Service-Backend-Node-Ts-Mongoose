@@ -48,7 +48,7 @@ router.patch("/status",
 );
 
 // Make User blocked and deleted
-router.patch("/active",
+router.patch("/activity",
     validateSchemaRequest(updateRoleZodSchema),
     checkAuthenticationUser(...Object.values(IUserRole)),
     UserController.updateAnUserIsActive
