@@ -200,8 +200,6 @@ const updateAnUserStatus = (email, payload, decodedToken) => __awaiter(void 0, v
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "User does not found.");
     }
-    // check User status or is active 
-    (0, checkReceiverUser_1.checkReceiverUser)(user);
     //If User is Super_Admin than he can't change his role.
     if (user.role === user_interface_1.IUserRole.Super_Admin || user.role === user_interface_1.IUserRole.Admin) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "You can't perform your role change work.");

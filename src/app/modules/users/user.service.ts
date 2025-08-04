@@ -237,8 +237,6 @@ const updateAnUserStatus = async (email: string, payload: Partial<IUserModel>, d
     if (!user) {
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
     }
-    // check User status or is active 
-    checkReceiverUser(user as IUserModel)
     //If User is Super_Admin than he can't change his role.
     if (user.role === IUserRole.Super_Admin || user.role === IUserRole.Admin) {
         throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
