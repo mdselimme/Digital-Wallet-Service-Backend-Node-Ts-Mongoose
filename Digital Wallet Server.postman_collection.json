@@ -1,0 +1,950 @@
+{
+	"info": {
+		"_postman_id": "cca668bd-adc8-4ee7-a52a-0067cb9a8fec",
+		"name": "Digital Wallet Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43349328",
+		"_collection_link": "https://planetary-shadow-559990.postman.co/workspace/Team-Workspace~211c2121-e98f-4968-8083-0a1b23a3cfd8/collection/43349328-cca668bd-adc8-4ee7-a52a-0067cb9a8fec?action=share&source=collection_link&creator=43349328"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODcxZjgzOWJhNTJlMjM4OTc0MzVlOGMiLCJlbWFpbCI6InN1cGVyYWRtaW5AZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNzUzNjQ0MzkwLCJleHAiOjE3NTM3MzA3OTB9.hODJWNjyccC2hrIRh59wb3Pgi7V6PKASNwrPvOV9-PI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Abu Bakar\",\r\n    \"email\": \"abubakar@gmail.com\",\r\n    \"phone\": \"01700000006\",\r\n    \"password\": \"54321\",\r\n    \"role\": \"Admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user/register",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update An User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\":\"Niguary, Gafargaon, Mymensingh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user/update/688f9d4409c0934c438d0ea7",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"update",
+								"688f9d4409c0934c438d0ea7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\":\"Admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user/role?email=abubakar@gmail.com",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"role"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "abubakar@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    //value (Suspend or Approve)\r\n    \"userStatus\":\"Suspesnd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user/status?email=abubakar@gmail.com",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"status"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "abubakar@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Activity",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhmOWQ0NDA5YzA5MzRjNDM4ZDBlYTciLCJlbWFpbCI6ImFidWJha2FyQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIndhbGxldElkIjoiNjg4ZjlkNDQwOWMwOTM0YzQzOGQwZWFkIiwiaWF0IjoxNzU0MzAxNDExLCJleHAiOjE3NTQzODc4MTF9.Lby_6T15opyofr9_7PIO2Js7XN6udZbjeWU3W9cmf-4",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    //Value (Active | Blocked | Deleted)\r\n    \"isActive\":\"Deleted\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user/activity?email=abubakar@gmail.com",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"activity"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "abubakar@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user?role=Agent",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "Agent"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ge me User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user/me",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single User By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/user/688f9d4409c0934c438d0ea7",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"688f9d4409c0934c438d0ea7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Log in User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    //User\r\n    \"email\": \"mstfatema@gmail.com\",\r\n    //User\r\n    // \"email\": \"mstfatema@gmail.com\",\r\n    //Agent\r\n    // \"email\": \"selinaakter@gmail.com\",\r\n    //Agent\r\n    // \"email\": \"mdusuf@gmail.com\",\r\n    //Admin\r\n    //  \"email\": \"abubakar@gmail.com\",\r\n     //Admin\r\n    //  \"email\": \"mdmoin@gmail.com\",\r\n     //Super_Admin\r\n    //  \"email\": \"digitalwallet@gmail.com\",\r\n     //Password For All\r\n     \"password\": \"54321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/auth/login",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/auth/logout",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRiMjIzZjU5ZmQxOGQ3OTY3YjciLCJlbWFpbCI6InNlbGluYWFrdGVyQGdtYWlsLmNvbSIsInJvbGUiOiJBZ2VudCIsIndhbGxldElkIjoiNjg4ZGU0YjIyM2Y1OWZkMThkNzk2N2JkIiwiaWF0IjoxNzU0MTU1NjgwLCJleHAiOjE3NTQyNDIwODB9.xe4UZeeptcXV6XbruX76ll6iZ2j_GeEWbS2Llm2HUZw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/auth/refresh-token",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"54321\",\r\n    \"newPassword\": \"54321\"\r\n}\r\n\r\n//  \"email\": \"digitalwallet@gmail.com\",\r\n//     \"password\": \"Dg@123456\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/auth/reset-password",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Add Money To Agent And Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiverEmail\": \"selinaakter@gmail.com\",\r\n    \"senderPassword\": \"54321\",\r\n    \"amount\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction/add-money",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"add-money"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agent Cash In User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRiMjIzZjU5ZmQxOGQ3OTY3YjciLCJlbWFpbCI6InNlbGluYWFrdGVyQGdtYWlsLmNvbSIsInJvbGUiOiJBZ2VudCIsIndhbGxldElkIjoiNjg4ZGU0YjIyM2Y1OWZkMThkNzk2N2JkIiwiaWF0IjoxNzU0MjQzOTA4LCJleHAiOjE3NTQzMzAzMDh9.hCPtd8RUyWXapNXtjfhM6nFLpM2tuR5cxSi6clR4MQQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiverEmail\": \"selimakondo58@gmail.com\",\r\n    \"senderPassword\": \"54321\",\r\n    \"amount\": 300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction/cash-in",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"cash-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cash Out User From Agent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRlMTIzZjU5ZmQxOGQ3OTY3YzMiLCJlbWFpbCI6Im1zdGZhdGVtYUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsIndhbGxldElkIjoiNjg4ZGU0ZTIyM2Y1OWZkMThkNzk2N2M5IiwiaWF0IjoxNzU0MjQ0NjQ3LCJleHAiOjE3NTQzMzEwNDd9.7d0QKJvCL1Ff9gSWgX1TKnQWUdXJwUlnVXJ5eRxIixA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiverEmail\": \"selinaakter@gmail.com\",\r\n    \"senderPassword\": \"54321\",\r\n    \"amount\": 300\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction/cash-out",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"cash-out"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Money User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRlMTIzZjU5ZmQxOGQ3OTY3YzMiLCJlbWFpbCI6Im1zdGZhdGVtYUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsIndhbGxldElkIjoiNjg4ZGU0ZTIyM2Y1OWZkMThkNzk2N2M5IiwiaWF0IjoxNzU0MjA4NDYwLCJleHAiOjE3NTQyOTQ4NjB9.rR-RYz3IGn52E6XbtvvXCCKZ0yIDo9c7dbwJpUgjyOk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiverEmail\": \"contact.mdselim.dev@gmail.com\",\r\n    \"senderPassword\": \"54321\",\r\n    \"amount\": 1000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction/send-money",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"send-money"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agent To Agent B2B",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRiMjIzZjU5ZmQxOGQ3OTY3YjciLCJlbWFpbCI6InNlbGluYWFrdGVyQGdtYWlsLmNvbSIsInJvbGUiOiJBZ2VudCIsIndhbGxldElkIjoiNjg4ZGU0YjIyM2Y1OWZkMThkNzk2N2JkIiwiaWF0IjoxNzU0MjQzOTA4LCJleHAiOjE3NTQzMzAzMDh9.hCPtd8RUyWXapNXtjfhM6nFLpM2tuR5cxSi6clR4MQQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiverEmail\": \"selinaakter@gmail.com\",\r\n    \"senderPassword\": \"54321\",\r\n    \"amount\": 200\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction/b-to-b",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"b-to-b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A Single Transaction",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTUxMjIzZjU5ZmQxOGQ3OTY3Y2YiLCJlbWFpbCI6Im1kbW9pbkBnbWFpbC5jb20iLCJyb2xlIjoiQWRtaW4iLCJ3YWxsZXRJZCI6IjY4OGRlNTEzMjNmNTlmZDE4ZDc5NjdkNSIsImlhdCI6MTc1NDIxMzk5MiwiZXhwIjoxNzU0MzAwMzkyfQ.G-2aQMqMiLnZ6BOBTVbMYGo4JCoAc_nCWJydwkWtf_M",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiverEmail\": \"mdmahabub@gmail.com\",\r\n    \"senderPassword\": \"12345\",\r\n    \"amount\": 300\r\n}"
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction/688f344b7199b937e99bdc77",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"688f344b7199b937e99bdc77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Transaction",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRlMTIzZjU5ZmQxOGQ3OTY3YzMiLCJlbWFpbCI6Im1zdGZhdGVtYUBnbWFpbC5jb20iLCJyb2xlIjoiVXNlciIsIndhbGxldElkIjoiNjg4ZGU0ZTIyM2Y1OWZkMThkNzk2N2M5IiwiaWF0IjoxNzU0MjQ0NjQ3LCJleHAiOjE3NTQzMzEwNDd9.7d0QKJvCL1Ff9gSWgX1TKnQWUdXJwUlnVXJ5eRxIixA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction?limit=2&sort=asc",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Transaction",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkZTRiMjIzZjU5ZmQxOGQ3OTY3YjciLCJlbWFpbCI6InNlbGluYWFrdGVyQGdtYWlsLmNvbSIsInJvbGUiOiJBZ2VudCIsIndhbGxldElkIjoiNjg4ZGU0YjIyM2Y1OWZkMThkNzk2N2JkIiwiaWF0IjoxNzU0MjQzOTA4LCJleHAiOjE3NTQzMzAzMDh9.hCPtd8RUyWXapNXtjfhM6nFLpM2tuR5cxSi6clR4MQQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"receiverEmail\": \"selinaakter@gmail.com\",\r\n    \"senderPassword\": \"54321\",\r\n    \"amount\": 500\r\n}"
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/transaction/get/me?limit=1",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transaction",
+								"get",
+								"me"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Get Single Wallet",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"email\": \"contact.mdselim.dev@gmail.com\",\r\n    \"email\": \"selimakondo58@gmail.com\",\r\n    // \"email\": \"ahmedmahabub@gmail.com\",\r\n    \"password\": \"12345\"\r\n    // \"email\": \"digitalwallet@gmail.com\",\r\n    // \"password\": \"Dg@123456\"\r\n}"
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/wallet/find/688de36823f59fd18d796796",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"find",
+								"688de36823f59fd18d796796"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Wallet data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyMzYxOTUsImV4cCI6MTc1NDMyMjU5NX0.vH_LSOx5rDFN84a9qumGKqF9z59YIfuuBZ1kKQUZA_Q",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/wallet?limit=2&sort=desc",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wallet"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "sort",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Money to super user",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyNDA4NjUsImV4cCI6MTc1NDMyNzI2NX0.KgjIfkT8Vs9sQb3dxu5VYGFdaWzxC1EiRWb4EfguY-8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\":500\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/wallet/add/super",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"add",
+								"super"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Wallet find",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNTciLCJlbWFpbCI6ImRpZ2l0YWx3YWxsZXRAZ21haWwuY29tIiwicm9sZSI6IlN1cGVyX0FkbWluIiwid2FsbGV0SWQiOiI2ODhkM2UxNTFmMTE4Y2FhNDI2MDFhNWQiLCJpYXQiOjE3NTQyMzYxOTUsImV4cCI6MTc1NDMyMjU5NX0.vH_LSOx5rDFN84a9qumGKqF9z59YIfuuBZ1kKQUZA_Q",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // User \r\n    // \"email\": \"contact.mdselim.dev@gmail.com\",\r\n    // User \r\n    // \"email\": \"selimakondo58@gmail.com\",,\r\n    // User\r\n    // \"email\": \"mdmahabub@gmail.com\",\r\n    // Agent \r\n    // \"email\": \"mdusuf@gmail.com\",\r\n    // User \r\n    // \"email\": \"mstfatema@gmail.com,\r\n    //Agent\r\n    // \"email\": \"selinaakter@gmail.com\",\r\n    // Admin \r\n    // \"email\": \"mdmoin@gmail.com\"\r\n    // Super Admin\r\n    // \"email\": \"digitalwallet@gmail.com\",\r\n    \"password\": \"54321\"\r\n}"
+						},
+						"url": {
+							"raw": "https://digital-wallet-server.vercel.app/api/v1/wallet/me",
+							"protocol": "https",
+							"host": [
+								"digital-wallet-server",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wallet",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
