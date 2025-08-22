@@ -18,7 +18,7 @@ const AuthLogIn = async (payload: Partial<IUserModel>) => {
     const isUserExist = await User.findOne({ email });
 
     if (!isUserExist) {
-        throw new AppError(httpStatusCodes.NOT_FOUND, "User not found.");
+        throw new AppError(httpStatusCodes.NOT_FOUND, "User Does Not Exist. Please register an account.");
     }
     // check receiver 
     checkReceiverUser(isUserExist as IUserModel)

@@ -12,7 +12,7 @@ import { isActive, IStatus } from '../modules/users/user.interface';
 
 export const checkAuthenticationUser = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const accessToken = req.headers.authorization;
+        const accessToken = req.headers.authorization || req.cookies.accessToken;
         // if access token not found 
         if (!accessToken) {
             throw new AppError(httpStatusCodes.BAD_GATEWAY, "No token found! Please give token.");
@@ -23,7 +23,7 @@ export const checkAuthenticationUser = (...authRoles: string[]) => async (req: R
         const isUserExist = await User.findOne({ email: verifiedToken.email });
         // If user not found 
         if (!isUserExist) {
-            throw new AppError(httpStatusCodes.NOT_FOUND, "Authentice user does not found. Token is not valid.");
+            throw new AppError(httpStatusCodes.NOT_FOUND, "User does not found. Token is not valid.");
         };
         // if user delete or blocked 
         if (isUserExist.isActive === isActive.Blocked || isUserExist.isActive === isActive.Deleted) {
