@@ -12,13 +12,24 @@ interface IEnvVariable {
     SUPER_ADMIN_EMAIL: string,
     SUPER_ADMIN_PASS: string,
     SUPER_ADMIN_PHONE: string,
+    SMTP: {
+        SMTP_PASS: string,
+        SMTP_USER: string,
+        SMTP_HOST: string,
+        SMTP_PORT: string,
+        SMTP_FROM: string
+    },
     NODE_DEV: "development" | "production",
 };
 
 
 const envVariable = (): IEnvVariable => {
 
-    const requireVariable: string[] = ["MONGODB_CONFIG_URL", "NODE_DEV", "PORT", "BCRYPT_HASH_ROUND", "JWT_REFRESH_EXPIRED", "JWT_REFRESH_SECRET", "JWT_ACCESS_EXPIRED", "JWT_ACCESS_SECRET", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASS", "SUPER_ADMIN_PHONE"];
+    const requireVariable: string[] = ["MONGODB_CONFIG_URL", "NODE_DEV", "PORT", "BCRYPT_HASH_ROUND", "JWT_REFRESH_EXPIRED", "JWT_REFRESH_SECRET", "JWT_ACCESS_EXPIRED", "JWT_ACCESS_SECRET", "SUPER_ADMIN_EMAIL", "SUPER_ADMIN_PASS", "SUPER_ADMIN_PHONE", "SMTP_PASS",
+        "SMTP_USER",
+        "SMTP_HOST",
+        "SMTP_PORT",
+        "SMTP_FROM"];
 
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
@@ -38,6 +49,13 @@ const envVariable = (): IEnvVariable => {
         SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
         SUPER_ADMIN_PASS: process.env.SUPER_ADMIN_PASS as string,
         SUPER_ADMIN_PHONE: process.env.SUPER_ADMIN_PHONE as string,
+        SMTP: {
+            SMTP_PASS: process.env.SMTP_PASS as string,
+            SMTP_USER: process.env.SMTP_USER as string,
+            SMTP_HOST: process.env.SMTP_HOST as string,
+            SMTP_PORT: process.env.SMTP_PORT as string,
+            SMTP_FROM: process.env.SMTP_FROM as string,
+        },
         NODE_DEV: process.env.NODE_DEV as "development" | "production",
     }
 };
