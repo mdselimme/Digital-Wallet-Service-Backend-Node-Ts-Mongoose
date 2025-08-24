@@ -3,13 +3,16 @@ import { Request, Response } from "express"
 import { catchAsyncTryCatchHandler } from "../../utils/catchAsyncTryCatch"
 import { sendEmail } from "../../utils/sendEmail"
 import { sendResponse } from "../../utils/sendResponse";
+import { envData } from '../../config/envVariable';
 
 const sendContactEmail = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
     const { name, email, subject, message } = req.body;
 
+    console.log(req.body)
+
     await sendEmail({
-        to: email,
+        to: envData.SMTP.SMTP_USER,
         subject: subject,
         templateName: "contactForm",
         templateData: {
