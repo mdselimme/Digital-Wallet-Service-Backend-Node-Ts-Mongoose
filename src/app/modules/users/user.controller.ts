@@ -23,7 +23,7 @@ const createAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Respons
 // Get All Users 
 const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { limit, sort, role } = req.query;
+    const { limit, sort, role, page } = req.query;
 
     const decodedToken = req.user;
 
@@ -33,7 +33,9 @@ const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response
         dataLimit = Number(limit)
     }
 
-    const result = await UserService.getAllUsers(dataLimit, sort as string, role as string, decodedToken);
+    const currentPage = page ? Number(page) : 1;
+
+    const result = await UserService.getAllUsers(dataLimit, sort as string, role as string, currentPage, decodedToken);
 
     sendResponse(res, {
         success: true,
@@ -76,7 +78,7 @@ const updateAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Respons
 
     const decodedToken = req.user;
 
-    const result = await UserService.updateAnUser(req.params.id, req.body, decodedToken as JwtPayload);
+    const result = await UserService.updateAnUser(req.body, decodedToken as JwtPayload);
 
     sendResponse(res, {
         success: true,

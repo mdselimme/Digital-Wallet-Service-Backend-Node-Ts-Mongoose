@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatusCodes from 'http-status-codes';
 import { Request, Response } from "express";
 import { catchAsyncTryCatchHandler } from "../../utils/catchAsyncTryCatch"
@@ -86,36 +87,49 @@ const agentToAgentB2b = catchAsyncTryCatchHandler(async (req: Request, res: Resp
 // Get All Transaction Data
 const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { limit, sort } = req.query;
+    const { limit, sort, page, startDate, endDate } = req.query;
 
-    let dataLimit = 10;
+    const tranLimit = limit ? Number(limit) : 10;
+    const currentPage = page ? Number(page) : 1;
 
     let sortTran: 1 | -1 = -1;
+    const dateFilter: any = {};
 
-    if (limit) {
-        dataLimit = Number(limit)
+    if (startDate || endDate) {
+        dateFilter.createdAt = {};
+        if (startDate) {
+            dateFilter.createdAt.$gte = new Date(startDate as string);
+        }
+        if (endDate) {
+            dateFilter.createdAt.$lte = new Date(endDate as string);
+        }
     }
 
-    if (sort === "desc") {
-        sortTran = -1;
-    } else {
+    if (sort === "asc") {
         sortTran = 1;
     }
 
-    const transaction = await Transaction.find({})
+    const skip = (currentPage - 1) * tranLimit;
+
+    const transaction = await Transaction.find(dateFilter)
         .populate("send", "name email role phone")
         .populate("to", "name email role phone")
-        .limit(dataLimit)
+        .limit(tranLimit)
+        .skip(skip)
         .sort({ createdAt: sortTran });
 
-    const total = await Transaction.countDocuments();
+    const total = await Transaction.countDocuments(dateFilter);
 
     sendResponse(res, {
         success: true,
         message: "All Transaction Retrieved Successfully.",
         data: {
-            total: {
-                count: total
+            meta: {
+                total,
+                sort,
+                page: currentPage,
+                limit: tranLimit,
+                totalPages: Math.ceil(total / tranLimit)
             },
             transaction
         },

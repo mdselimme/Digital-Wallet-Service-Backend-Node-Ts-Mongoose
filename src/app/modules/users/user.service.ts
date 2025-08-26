@@ -49,6 +49,7 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
             send: superAdminWallet._id,
             to: user[0]._id,
             amount: 50,
+            successful: true,
             fee: ITransFee.Free,
             commission: ITransFee.Free,
             type: IPaymentType.BONUS
@@ -90,7 +91,7 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
 };
 
 // Get All Users Service 
-const getAllUsers = async (limit: number, sort: string, role: string, decodedToken: JwtPayload) => {
+const getAllUsers = async (limit: number, sort: string, role: string, currentPage: number, decodedToken: JwtPayload) => {
 
     if (role === IUserRole.Super_Admin && role !== decodedToken.role) {
         throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this data.");
@@ -109,19 +110,24 @@ const getAllUsers = async (limit: number, sort: string, role: string, decodedTok
         filter.role = role;
     }
 
+    const skip = (currentPage - 1) * limit;
+
     const users = await User.find(filter)
         .populate("walletId", "balance")
         .sort({ createdAt: dataSort })
         .limit(limit)
+        .skip(skip)
         .select("-password");
 
-    const userCount = await User.countDocuments(filter);
+    const total = await User.countDocuments(filter);
 
     return {
-        total: {
-            count: userCount,
+        meta: {
+            total,
             limit: limit,
+            totalPages: Math.ceil(total / limit),
             sort: sort,
+            page: currentPage,
             role: role
         },
         users,
@@ -158,16 +164,9 @@ const getSingleUser = async (userId: string) => {
 };
 
 // Update An User 
-const updateAnUser = async (userId: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+const updateAnUser = async (payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
 
-
-    if (decodedToken.role === IUserRole.User || decodedToken.role === IUserRole.Agent) {
-        if (userId !== decodedToken.userId) {
-            throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized.");
-        }
-    }
-
-    const user = await User.findById(userId);
+    const user = await User.findById(decodedToken.userId);
 
     if (!user) {
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
@@ -185,7 +184,7 @@ const updateAnUser = async (userId: string, payload: Partial<IUserModel>, decode
         }
     };
 
-    const newUpdateUser = await User.findByIdAndUpdate(userId, payload, { new: true, runValidators: true, }).select("-password");
+    const newUpdateUser = await User.findByIdAndUpdate(decodedToken.userId, payload, { new: true, runValidators: true, }).select("-password");
 
     return newUpdateUser;
 };
@@ -262,7 +261,7 @@ const updateAnUserIsActive = async (email: string, payload: Partial<IUserModel>,
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
     }
 
-    // super admin adn admin can only do bloced user account 
+    // super admin adn admin can only do blocked user account 
     if (payload.isActive === isActive.Blocked && decodedToken.role !== (IUserRole.Super_Admin || IUserRole.Admin)) {
         throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this perform.");
     }

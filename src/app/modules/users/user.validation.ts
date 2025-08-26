@@ -43,6 +43,7 @@ export const updateUserZodSchema = z.object({
         .optional(),
     address: z
         .string({ error: "address must be string." })
+        .min(3, { error: "address must be string." })
         .optional(),
     phone: z.string()
         .min(11, "Phone number is too short")

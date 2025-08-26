@@ -14,7 +14,7 @@ router.post("/register",
     UserController.createAnUser);
 
 // Update User 
-router.patch("/update/:id",
+router.patch("/update",
     validateSchemaRequest(updateUserZodSchema),
     checkAuthenticationUser(...Object.values(IUserRole)),
     UserController.updateAnUser
