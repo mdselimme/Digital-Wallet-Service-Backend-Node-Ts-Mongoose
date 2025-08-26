@@ -145,21 +145,20 @@ const getMyTransaction = catchAsyncTryCatchHandler(async (req: Request, res: Res
 
     const decodedToken = req.user;
 
-    const { limit, sort } = req.query;
+    const { limit, sort, page, startDate, endDate } = req.query;
 
-    let tranLimit = 10;
+    const tranLimit = limit ? Number(limit) : 10;
+    const currentPage = page ? Number(page) : 1;
+    const sortTran = sort ? (sort as string) : "desc";
 
-    let sortTran = "asc"
 
-    if (limit) {
-        tranLimit = Number(limit);
-    }
-
-    if (sort) {
-        sortTran = sort as string;
-    }
-
-    const transaction = await TransactionServices.getMyTransaction(tranLimit, sortTran, decodedToken);
+    const transaction = await TransactionServices.getMyTransaction(
+        tranLimit,
+        currentPage,
+        sortTran,
+        decodedToken,
+        startDate as string,
+        endDate as string);
 
     sendResponse(res, {
         success: true,

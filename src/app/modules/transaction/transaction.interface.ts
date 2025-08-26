@@ -7,6 +7,7 @@ export enum IPaymentType {
     BONUS = "BONUS",
     ADD_MONEY = "ADD_MONEY",
     B2B = "B2B",
+    ADD_MONEY_DIGITAL = "ADD_MONEY_DIGITAL"
 };
 
 export enum ITransFee {
@@ -22,6 +23,7 @@ export interface ITransaction {
     send: Types.ObjectId,
     to: Types.ObjectId,
     amount: number,
+    successful: boolean,
     fee: number,
     commission: number,
     type: IPaymentType

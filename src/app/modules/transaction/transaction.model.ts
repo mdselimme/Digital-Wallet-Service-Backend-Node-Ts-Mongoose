@@ -25,6 +25,10 @@ const transactionSchemaModel = new Schema<ITransaction>({
         type: Number,
         required: [true, "Amount is required."]
     },
+    successful: {
+        type: Boolean,
+        required: true
+    },
     commission: {
         type: Number,
         required: [true, "Commission is required."]

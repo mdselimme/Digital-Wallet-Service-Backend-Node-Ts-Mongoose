@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatusCodes from 'http-status-codes';
 import { AppError } from "../../utils/AppError";
 import { User } from "../users/user.model";
@@ -58,6 +59,7 @@ const addMoneyToAll = async (payload: ISendTransPayload, decodedToken: JwtPayloa
         const transactionPayload: ITransaction = {
             send: sendingUser._id,
             to: receiverUser._id,
+            successful: true,
             amount: amount,
             fee: ITransFee.Free,
             commission: ITransFee.Free,
@@ -143,6 +145,7 @@ const cashInTransfer = async (payload: ISendTransPayload, decodedToken: JwtPaylo
             send: sendingUser._id,
             to: receiverUser._id,
             amount: amount,
+            successful: true,
             fee: ITransFee.Free,
             commission: amount * (ITransFee.Agent / 100),
             type: IPaymentType.CASH_IN
@@ -227,6 +230,7 @@ const sendMoneyTransfer = async (payload: ISendTransPayload, decodedToken: JwtPa
             send: sendingUser._id,
             to: receiverUser._id,
             amount: amount,
+            successful: true,
             fee: amount * (ITransFee.User / 100),
             commission: ITransFee.Free,
             type: IPaymentType.SEND_MONEY
@@ -310,6 +314,7 @@ const userCashOutAgent = async (payload: ISendTransPayload, decodedToken: JwtPay
         const transactionPayload: ITransaction = {
             send: sendingUser._id,
             to: receiverUser._id,
+            successful: true,
             amount: amount,
             fee: amount * (ITransFee.CashOut / 100),
             commission: amount * (ITransFee.Agent / 100),
@@ -395,6 +400,7 @@ const agentToAgentB2b = async (payload: ISendTransPayload, decodedToken: JwtPayl
             send: sendingUser._id,
             to: receiverUser._id,
             amount: amount,
+            successful: true,
             fee: ITransFee.Free,
             commission: ITransFee.Free,
             type: IPaymentType.B2B
@@ -459,7 +465,7 @@ const getASingleTransaction = async (id: string, decodedToken: JwtPayload) => {
 }
 
 // Get My Transaction 
-const getMyTransaction = async (tranLimit: number, sortTran: string, decodedToken: JwtPayload) => {
+const getMyTransaction = async (tranLimit: number, currentPage: number, sortTran: string, decodedToken: JwtPayload, startDate?: string, endDate?: string) => {
 
     const myWallet = await Wallet.findById(decodedToken.walletId);
 
@@ -469,23 +475,44 @@ const getMyTransaction = async (tranLimit: number, sortTran: string, decodedToke
 
     const sort = sortTran === "asc" ? 1 : -1;
 
+    const dateFilter: any = {};
+
+    if (startDate || endDate) {
+        dateFilter.createdAt = {};
+        if (startDate) {
+            dateFilter.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+            dateFilter.createdAt.$lte = new Date(endDate);
+        }
+    }
+
+    const skip = (currentPage - 1) * tranLimit;
+
     const transactions = await Transaction.find({
-        _id: { $in: myWallet.transaction }
+        _id: { $in: myWallet.transaction },
+        ...dateFilter
     }).select("send to amount commission fee type createdAt")
         .populate("send", "name email phone role")
         .populate("to", "name email phone role")
         .sort({ createdAt: sort })
+        .skip(skip)
         .limit(tranLimit);
 
     const total = await Transaction.countDocuments({
-        _id: { $in: myWallet.transaction }
+        _id: { $in: myWallet.transaction },
+        ...dateFilter
     });
 
     return {
-        total: {
+        meta: {
+            page: currentPage,
             limit: tranLimit,
+            total,
+            totalPages: Math.ceil(total / tranLimit),
             sort: sortTran,
-            count: total
+            startDate: startDate || null,
+            endDate: endDate || null
         },
         transactions
     };

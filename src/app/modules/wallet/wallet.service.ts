@@ -29,9 +29,10 @@ const addMoneyToSuperAdminWallet = async (amount: number, decodedToken: JwtPaylo
         send: decodedToken.userId,
         to: decodedToken.userId,
         amount: amount,
+        successful: true,
         fee: ITransFee.Free,
         commission: ITransFee.Free,
-        type: IPaymentType.ADD_MONEY
+        type: IPaymentType.ADD_MONEY_DIGITAL
     };
 
     const transaction = await Transaction.create(transactionPayload);
