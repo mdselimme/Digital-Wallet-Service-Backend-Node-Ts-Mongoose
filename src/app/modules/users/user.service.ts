@@ -10,7 +10,7 @@ import { IWallet } from "../wallet/wallet.interface";
 import { Transaction } from "../transaction/transaction.model";
 import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
 import { JwtPayload } from "jsonwebtoken";
-import { checkReceiverUser } from "../../utils/checkReceiverUser";
+
 
 
 // Create An User 
@@ -203,8 +203,6 @@ const updateAnUserRole = async (email: string, payload: Partial<IUserModel>, dec
     if (!user) {
         throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
     }
-    // check User status or is active 
-    checkReceiverUser(user as IUserModel)
     //If User is Super_Admin than he can't change his role.
     if (user.role === IUserRole.Super_Admin) {
         throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
@@ -241,16 +239,12 @@ const updateAnUserStatus = async (email: string, payload: Partial<IUserModel>, d
         throw new AppError(StatusCodes.NOT_FOUND, "You can't perform your role change work.");
     }
     // if payload role is super admin or user role and payload role is equal 
-    if (payload.userStatus) {
-        if (payload.userStatus === user.userStatus) {
-            throw new AppError(StatusCodes.BAD_REQUEST, `You are already ${payload.userStatus}. So you can't do this.`);
-        };
-    }
+    if (payload.userStatus === user.userStatus) {
+        throw new AppError(StatusCodes.BAD_REQUEST, `You are already ${payload.userStatus}. So you can't do this.`);
+    };
     // Update User role perform 
     const newUpdateUser = await User.findByIdAndUpdate(user._id, payload, { new: true, runValidators: true, }).select("-password");
-
     return newUpdateUser;
-    return
 }
 
 const updateAnUserIsActive = async (email: string, payload: Partial<IUserModel>, decodedToken: JwtPayload) => {

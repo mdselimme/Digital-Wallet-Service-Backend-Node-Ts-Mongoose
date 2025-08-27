@@ -7,16 +7,15 @@ import { envData } from '../../config/envVariable';
 
 const sendContactEmail = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { name, email, subject, message } = req.body;
+    const { name, email, phone, subject, message } = req.body;
 
-    console.log(req.body)
 
     await sendEmail({
         to: envData.SMTP.SMTP_USER,
         subject: subject,
         templateName: "contactForm",
         templateData: {
-            name, email, subject, message
+            name, email, phone, subject, message
         }
     });
 

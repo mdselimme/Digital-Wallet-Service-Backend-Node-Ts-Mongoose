@@ -10,6 +10,13 @@ export const contactFormSchema = z.object({
     subject: z
         .string()
         .min(10, { error: "write your subject min 10 character." }),
+    phone: z
+        .string()
+        .length(11, { message: "Phone number must be exactly 11 digits" })
+        .regex(/^01\d{9}$/, {
+            message:
+                "Invalid Bangladeshi phone number. It must start with '01' and be exactly 11 digits long.",
+        }),
     message: z
         .string()
         .min(10, { error: "write your subject min 10 character." }),
