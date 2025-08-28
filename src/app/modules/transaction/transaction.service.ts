@@ -465,7 +465,7 @@ const getASingleTransaction = async (id: string, decodedToken: JwtPayload) => {
 }
 
 // Get My Transaction 
-const getMyTransaction = async (tranLimit: number, currentPage: number, sortTran: string, decodedToken: JwtPayload, startDate?: string, endDate?: string) => {
+const getMyTransaction = async (tranLimit: number, currentPage: number, sortTran: string, decodedToken: JwtPayload, startDate?: string, endDate?: string, tranType?: string) => {
 
     const myWallet = await Wallet.findById(decodedToken.walletId);
 
@@ -475,34 +475,34 @@ const getMyTransaction = async (tranLimit: number, currentPage: number, sortTran
 
     const sort = sortTran === "asc" ? 1 : -1;
 
-    const dateFilter: any = {};
+    const filters: any = {
+        _id: { $in: myWallet.transaction },
+    };
 
     if (startDate || endDate) {
-        dateFilter.createdAt = {};
+        filters.createdAt = {};
         if (startDate) {
-            dateFilter.createdAt.$gte = new Date(startDate);
+            filters.createdAt.$gte = new Date(startDate);
         }
         if (endDate) {
-            dateFilter.createdAt.$lte = new Date(endDate);
+            filters.createdAt.$lte = new Date(endDate);
         }
+    }
+
+    if (tranType) {
+        filters.type = tranType;
     }
 
     const skip = (currentPage - 1) * tranLimit;
 
-    const transactions = await Transaction.find({
-        _id: { $in: myWallet.transaction },
-        ...dateFilter
-    }).select("send to amount commission fee type createdAt")
+    const transactions = await Transaction.find(filters).select("send to amount commission fee type createdAt")
         .populate("send", "name email phone role")
         .populate("to", "name email phone role")
         .sort({ createdAt: sort })
         .skip(skip)
         .limit(tranLimit);
 
-    const total = await Transaction.countDocuments({
-        _id: { $in: myWallet.transaction },
-        ...dateFilter
-    });
+    const total = await Transaction.countDocuments(filters);
 
     return {
         meta: {

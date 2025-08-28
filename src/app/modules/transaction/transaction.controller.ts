@@ -159,7 +159,7 @@ const getMyTransaction = catchAsyncTryCatchHandler(async (req: Request, res: Res
 
     const decodedToken = req.user;
 
-    const { limit, sort, page, startDate, endDate } = req.query;
+    const { limit, sort, page, startDate, endDate, tranType } = req.query;
 
     const tranLimit = limit ? Number(limit) : 10;
     const currentPage = page ? Number(page) : 1;
@@ -172,7 +172,7 @@ const getMyTransaction = catchAsyncTryCatchHandler(async (req: Request, res: Res
         sortTran,
         decodedToken,
         startDate as string,
-        endDate as string);
+        endDate as string, tranType as string);
 
     sendResponse(res, {
         success: true,

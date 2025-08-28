@@ -17,6 +17,7 @@ interface IPaginateOptions {
     startDate?: string;
     endDate?: string;
     filter?: FilterQuery<any>;
+    search?: { field: string, value: string }
     select?: string[] | string,
     remove?: string[] | string,
 };
@@ -30,11 +31,12 @@ export const QueryBuilder = async <T>(model: Model<T>, options: IPaginateOptions
         startDate,
         endDate,
         filter = {},
+        search,
         select,
         remove
     } = options;
 
-    const sortField = sort?.order === "asc" ? 1 : -1;
+    const sortField = sort?.field || "createdAt";
     const sortOrder: 1 | -1 = sort?.order === "asc" ? 1 : -1;
 
     const dateFilter: any = {};
@@ -49,8 +51,16 @@ export const QueryBuilder = async <T>(model: Model<T>, options: IPaginateOptions
             dateFilter.createdAt.$lte = end;
         }
     }
+
+    let searchFilter: any = {};
+    if (search?.field && search?.value) {
+        searchFilter = {
+            [search.field]: { $regex: search.value, $options: "i" }
+        }
+    }
+
     const skip = (page - 1) * limit;
-    const query = { ...filter, ...dateFilter };
+    const query = { ...filter, ...dateFilter, ...searchFilter };
 
     let mongooseQuery = model.find(query).sort({ [sortField]: sortOrder });
 

@@ -91,26 +91,10 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
     }
 };
 
-// Get All Users Service 
-/* const getAllUsers = async (payload: any) => {
+// Get All Users  
+const getAllUsers = async (payload: any) => {
 
-    const { page, limit, sortField, sortOrder, startDate, endDate } = payload;
-
-
-    // let dataSort: -1 | 1 = -1;
-    // const filter: any = {};
-
-    // if (sort === "asc") {
-    //     dataSort = 1;
-    // } else {
-    //     dataSort = -1
-    // }
-
-    // if (role) {
-    //     filter.role = role;
-    // }
-
-    // const skip = (currentPage - 1) * limit;
+    const { page, limit, sortField, sortOrder, startDate, endDate, searchField, searchValue } = payload;
 
     const remove = "password";
 
@@ -123,65 +107,15 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
         },
         startDate: startDate as string,
         endDate: endDate as string,
+        search: searchField && searchValue ? { field: searchField, value: searchValue } : undefined,
         remove: remove ? (remove as string).split(",") : undefined,
     }, [
         { path: "walletId", select: "balance" },
     ])
 
-    // const users = await User.find(filter)
-    //     .populate("walletId", "balance")
-    //     .sort({ createdAt: dataSort })
-    //     .limit(limit)
-    //     .skip(skip)
-    //     .select("-password");
-
-    // const total = await User.countDocuments(filter);
-
     return result;
-}; */
-// Get All Users Service 
-const getAllUsers = async (limit: number, sort: string, role: string, currentPage: number, decodedToken: JwtPayload) => {
-
-    if (role === IUserRole.Super_Admin && role !== decodedToken.role) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this data.");
-    }
-
-    let dataSort: -1 | 1 = -1;
-    const filter: any = {};
-
-    if (sort === "asc") {
-        dataSort = 1;
-    } else {
-        dataSort = -1
-    }
-
-    if (role) {
-        filter.role = role;
-    }
-
-    const skip = (currentPage - 1) * limit;
-
-    const users = await User.find(filter)
-        .populate("walletId", "balance")
-        .sort({ createdAt: dataSort })
-        .limit(limit)
-        .skip(skip)
-        .select("-password");
-
-    const total = await User.countDocuments(filter);
-
-    return {
-        meta: {
-            total,
-            limit: limit,
-            totalPages: Math.ceil(total / limit),
-            sort: sort,
-            page: currentPage,
-            role: role
-        },
-        users,
-    }
 };
+
 
 // Get Me User
 const getMeUser = async (userId: string) => {
