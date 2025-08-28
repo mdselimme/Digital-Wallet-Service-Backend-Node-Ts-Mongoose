@@ -21,6 +21,19 @@ const createAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Respons
 });
 
 // Get All Users 
+/* const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+
+
+    const result = await UserService.getAllUsers(req.query);
+
+    sendResponse(res, {
+        success: true,
+        message: "All User Retrieved Successfully.",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+}) */
 const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
     const { limit, sort, role, page } = req.query;

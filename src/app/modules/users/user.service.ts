@@ -10,6 +10,7 @@ import { IWallet } from "../wallet/wallet.interface";
 import { Transaction } from "../transaction/transaction.model";
 import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
 import { JwtPayload } from "jsonwebtoken";
+import { QueryBuilder } from "../../utils/QueryBuilder";
 
 
 
@@ -90,6 +91,54 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
     }
 };
 
+// Get All Users Service 
+/* const getAllUsers = async (payload: any) => {
+
+    const { page, limit, sortField, sortOrder, startDate, endDate } = payload;
+
+
+    // let dataSort: -1 | 1 = -1;
+    // const filter: any = {};
+
+    // if (sort === "asc") {
+    //     dataSort = 1;
+    // } else {
+    //     dataSort = -1
+    // }
+
+    // if (role) {
+    //     filter.role = role;
+    // }
+
+    // const skip = (currentPage - 1) * limit;
+
+    const remove = "password";
+
+    const result = await QueryBuilder(User, {
+        page: Number(page) || 1,
+        limit: Number(limit) || 5,
+        sort: {
+            field: (sortField) || "createdAt",
+            order: (sortOrder as "asc" | "desc") || "desc"
+        },
+        startDate: startDate as string,
+        endDate: endDate as string,
+        remove: remove ? (remove as string).split(",") : undefined,
+    }, [
+        { path: "walletId", select: "balance" },
+    ])
+
+    // const users = await User.find(filter)
+    //     .populate("walletId", "balance")
+    //     .sort({ createdAt: dataSort })
+    //     .limit(limit)
+    //     .skip(skip)
+    //     .select("-password");
+
+    // const total = await User.countDocuments(filter);
+
+    return result;
+}; */
 // Get All Users Service 
 const getAllUsers = async (limit: number, sort: string, role: string, currentPage: number, decodedToken: JwtPayload) => {
 
