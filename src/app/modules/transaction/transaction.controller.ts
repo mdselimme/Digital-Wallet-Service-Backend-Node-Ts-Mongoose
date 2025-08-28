@@ -87,22 +87,26 @@ const agentToAgentB2b = catchAsyncTryCatchHandler(async (req: Request, res: Resp
 // Get All Transaction Data
 const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { limit, sort, page, startDate, endDate } = req.query;
+    const { limit, sort, page, tranType, startDate, endDate } = req.query;
 
     const tranLimit = limit ? Number(limit) : 10;
     const currentPage = page ? Number(page) : 1;
 
     let sortTran: 1 | -1 = -1;
-    const dateFilter: any = {};
+    const filters: any = {};
 
     if (startDate || endDate) {
-        dateFilter.createdAt = {};
+        filters.createdAt = {};
         if (startDate) {
-            dateFilter.createdAt.$gte = new Date(startDate as string);
+            filters.createdAt.$gte = new Date(startDate as string);
         }
         if (endDate) {
-            dateFilter.createdAt.$lte = new Date(endDate as string);
+            filters.createdAt.$lte = new Date(endDate as string);
         }
+    }
+
+    if (tranType) {
+        filters.type = tranType;
     }
 
     if (sort === "asc") {
@@ -111,14 +115,14 @@ const getAllTransactionData = catchAsyncTryCatchHandler(async (req: Request, res
 
     const skip = (currentPage - 1) * tranLimit;
 
-    const transaction = await Transaction.find(dateFilter)
+    const transaction = await Transaction.find(filters)
         .populate("send", "name email role phone")
         .populate("to", "name email role phone")
         .limit(tranLimit)
         .skip(skip)
         .sort({ createdAt: sortTran });
 
-    const total = await Transaction.countDocuments(dateFilter);
+    const total = await Transaction.countDocuments(filters);
 
     sendResponse(res, {
         success: true,
