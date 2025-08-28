@@ -10,6 +10,7 @@ import { IWallet } from "../wallet/wallet.interface";
 import { Transaction } from "../transaction/transaction.model";
 import { IPaymentType, ITransaction, ITransFee } from "../transaction/transaction.interface";
 import { JwtPayload } from "jsonwebtoken";
+import { QueryBuilder } from "../../utils/QueryBuilder";
 
 
 
@@ -90,49 +91,31 @@ const createAnUser = async (payload: Partial<IUserModel>) => {
     }
 };
 
-// Get All Users Service 
-const getAllUsers = async (limit: number, sort: string, role: string, currentPage: number, decodedToken: JwtPayload) => {
+// Get All Users  
+const getAllUsers = async (payload: any) => {
 
-    if (role === IUserRole.Super_Admin && role !== decodedToken.role) {
-        throw new AppError(StatusCodes.BAD_REQUEST, "You are not authorized for this data.");
-    }
+    const { page, limit, sortField, sortOrder, startDate, endDate, searchField, searchValue } = payload;
 
-    let dataSort: -1 | 1 = -1;
-    const filter: any = {};
+    const remove = "password";
 
-    if (sort === "asc") {
-        dataSort = 1;
-    } else {
-        dataSort = -1
-    }
-
-    if (role) {
-        filter.role = role;
-    }
-
-    const skip = (currentPage - 1) * limit;
-
-    const users = await User.find(filter)
-        .populate("walletId", "balance")
-        .sort({ createdAt: dataSort })
-        .limit(limit)
-        .skip(skip)
-        .select("-password");
-
-    const total = await User.countDocuments(filter);
-
-    return {
-        meta: {
-            total,
-            limit: limit,
-            totalPages: Math.ceil(total / limit),
-            sort: sort,
-            page: currentPage,
-            role: role
+    const result = await QueryBuilder(User, {
+        page: Number(page) || 1,
+        limit: Number(limit) || 5,
+        sort: {
+            field: (sortField) || "createdAt",
+            order: (sortOrder as "asc" | "desc") || "desc"
         },
-        users,
-    }
+        startDate: startDate as string,
+        endDate: endDate as string,
+        search: searchField && searchValue ? { field: searchField, value: searchValue } : undefined,
+        remove: remove ? (remove as string).split(",") : undefined,
+    }, [
+        { path: "walletId", select: "balance" },
+    ])
+
+    return result;
 };
+
 
 // Get Me User
 const getMeUser = async (userId: string) => {

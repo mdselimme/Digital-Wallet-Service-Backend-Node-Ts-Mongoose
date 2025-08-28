@@ -23,19 +23,7 @@ const createAnUser = catchAsyncTryCatchHandler(async (req: Request, res: Respons
 // Get All Users 
 const getAllUsers = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
-    const { limit, sort, role, page } = req.query;
-
-    const decodedToken = req.user;
-
-    let dataLimit = 10
-
-    if (limit) {
-        dataLimit = Number(limit)
-    }
-
-    const currentPage = page ? Number(page) : 1;
-
-    const result = await UserService.getAllUsers(dataLimit, sort as string, role as string, currentPage, decodedToken);
+    const result = await UserService.getAllUsers(req.query);
 
     sendResponse(res, {
         success: true,
