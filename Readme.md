@@ -346,9 +346,10 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 #### Get All Users
 
-- method: `GET` api endpoint: http://localhost:5000/api/v1/user?limit=5&sort=asc&role=User
+- method: `GET` api endpoint: http://localhost:5000/api/v1/user?limit=5&sort=asc&searchField={role}&searchValue={Admin}&page=1
 - limit : default : 10
 - sort : default desc newest first and asc oldest first.
+- sortField and sortValue
 - role: If you want to see role based user then you need to give a query role from these (Admin|User|Agent)
 - credentials: true
 - Super Admin and Admin can access this route.
@@ -917,7 +918,7 @@ example: https://digital-wallet-server.vercel.app/api/v1/user/active?email=usufa
 
 #### 8. Get All Transaction
 
-- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction?limit={number}&sort=asc
+- method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/transaction?limit={number}&sort=asc&page={number}&tranType={CASH_IN}
 - credentials: true.
 - default limit: 10. with out list see all transaction.
 - Super Admin And Admin Can Access This route.
@@ -1131,6 +1132,49 @@ example: https://digital-wallet-server.vercel.app/api/v1/wallet/688de36823f59fd1
             {...}
         ]
     }
+}
+```
+
+## Contact Form Email Send:
+
+- User can login with email and password and find accesstoken and refreshtoken.
+
+#### contact send api
+
+- method: `POST` api endpoint: https://digital-wallet-server.vercel.app/api/v1/contact/send
+
+##### schema design:
+
+```json
+{
+   "name": "string",
+   "email": "string",
+   "phone": "string",
+   "subject": "string",
+   "message": "string",//Password should be five character long and number format
+}
+```
+
+##### Request:
+
+```json
+{
+    "name":"Selim",
+    "email": "contact.mdselim.dev@gmail.com",
+    "subject": "Query for reset password problem",
+    "phone": "01737210264",
+    "message": "I am trying to reset my account password but i can't do this."
+}
+```
+
+#### Response:
+
+```json
+{
+    "message": "Contact Form Submitted Successfully.",
+    "statusCode": 200,
+    "success": true,
+    "data": null
 }
 ```
 
