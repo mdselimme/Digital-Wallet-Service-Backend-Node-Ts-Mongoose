@@ -43,6 +43,7 @@ exports.updateUserZodSchema = zod_1.default.object({
         .optional(),
     address: zod_1.default
         .string({ error: "address must be string." })
+        .min(3, { error: "address must be string." })
         .optional(),
     phone: zod_1.default.string()
         .min(11, "Phone number is too short")

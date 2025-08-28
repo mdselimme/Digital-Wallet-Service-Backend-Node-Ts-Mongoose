@@ -53,6 +53,7 @@ const seedSuperAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
             send: digitalWallet._id,
             to: user._id,
             amount: 100000,
+            successful: true,
             fee: transaction_interface_1.ITransFee.Free,
             commission: transaction_interface_1.ITransFee.Free,
             type: transaction_interface_1.IPaymentType.BONUS

@@ -11,7 +11,7 @@ const router = (0, express_1.Router)();
 // User Register 
 router.post("/register", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.createUserZodSchema), user_controller_1.UserController.createAnUser);
 // Update User 
-router.patch("/update/:id", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateUserZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.updateAnUser);
+router.patch("/update", (0, validateSchemaRequest_1.validateSchemaRequest)(user_validation_1.updateUserZodSchema), (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.updateAnUser);
 // Get All Users 
 router.get("/me", (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), user_controller_1.UserController.getMeUser);
 // Get Single User 

@@ -23,7 +23,7 @@ const envVariable_1 = require("../../config/envVariable");
 const wallet_model_1 = require("../wallet/wallet.model");
 const transaction_model_1 = require("../transaction/transaction.model");
 const transaction_interface_1 = require("../transaction/transaction.interface");
-const checkReceiverUser_1 = require("../../utils/checkReceiverUser");
+const QueryBuilder_1 = require("../../utils/QueryBuilder");
 // Create An User 
 const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield user_model_1.User.startSession();
@@ -45,6 +45,7 @@ const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
             send: superAdminWallet._id,
             to: user[0]._id,
             amount: 50,
+            successful: true,
             fee: transaction_interface_1.ITransFee.Free,
             commission: transaction_interface_1.ITransFee.Free,
             type: transaction_interface_1.IPaymentType.BONUS
@@ -75,37 +76,25 @@ const createAnUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
         throw error;
     }
 });
-// Get All Users Service 
-const getAllUsers = (limit, sort, role, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
-    if (role === user_interface_1.IUserRole.Super_Admin && role !== decodedToken.role) {
-        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized for this data.");
-    }
-    let dataSort = -1;
-    const filter = {};
-    if (sort === "asc") {
-        dataSort = 1;
-    }
-    else {
-        dataSort = -1;
-    }
-    if (role) {
-        filter.role = role;
-    }
-    const users = yield user_model_1.User.find(filter)
-        .populate("walletId", "balance")
-        .sort({ createdAt: dataSort })
-        .limit(limit)
-        .select("-password");
-    const userCount = yield user_model_1.User.countDocuments(filter);
-    return {
-        total: {
-            count: userCount,
-            limit: limit,
-            sort: sort,
-            role: role
+// Get All Users  
+const getAllUsers = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { page, limit, sortField, sortOrder, startDate, endDate, searchField, searchValue } = payload;
+    const remove = "password";
+    const result = yield (0, QueryBuilder_1.QueryBuilder)(user_model_1.User, {
+        page: Number(page) || 1,
+        limit: Number(limit) || 5,
+        sort: {
+            field: (sortField) || "createdAt",
+            order: sortOrder || "desc"
         },
-        users,
-    };
+        startDate: startDate,
+        endDate: endDate,
+        search: searchField && searchValue ? { field: searchField, value: searchValue } : undefined,
+        remove: remove ? remove.split(",") : undefined,
+    }, [
+        { path: "walletId", select: "balance" },
+    ]);
+    return result;
 });
 // Get Me User
 const getMeUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -129,13 +118,8 @@ const getSingleUser = (userId) => __awaiter(void 0, void 0, void 0, function* ()
     return user;
 });
 // Update An User 
-const updateAnUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
-    if (decodedToken.role === user_interface_1.IUserRole.User || decodedToken.role === user_interface_1.IUserRole.Agent) {
-        if (userId !== decodedToken.userId) {
-            throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized.");
-        }
-    }
-    const user = yield user_model_1.User.findById(userId);
+const updateAnUser = (payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findById(decodedToken.userId);
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "User does not found.");
     }
@@ -150,7 +134,7 @@ const updateAnUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0
         }
     }
     ;
-    const newUpdateUser = yield user_model_1.User.findByIdAndUpdate(userId, payload, { new: true, runValidators: true, }).select("-password");
+    const newUpdateUser = yield user_model_1.User.findByIdAndUpdate(decodedToken.userId, payload, { new: true, runValidators: true, }).select("-password");
     return newUpdateUser;
 });
 // Update An User Role
@@ -167,8 +151,6 @@ const updateAnUserRole = (email, payload, decodedToken) => __awaiter(void 0, voi
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "User does not found.");
     }
-    // check User status or is active 
-    (0, checkReceiverUser_1.checkReceiverUser)(user);
     //If User is Super_Admin than he can't change his role.
     if (user.role === user_interface_1.IUserRole.Super_Admin) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "You can't perform your role change work.");
@@ -205,16 +187,13 @@ const updateAnUserStatus = (email, payload, decodedToken) => __awaiter(void 0, v
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "You can't perform your role change work.");
     }
     // if payload role is super admin or user role and payload role is equal 
-    if (payload.userStatus) {
-        if (payload.userStatus === user.userStatus) {
-            throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, `You are already ${payload.userStatus}. So you can't do this.`);
-        }
-        ;
+    if (payload.userStatus === user.userStatus) {
+        throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, `You are already ${payload.userStatus}. So you can't do this.`);
     }
+    ;
     // Update User role perform 
     const newUpdateUser = yield user_model_1.User.findByIdAndUpdate(user._id, payload, { new: true, runValidators: true, }).select("-password");
     return newUpdateUser;
-    return;
 });
 const updateAnUserIsActive = (email, payload, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
     // user find 
@@ -223,7 +202,7 @@ const updateAnUserIsActive = (email, payload, decodedToken) => __awaiter(void 0,
     if (!user) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, "User does not found.");
     }
-    // super admin adn admin can only do bloced user account 
+    // super admin adn admin can only do blocked user account 
     if (payload.isActive === user_interface_1.isActive.Blocked && decodedToken.role !== (user_interface_1.IUserRole.Super_Admin || user_interface_1.IUserRole.Admin)) {
         throw new AppError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not authorized for this perform.");
     }

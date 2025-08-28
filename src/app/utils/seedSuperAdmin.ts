@@ -52,6 +52,7 @@ export const seedSuperAdmin = async () => {
             send: digitalWallet._id,
             to: user._id,
             amount: 100000,
+            successful: true,
             fee: ITransFee.Free,
             commission: ITransFee.Free,
             type: IPaymentType.BONUS

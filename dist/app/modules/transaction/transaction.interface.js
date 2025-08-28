@@ -9,6 +9,7 @@ var IPaymentType;
     IPaymentType["BONUS"] = "BONUS";
     IPaymentType["ADD_MONEY"] = "ADD_MONEY";
     IPaymentType["B2B"] = "B2B";
+    IPaymentType["ADD_MONEY_DIGITAL"] = "ADD_MONEY_DIGITAL";
 })(IPaymentType || (exports.IPaymentType = IPaymentType = {}));
 ;
 var ITransFee;

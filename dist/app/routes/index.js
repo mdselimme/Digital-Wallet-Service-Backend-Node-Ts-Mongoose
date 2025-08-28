@@ -6,6 +6,7 @@ const user_route_1 = require("../modules/users/user.route");
 const auth_route_1 = require("../modules/auth/auth.route");
 const transaction_route_1 = require("../modules/transaction/transaction.route");
 const wallet_route_1 = require("../modules/wallet/wallet.route");
+const contact_route_1 = require("../modules/contact/contact.route");
 exports.router = (0, express_1.Router)();
 const RoutesModel = [
     {
@@ -23,6 +24,10 @@ const RoutesModel = [
     {
         path: "/wallet",
         route: wallet_route_1.WalletRouter
+    },
+    {
+        path: "/contact",
+        route: contact_route_1.ContactRouter
     },
 ];
 RoutesModel.forEach((route) => {

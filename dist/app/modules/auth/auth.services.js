@@ -38,7 +38,7 @@ const AuthLogIn = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
     const isUserExist = yield user_model_1.User.findOne({ email });
     if (!isUserExist) {
-        throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "User not found.");
+        throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "User Does Not Exist. Please register an account.");
     }
     // check receiver 
     (0, checkReceiverUser_1.checkReceiverUser)(isUserExist);

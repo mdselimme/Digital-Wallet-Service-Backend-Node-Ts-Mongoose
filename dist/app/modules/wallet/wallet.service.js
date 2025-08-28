@@ -36,9 +36,10 @@ const addMoneyToSuperAdminWallet = (amount, decodedToken) => __awaiter(void 0, v
         send: decodedToken.userId,
         to: decodedToken.userId,
         amount: amount,
+        successful: true,
         fee: transaction_interface_1.ITransFee.Free,
         commission: transaction_interface_1.ITransFee.Free,
-        type: transaction_interface_1.IPaymentType.ADD_MONEY
+        type: transaction_interface_1.IPaymentType.ADD_MONEY_DIGITAL
     };
     const transaction = yield transaction_model_1.Transaction.create(transactionPayload);
     const newWalletBalance = Number(wallet.balance) + Number(transaction.amount);

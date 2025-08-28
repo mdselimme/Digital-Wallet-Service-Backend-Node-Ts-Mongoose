@@ -21,7 +21,7 @@ const user_model_1 = require("../modules/users/user.model");
 const user_interface_1 = require("../modules/users/user.interface");
 const checkAuthenticationUser = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accessToken = req.headers.authorization;
+        const accessToken = req.headers.authorization || req.cookies.accessToken;
         // if access token not found 
         if (!accessToken) {
             throw new AppError_1.AppError(http_status_codes_1.default.BAD_GATEWAY, "No token found! Please give token.");
@@ -32,7 +32,7 @@ const checkAuthenticationUser = (...authRoles) => (req, res, next) => __awaiter(
         const isUserExist = yield user_model_1.User.findOne({ email: verifiedToken.email });
         // If user not found 
         if (!isUserExist) {
-            throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Authentice user does not found. Token is not valid.");
+            throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "User does not found. Token is not valid.");
         }
         ;
         // if user delete or blocked 

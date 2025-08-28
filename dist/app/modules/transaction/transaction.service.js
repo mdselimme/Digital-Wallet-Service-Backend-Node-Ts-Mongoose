@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionServices = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const AppError_1 = require("../../utils/AppError");
 const user_model_1 = require("../users/user.model");
@@ -72,6 +73,7 @@ const addMoneyToAll = (payload, decodedToken) => __awaiter(void 0, void 0, void 
         const transactionPayload = {
             send: sendingUser._id,
             to: receiverUser._id,
+            successful: true,
             amount: amount,
             fee: transaction_interface_1.ITransFee.Free,
             commission: transaction_interface_1.ITransFee.Free,
@@ -160,6 +162,7 @@ const cashInTransfer = (payload, decodedToken) => __awaiter(void 0, void 0, void
             send: sendingUser._id,
             to: receiverUser._id,
             amount: amount,
+            successful: true,
             fee: transaction_interface_1.ITransFee.Free,
             commission: amount * (transaction_interface_1.ITransFee.Agent / 100),
             type: transaction_interface_1.IPaymentType.CASH_IN
@@ -247,6 +250,7 @@ const sendMoneyTransfer = (payload, decodedToken) => __awaiter(void 0, void 0, v
             send: sendingUser._id,
             to: receiverUser._id,
             amount: amount,
+            successful: true,
             fee: amount * (transaction_interface_1.ITransFee.User / 100),
             commission: transaction_interface_1.ITransFee.Free,
             type: transaction_interface_1.IPaymentType.SEND_MONEY
@@ -333,6 +337,7 @@ const userCashOutAgent = (payload, decodedToken) => __awaiter(void 0, void 0, vo
         const transactionPayload = {
             send: sendingUser._id,
             to: receiverUser._id,
+            successful: true,
             amount: amount,
             fee: amount * (transaction_interface_1.ITransFee.CashOut / 100),
             commission: amount * (transaction_interface_1.ITransFee.Agent / 100),
@@ -421,6 +426,7 @@ const agentToAgentB2b = (payload, decodedToken) => __awaiter(void 0, void 0, voi
             send: sendingUser._id,
             to: receiverUser._id,
             amount: amount,
+            successful: true,
             fee: transaction_interface_1.ITransFee.Free,
             commission: transaction_interface_1.ITransFee.Free,
             type: transaction_interface_1.IPaymentType.B2B
@@ -480,27 +486,44 @@ const getASingleTransaction = (id, decodedToken) => __awaiter(void 0, void 0, vo
     return transaction;
 });
 // Get My Transaction 
-const getMyTransaction = (tranLimit, sortTran, decodedToken) => __awaiter(void 0, void 0, void 0, function* () {
+const getMyTransaction = (tranLimit, currentPage, sortTran, decodedToken, startDate, endDate, tranType) => __awaiter(void 0, void 0, void 0, function* () {
     const myWallet = yield wallet_model_1.Wallet.findById(decodedToken.walletId);
     if (!myWallet) {
         throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "Invalid Wallet Id. Wallet Not found.");
     }
     const sort = sortTran === "asc" ? 1 : -1;
-    const transactions = yield transaction_model_1.Transaction.find({
-        _id: { $in: myWallet.transaction }
-    }).select("send to amount commission fee type createdAt")
+    const filters = {
+        _id: { $in: myWallet.transaction },
+    };
+    if (startDate || endDate) {
+        filters.createdAt = {};
+        if (startDate) {
+            filters.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+            filters.createdAt.$lte = new Date(endDate);
+        }
+    }
+    if (tranType) {
+        filters.type = tranType;
+    }
+    const skip = (currentPage - 1) * tranLimit;
+    const transactions = yield transaction_model_1.Transaction.find(filters).select("send to amount commission fee type createdAt")
         .populate("send", "name email phone role")
         .populate("to", "name email phone role")
         .sort({ createdAt: sort })
+        .skip(skip)
         .limit(tranLimit);
-    const total = yield transaction_model_1.Transaction.countDocuments({
-        _id: { $in: myWallet.transaction }
-    });
+    const total = yield transaction_model_1.Transaction.countDocuments(filters);
     return {
-        total: {
+        meta: {
+            page: currentPage,
             limit: tranLimit,
+            total,
+            totalPages: Math.ceil(total / tranLimit),
             sort: sortTran,
-            count: total
+            startDate: startDate || null,
+            endDate: endDate || null
         },
         transactions
     };

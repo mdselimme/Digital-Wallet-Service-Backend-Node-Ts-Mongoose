@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionController = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const catchAsyncTryCatch_1 = require("../../utils/catchAsyncTryCatch");
 const sendResponse_1 = require("../../utils/sendResponse");
@@ -75,30 +76,44 @@ const agentToAgentB2b = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req
 }));
 // Get All Transaction Data
 const getAllTransactionData = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limit, sort } = req.query;
-    let dataLimit = 10;
+    const { limit, sort, page, tranType, startDate, endDate } = req.query;
+    const tranLimit = limit ? Number(limit) : 10;
+    const currentPage = page ? Number(page) : 1;
     let sortTran = -1;
-    if (limit) {
-        dataLimit = Number(limit);
+    const filters = {};
+    if (startDate || endDate) {
+        filters.createdAt = {};
+        if (startDate) {
+            filters.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+            filters.createdAt.$lte = new Date(endDate);
+        }
     }
-    if (sort === "desc") {
-        sortTran = -1;
+    if (tranType) {
+        filters.type = tranType;
     }
-    else {
+    if (sort === "asc") {
         sortTran = 1;
     }
-    const transaction = yield transaction_model_1.Transaction.find({})
+    const skip = (currentPage - 1) * tranLimit;
+    const transaction = yield transaction_model_1.Transaction.find(filters)
         .populate("send", "name email role phone")
         .populate("to", "name email role phone")
-        .limit(dataLimit)
+        .limit(tranLimit)
+        .skip(skip)
         .sort({ createdAt: sortTran });
-    const total = yield transaction_model_1.Transaction.countDocuments();
+    const total = yield transaction_model_1.Transaction.countDocuments(filters);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "All Transaction Retrieved Successfully.",
         data: {
-            total: {
-                count: total
+            meta: {
+                total,
+                sort,
+                page: currentPage,
+                limit: tranLimit,
+                totalPages: Math.ceil(total / tranLimit)
             },
             transaction
         },
@@ -119,16 +134,11 @@ const getASingleTransaction = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler
 // Get My Transaction 
 const getMyTransaction = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
-    const { limit, sort } = req.query;
-    let tranLimit = 10;
-    let sortTran = "asc";
-    if (limit) {
-        tranLimit = Number(limit);
-    }
-    if (sort) {
-        sortTran = sort;
-    }
-    const transaction = yield transaction_service_1.TransactionServices.getMyTransaction(tranLimit, sortTran, decodedToken);
+    const { limit, sort, page, startDate, endDate, tranType } = req.query;
+    const tranLimit = limit ? Number(limit) : 10;
+    const currentPage = page ? Number(page) : 1;
+    const sortTran = sort ? sort : "desc";
+    const transaction = yield transaction_service_1.TransactionServices.getMyTransaction(tranLimit, currentPage, sortTran, decodedToken, startDate, endDate, tranType);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Transaction Retrieved Successfully.",

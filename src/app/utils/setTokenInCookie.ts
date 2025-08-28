@@ -11,17 +11,17 @@ export const setTokenInCookie = (res: Response, token: IToken) => {
     if (token.accessToken) {
         res.cookie("accessToken", token.accessToken, {
             httpOnly: true,
-            // secure: envData.NODE_DEV === "production",
-            secure: true,
-            sameSite: "none"
+            secure: envData.NODE_DEV === "production",
+            sameSite: "none",
+            maxAge: Number(envData.COOKIE_EXPIRES_ACCESS_TOKEN)
         })
     }
     if (token.refreshToken) {
         res.cookie("refreshToken", token.refreshToken, {
             httpOnly: true,
-            // secure: envData.NODE_DEV === "production",
-            secure: true,
-            sameSite: "none"
+            secure: envData.NODE_DEV === "production",
+            sameSite: "none",
+            maxAge: Number(envData.COOKIE_EXPIRES_REFRESH_TOKEN)
         })
     }
 };

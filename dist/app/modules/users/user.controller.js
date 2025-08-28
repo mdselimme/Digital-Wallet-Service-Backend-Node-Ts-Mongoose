@@ -26,13 +26,7 @@ const createAnUser = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, r
 }));
 // Get All Users 
 const getAllUsers = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { limit, sort, role } = req.query;
-    const decodedToken = req.user;
-    let dataLimit = 10;
-    if (limit) {
-        dataLimit = Number(limit);
-    }
-    const result = yield user_service_1.UserService.getAllUsers(dataLimit, sort, role, decodedToken);
+    const result = yield user_service_1.UserService.getAllUsers(req.query);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "All User Retrieved Successfully.",
@@ -64,7 +58,7 @@ const getSingleUser = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, 
 // Update An User 
 const updateAnUser = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedToken = req.user;
-    const result = yield user_service_1.UserService.updateAnUser(req.params.id, req.body, decodedToken);
+    const result = yield user_service_1.UserService.updateAnUser(req.body, decodedToken);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
         message: "Update User Successfully",

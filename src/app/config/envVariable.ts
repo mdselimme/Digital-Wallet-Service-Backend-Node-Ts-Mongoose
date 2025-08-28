@@ -12,6 +12,8 @@ interface IEnvVariable {
     SUPER_ADMIN_EMAIL: string,
     SUPER_ADMIN_PASS: string,
     SUPER_ADMIN_PHONE: string,
+    COOKIE_EXPIRES_ACCESS_TOKEN: string,
+    COOKIE_EXPIRES_REFRESH_TOKEN: string,
     SMTP: {
         SMTP_PASS: string,
         SMTP_USER: string,
@@ -29,7 +31,7 @@ const envVariable = (): IEnvVariable => {
         "SMTP_USER",
         "SMTP_HOST",
         "SMTP_PORT",
-        "SMTP_FROM"];
+        "SMTP_FROM", "COOKIE_EXPIRES_REFRESH_TOKEN", "COOKIE_EXPIRES_ACCESS_TOKEN"];
 
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
@@ -49,6 +51,8 @@ const envVariable = (): IEnvVariable => {
         SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
         SUPER_ADMIN_PASS: process.env.SUPER_ADMIN_PASS as string,
         SUPER_ADMIN_PHONE: process.env.SUPER_ADMIN_PHONE as string,
+        COOKIE_EXPIRES_ACCESS_TOKEN: process.env.COOKIE_EXPIRES_ACCESS_TOKEN as string,
+        COOKIE_EXPIRES_REFRESH_TOKEN: process.env.COOKIE_EXPIRES_REFRESH_TOKEN as string,
         SMTP: {
             SMTP_PASS: process.env.SMTP_PASS as string,
             SMTP_USER: process.env.SMTP_USER as string,
