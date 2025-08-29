@@ -8,7 +8,7 @@ const setTokenInCookie = (res, token) => {
             httpOnly: true,
             secure: envVariable_1.envData.NODE_DEV === "production",
             sameSite: "none",
-            maxAge: Number(envVariable_1.envData.COOKIE_EXPIRES_ACCESS_TOKEN)
+            maxAge: 1000 * 60 * 60 * 24
         });
     }
     if (token.refreshToken) {
@@ -16,7 +16,7 @@ const setTokenInCookie = (res, token) => {
             httpOnly: true,
             secure: envVariable_1.envData.NODE_DEV === "production",
             sameSite: "none",
-            maxAge: Number(envVariable_1.envData.COOKIE_EXPIRES_REFRESH_TOKEN)
+            maxAge: 1000 * 60 * 60 * 24 * 30
         });
     }
 };

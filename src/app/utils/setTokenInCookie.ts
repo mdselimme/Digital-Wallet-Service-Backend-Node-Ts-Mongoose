@@ -13,7 +13,7 @@ export const setTokenInCookie = (res: Response, token: IToken) => {
             httpOnly: true,
             secure: envData.NODE_DEV === "production",
             sameSite: "none",
-            maxAge: Number(envData.COOKIE_EXPIRES_ACCESS_TOKEN)
+            maxAge: 1000 * 60 * 60 * 24
         })
     }
     if (token.refreshToken) {
@@ -21,7 +21,7 @@ export const setTokenInCookie = (res: Response, token: IToken) => {
             httpOnly: true,
             secure: envData.NODE_DEV === "production",
             sameSite: "none",
-            maxAge: Number(envData.COOKIE_EXPIRES_REFRESH_TOKEN)
+            maxAge: 1000 * 60 * 60 * 24 * 30
         })
     }
 };

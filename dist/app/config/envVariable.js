@@ -12,7 +12,7 @@ const envVariable = () => {
         "SMTP_USER",
         "SMTP_HOST",
         "SMTP_PORT",
-        "SMTP_FROM", "COOKIE_EXPIRES_REFRESH_TOKEN", "COOKIE_EXPIRES_ACCESS_TOKEN"];
+        "SMTP_FROM"];
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
             // eslint-disable-next-line no-console
@@ -30,8 +30,6 @@ const envVariable = () => {
         SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL,
         SUPER_ADMIN_PASS: process.env.SUPER_ADMIN_PASS,
         SUPER_ADMIN_PHONE: process.env.SUPER_ADMIN_PHONE,
-        COOKIE_EXPIRES_ACCESS_TOKEN: process.env.COOKIE_EXPIRES_ACCESS_TOKEN,
-        COOKIE_EXPIRES_REFRESH_TOKEN: process.env.COOKIE_EXPIRES_REFRESH_TOKEN,
         SMTP: {
             SMTP_PASS: process.env.SMTP_PASS,
             SMTP_USER: process.env.SMTP_USER,
