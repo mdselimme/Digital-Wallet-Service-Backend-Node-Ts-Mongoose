@@ -16,3 +16,8 @@ export const resetPasswordZodValidation = z.object({
         .max(5, { message: "Password maximum 5 characters long." })
         .regex(/^(?!0).{5}$/, { message: "Password must be five character long and not started with 0." }),
 });
+
+export const forgotPasswordZodValidation = z.object({
+    email: z
+        .email({ error: "Email must be string and email format." }),
+});

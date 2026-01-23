@@ -41,6 +41,23 @@ const resetUserPassword = catchAsyncTryCatchHandler(async (req: Request, res: Re
     });
 });
 
+// forgot password email send
+const forgotUserPassword = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+
+    const { email } = req.body;
+
+    await AuthServices.forgotUserPassword(email);
+
+    // setTokenInCookie(res, { accessToken: result.accessToken, refreshToken: result.refreshToken });
+
+    sendResponse(res, {
+        success: true,
+        message: "Forgot Password Email Sent Successfully.",
+        data: null,
+        statusCode: httpStatusCodes.OK
+    });
+});
+
 // Get new access token from refresh token 
 const getNewAccessTokenFromRefreshToken = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
 
@@ -94,5 +111,6 @@ export const AuthController = {
     AuthLogIn,
     AuthLogOut,
     getNewAccessTokenFromRefreshToken,
-    resetUserPassword
+    resetUserPassword,
+    forgotUserPassword
 }

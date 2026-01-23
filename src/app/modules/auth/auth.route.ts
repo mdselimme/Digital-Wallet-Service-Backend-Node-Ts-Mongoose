@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AuthController } from "./auth.controller";
 import { validateSchemaRequest } from "../../middleware/validateSchemaRequest";
-import { authLogInZodValidation, resetPasswordZodValidation } from "./auth.validation";
+import { authLogInZodValidation, forgotPasswordZodValidation, resetPasswordZodValidation } from "./auth.validation";
 import { checkAuthenticationUser } from "../../middleware/checkAuthentication";
 import { IUserRole } from "../users/user.interface";
 
@@ -12,6 +12,12 @@ const router = Router();
 router.post("/login",
     validateSchemaRequest(authLogInZodValidation),
     AuthController.AuthLogIn
+);
+
+//FOR Got Password Route
+router.post("/forgot-password",
+    validateSchemaRequest(forgotPasswordZodValidation),
+    AuthController.forgotUserPassword
 );
 
 // Reset User Password 

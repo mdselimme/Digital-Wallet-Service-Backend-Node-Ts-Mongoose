@@ -7,8 +7,10 @@ import { User } from "../users/user.model";
 import bcrypt from "bcrypt";
 import { createUserJwtToken } from '../../utils/userTokens';
 import { JwtPayload } from 'jsonwebtoken';
-import { envData } from '../../config/envVariable';
 import { checkReceiverUser } from '../../utils/checkReceiverUser';
+import { generateJwtToken } from '../../utils/jwtTokenGenerate';
+import { sendEmail } from '../../utils/sendEmail';
+import { envData } from '../../config/envVariable';
 
 // User login with email and password and cookie set
 const AuthLogIn = async (payload: Partial<IUserModel>) => {
@@ -60,6 +62,35 @@ const resetUserPasswordService = async (payload: { oldPassword: string, newPassw
 
 };
 
+//FORGOT PASSWORD
+const forgotUserPassword = async (email: string) => {
+    const isUserExist = await User.findOne({ email });
+
+    if (!isUserExist) {
+        throw new AppError(httpStatusCodes.NOT_FOUND, "User Does Not Exist. Please register an account.");
+    }
+    // check receiver 
+    checkReceiverUser(isUserExist as IUserModel)
+    const createPasswordToken = generateJwtToken(
+        { user: isUserExist._id },
+        envData.JWT_ACCESS_SECRET,
+        "5m"
+    );
+
+    const redirectUrl = `${envData.CLIENT_URL}/reset-password?user=${isUserExist._id}&token=${createPasswordToken}`;
+
+    await sendEmail({
+        to: email,
+        subject: "Digital Wallet - Password Reset Request",
+        templateName: "forgotPassword",
+        templateData: {
+            name: isUserExist.name || "User",
+            redirectUrl: redirectUrl
+        }
+    });
+}
+
+
 
 
 
@@ -67,5 +98,6 @@ const resetUserPasswordService = async (payload: { oldPassword: string, newPassw
 
 export const AuthServices = {
     AuthLogIn,
-    resetUserPasswordService
+    resetUserPasswordService,
+    forgotUserPassword
 }
