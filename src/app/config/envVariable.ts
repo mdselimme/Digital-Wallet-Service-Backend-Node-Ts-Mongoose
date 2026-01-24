@@ -10,6 +10,7 @@ interface IEnvVariable {
     JWT_REFRESH_SECRET: string,
     JWT_ACCESS_EXPIRED: string,
     JWT_ACCESS_SECRET: string,
+    JWT_FORGOT_TOKEN_EXPIRED: string,
     SUPER_ADMIN_EMAIL: string,
     SUPER_ADMIN_PASS: string,
     SUPER_ADMIN_PHONE: string,
@@ -30,8 +31,8 @@ const envVariable = (): IEnvVariable => {
         "SMTP_USER",
         "SMTP_HOST",
         "SMTP_PORT",
-        "SMTP_FROM"];
-
+        "SMTP_FROM",
+        "JWT_FORGOT_TOKEN_EXPIRED"];
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
             // eslint-disable-next-line no-console
@@ -48,6 +49,7 @@ const envVariable = (): IEnvVariable => {
         JWT_ACCESS_EXPIRED: process.env.JWT_ACCESS_EXPIRED as string,
         JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
         JWT_REFRESH_EXPIRED: process.env.JWT_REFRESH_EXPIRED as string,
+        JWT_FORGOT_TOKEN_EXPIRED: process.env.JWT_FORGOT_TOKEN_EXPIRED as string,
         SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
         SUPER_ADMIN_PASS: process.env.SUPER_ADMIN_PASS as string,
         SUPER_ADMIN_PHONE: process.env.SUPER_ADMIN_PHONE as string,

@@ -72,9 +72,12 @@ const forgotUserPassword = async (email: string) => {
     // check receiver 
     checkReceiverUser(isUserExist as IUserModel)
     const createPasswordToken = generateJwtToken(
-        { user: isUserExist._id },
+        {
+            user: isUserExist._id,
+            email: isUserExist.email
+        },
         envData.JWT_ACCESS_SECRET,
-        "5m"
+        envData.JWT_FORGOT_TOKEN_EXPIRED
     );
 
     const redirectUrl = `${envData.CLIENT_URL}/reset-password?user=${isUserExist._id}&token=${createPasswordToken}`;
