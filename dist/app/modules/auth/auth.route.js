@@ -10,6 +10,8 @@ const user_interface_1 = require("../users/user.interface");
 const router = (0, express_1.Router)();
 // User Login Route 
 router.post("/login", (0, validateSchemaRequest_1.validateSchemaRequest)(auth_validation_1.authLogInZodValidation), auth_controller_1.AuthController.AuthLogIn);
+//FOR Got Password Route
+router.post("/forgot-password", (0, validateSchemaRequest_1.validateSchemaRequest)(auth_validation_1.forgotPasswordZodValidation), auth_controller_1.AuthController.forgotUserPassword);
 // Reset User Password 
 router.post("/reset-password", (0, validateSchemaRequest_1.validateSchemaRequest)(auth_validation_1.resetPasswordZodValidation), (0, checkAuthentication_1.checkAuthenticationUser)(...Object.values(user_interface_1.IUserRole)), auth_controller_1.AuthController.resetUserPassword);
 // Refresh Token route 

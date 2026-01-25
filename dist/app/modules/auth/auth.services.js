@@ -31,8 +31,10 @@ const AppError_1 = require("../../utils/AppError");
 const user_model_1 = require("../users/user.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userTokens_1 = require("../../utils/userTokens");
-const envVariable_1 = require("../../config/envVariable");
 const checkReceiverUser_1 = require("../../utils/checkReceiverUser");
+const jwtTokenGenerate_1 = require("../../utils/jwtTokenGenerate");
+const sendEmail_1 = require("../../utils/sendEmail");
+const envVariable_1 = require("../../config/envVariable");
 // User login with email and password and cookie set
 const AuthLogIn = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
@@ -65,7 +67,31 @@ const resetUserPasswordService = (payload, decodedToken) => __awaiter(void 0, vo
     isUserExist.password = yield bcrypt_1.default.hash(newPassword, Number(envVariable_1.envData.BCRYPT_HASH_ROUND));
     isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.save();
 });
+//FORGOT PASSWORD
+const forgotUserPassword = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const isUserExist = yield user_model_1.User.findOne({ email });
+    if (!isUserExist) {
+        throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "User Does Not Exist. Please register an account.");
+    }
+    // check receiver 
+    (0, checkReceiverUser_1.checkReceiverUser)(isUserExist);
+    const createPasswordToken = (0, jwtTokenGenerate_1.generateJwtToken)({
+        user: isUserExist._id,
+        email: isUserExist.email
+    }, envVariable_1.envData.JWT_ACCESS_SECRET, envVariable_1.envData.JWT_FORGOT_TOKEN_EXPIRED);
+    const redirectUrl = `${envVariable_1.envData.CLIENT_URL}/reset-password?user=${isUserExist._id}&token=${createPasswordToken}`;
+    yield (0, sendEmail_1.sendEmail)({
+        to: email,
+        subject: "Digital Wallet - Password Reset Request",
+        templateName: "forgotPassword",
+        templateData: {
+            name: isUserExist.name || "User",
+            redirectUrl: redirectUrl
+        }
+    });
+});
 exports.AuthServices = {
     AuthLogIn,
-    resetUserPasswordService
+    resetUserPasswordService,
+    forgotUserPassword
 };

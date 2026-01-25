@@ -11,6 +11,7 @@ const userSchemaModel = new mongoose_1.Schema({
     photo: { type: String, trim: true },
     address: { type: String, trim: true },
     role: { type: String, enum: Object.values(user_interface_1.IUserRole), default: user_interface_1.IUserRole.User },
+    webTour: { type: Boolean, default: false },
     isActive: { type: String, enum: Object.values(user_interface_1.isActive), default: user_interface_1.isActive.Active },
     isVerified: { type: Boolean, default: true },
     phone: {

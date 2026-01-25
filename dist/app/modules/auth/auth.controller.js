@@ -43,6 +43,18 @@ const resetUserPassword = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((r
         statusCode: http_status_codes_1.default.OK
     });
 }));
+// forgot password email send
+const forgotUserPassword = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    yield auth_services_1.AuthServices.forgotUserPassword(email);
+    // setTokenInCookie(res, { accessToken: result.accessToken, refreshToken: result.refreshToken });
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        message: "Forgot Password Email Sent Successfully.",
+        data: null,
+        statusCode: http_status_codes_1.default.OK
+    });
+}));
 // Get new access token from refresh token 
 const getNewAccessTokenFromRefreshToken = (0, catchAsyncTryCatch_1.catchAsyncTryCatchHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const refreshToken = req.cookies.refreshToken;
@@ -82,5 +94,6 @@ exports.AuthController = {
     AuthLogIn,
     AuthLogOut,
     getNewAccessTokenFromRefreshToken,
-    resetUserPassword
+    resetUserPassword,
+    forgotUserPassword
 };

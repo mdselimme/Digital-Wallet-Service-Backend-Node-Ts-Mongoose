@@ -31,7 +31,7 @@ export interface IUserModel {
     address?: string,
     walletId?: Types.ObjectId,
     role?: IUserRole,
-    webTour: boolean,
+    webTour?: boolean,
     isActive?: isActive,
     isVerified?: boolean,
     phone: string,
