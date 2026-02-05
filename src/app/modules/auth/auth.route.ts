@@ -4,12 +4,14 @@ import { validateSchemaRequest } from "../../middleware/validateSchemaRequest";
 import { authLogInZodValidation, forgotPasswordZodValidation, resetPasswordZodValidation } from "./auth.validation";
 import { checkAuthenticationUser } from "../../middleware/checkAuthentication";
 import { IUserRole } from "../users/user.interface";
+import { authRateLimit } from "../../config/rateLimiter";
 
 
 const router = Router();
 
 // User Login Route 
 router.post("/login",
+    authRateLimit,
     validateSchemaRequest(authLogInZodValidation),
     AuthController.AuthLogIn
 );

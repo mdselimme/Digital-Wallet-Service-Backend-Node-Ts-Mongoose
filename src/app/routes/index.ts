@@ -4,8 +4,12 @@ import { AuthRouter } from "../modules/auth/auth.route";
 import { TransactionRouter } from "../modules/transaction/transaction.route";
 import { WalletRouter } from "../modules/wallet/wallet.route";
 import { ContactRouter } from "../modules/contact/contact.route";
+import { apiRateLimit } from "../config/rateLimiter";
 
 export const router = Router();
+
+//api rate limit
+router.use(apiRateLimit)
 
 const RoutesModel = [
     {
