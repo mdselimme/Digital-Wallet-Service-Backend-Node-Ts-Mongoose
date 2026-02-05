@@ -21,6 +21,12 @@ interface IEnvVariable {
         SMTP_PORT: string,
         SMTP_FROM: string
     },
+    RATE_LIMIT: {
+        RATE_AUTH_LIMIT: string,
+        RATE_AUTH_WINDOW_MS: string,
+        RATE_API_LIMIT: string,
+        RATE_API_WINDOW_MS: string,
+    },
     NODE_DEV: "development" | "production",
 };
 
@@ -32,7 +38,12 @@ const envVariable = (): IEnvVariable => {
         "SMTP_HOST",
         "SMTP_PORT",
         "SMTP_FROM",
-        "JWT_FORGOT_TOKEN_EXPIRED"];
+        "JWT_FORGOT_TOKEN_EXPIRED",
+        "RATE_AUTH_LIMIT",
+        "RATE_AUTH_WINDOW_MS",
+        "RATE_API_LIMIT",
+        "RATE_API_WINDOW_MS",
+    ];
     requireVariable.forEach((key) => {
         if (!process.env[key]) {
             // eslint-disable-next-line no-console
@@ -59,6 +70,12 @@ const envVariable = (): IEnvVariable => {
             SMTP_HOST: process.env.SMTP_HOST as string,
             SMTP_PORT: process.env.SMTP_PORT as string,
             SMTP_FROM: process.env.SMTP_FROM as string,
+        },
+        RATE_LIMIT: {
+            RATE_AUTH_LIMIT: process.env.RATE_AUTH_LIMIT as string,
+            RATE_AUTH_WINDOW_MS: process.env.RATE_AUTH_WINDOW_MS as string,
+            RATE_API_LIMIT: process.env.RATE_API_LIMIT as string,
+            RATE_API_WINDOW_MS: process.env.RATE_API_WINDOW_MS as string,
         },
         NODE_DEV: process.env.NODE_DEV as "development" | "production",
     }
