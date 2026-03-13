@@ -10,9 +10,9 @@ const userSchemaModel = new Schema<IUserModel>({
     photo: { type: String, trim: true },
     address: { type: String, trim: true },
     role: { type: String, enum: Object.values(IUserRole), default: IUserRole.User },
-    webTour: { type: Boolean, default: false },
     isActive: { type: String, enum: Object.values(isActive), default: isActive.Active },
     isVerified: { type: Boolean, default: true },
+    tour: { type: Boolean, default: false },
     phone: {
         type: String,
         trim: true,

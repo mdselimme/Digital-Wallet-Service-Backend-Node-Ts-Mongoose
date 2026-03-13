@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
 import { validateSchemaRequest } from "../../middleware/validateSchemaRequest";
-import { createUserZodSchema, updateRoleZodSchema, updateUserZodSchema } from "./user.validation";
+import { createUserZodSchema, updateRoleZodSchema, updateUserZodSchema, UserTourStatusZodSchema } from "./user.validation";
 import { checkAuthenticationUser } from "../../middleware/checkAuthentication";
 import { IUserRole } from "./user.interface";
 
@@ -20,6 +20,12 @@ router.patch("/update",
     UserController.updateAnUser
 );
 
+//update tour status
+router.patch("/tour",
+    validateSchemaRequest(UserTourStatusZodSchema),
+    checkAuthenticationUser(...Object.values(IUserRole)),
+    UserController.updateAnUserTourStatus
+);
 
 // Get All Users 
 router.get("/me",

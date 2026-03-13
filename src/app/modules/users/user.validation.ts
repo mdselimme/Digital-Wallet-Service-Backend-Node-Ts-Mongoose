@@ -66,3 +66,7 @@ export const updateRoleZodSchema = z.object({
         .enum(["Approve", "Suspend"], { error: "Value must be from these (Approve | Suspend" })
         .optional(),
 });
+
+export const UserTourStatusZodSchema = z.object({
+    tour: z.boolean({ error: "Tour status must be boolean." })
+});
