@@ -36,7 +36,8 @@ export const seedSuperAdmin = async () => {
             password: hashPassword,
             phone: envData.SUPER_ADMIN_PHONE,
             isVerified: true,
-            userStatus: IStatus.Approve
+            userStatus: IStatus.Approve,
+            tour: true
         };
 
         const user = await User.create(payload);
