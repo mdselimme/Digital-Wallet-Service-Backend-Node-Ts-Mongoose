@@ -140,6 +140,7 @@
 #### Get Me (self user)
 
 - method: `GET` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/me
+
 - credentials: true.
 
 #### Response:
@@ -162,6 +163,34 @@
         "updatedAt": "2025-08-01T12:14:15.455Z",
         "walletId": "688be198d8dec19a99b16ab6",
         "address": "Niguary, Gafargaon, Mymensingh"
+    }
+}
+```
+
+#### Update User Tour (self user)
+
+- method: `PATCH` api endpoint: https://digital-wallet-server.vercel.app/api/v1/user/tour
+
+- credentials: true.
+
+##### Request:
+
+```json
+{
+    "tour": true
+}
+```
+
+
+#### Response:
+
+```json
+{
+    "message": "Update User Tour Successfully",
+    "statusCode": 200,
+    "success": true,
+    "data": {
+        "tour": true
     }
 }
 ```
