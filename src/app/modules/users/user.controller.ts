@@ -127,6 +127,20 @@ const updateAnUserIsActive = catchAsyncTryCatchHandler(async (req: Request, res:
     });
 });
 
+// Update An User Tour Status
+const updateAnUserTourStatus = catchAsyncTryCatchHandler(async (req: Request, res: Response) => {
+    const decodedToken = req.user;
+
+    const result = await UserService.updateAnUserTourStatus(req.body, decodedToken as JwtPayload);
+
+    sendResponse(res, {
+        success: true,
+        message: "Update User Successfully",
+        data: result,
+        statusCode: StatusCodes.OK
+    });
+});
+
 export const UserController = {
     createAnUser,
     getAllUsers,
@@ -135,5 +149,6 @@ export const UserController = {
     updateAnUser,
     updateAnUserRole,
     updateAnUserStatus,
-    updateAnUserIsActive
+    updateAnUserIsActive,
+    updateAnUserTourStatus
 };

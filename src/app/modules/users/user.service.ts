@@ -265,6 +265,20 @@ const updateAnUserIsActive = async (email: string, payload: Partial<IUserModel>,
     return newUpdateUser;
 };
 
+// Update An User Tour Status
+const updateAnUserTourStatus = async (payload: Partial<IUserModel>, decodedToken: JwtPayload) => {
+
+    const user = await User.findById(decodedToken.userId);
+
+    if (!user) {
+        throw new AppError(StatusCodes.NOT_FOUND, "User does not found.");
+    }
+
+    const newUpdateUser = await User.findByIdAndUpdate(decodedToken.userId, payload, { new: true, runValidators: true, }).select("tour");
+
+    return newUpdateUser;
+}
+
 
 
 export const UserService = {
@@ -275,5 +289,6 @@ export const UserService = {
     updateAnUser,
     updateAnUserRole,
     updateAnUserStatus,
-    updateAnUserIsActive
+    updateAnUserIsActive,
+    updateAnUserTourStatus
 }
