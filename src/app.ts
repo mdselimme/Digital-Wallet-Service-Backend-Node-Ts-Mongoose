@@ -4,17 +4,13 @@ import { router } from "./app/routes";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
+import { envData } from "./app/config/envVariable";
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: ["http://localhost:3000", "https://digital-wallet-management-system-cl.vercel.app"], credentials: true }));
+app.use(cors({ origin: [envData.CLIENT_URL, "https://digital-wallet-management-system-cl.vercel.app"], credentials: true }));
 app.use(cookieParser());
 
-
-
-
 app.use("/api/v1/", router);
-
-
 
 // Default Route 
 app.get("/", (req: Request, res: Response) => {
